@@ -1,34 +1,40 @@
 /**
- * Typographic Watermarking - Content Method 2 & 3: Clipboard API (MAIN World)
- * Handles "Copy" buttons that use navigator.clipboard
+ * Typographic Watermarking - Content Method 2 & 3: Clipboard Prototype Patch (MAIN World)
+ * Aggressively patches Clipboard.prototype to handle "Copy" buttons
  */
 
+// Domain mapping: substring/suffix -> fingerprint
 const FINGERPRINTS = {
-  'chatgpt.com': '\u2009',
-  'chat.openai.com': '\u2009',
-  'claude.ai': '\u200A',
-  'gemini.google.com': '\u2005',
-  'poe.com': '\u2004',
-  'copilot.microsoft.com': '\u2006',
-  'perplexity.ai': '\u2007',
-  'www.perplexity.ai': '\u2007',
+  'chatgpt': '\u2009',
+  'openai': '\u2009',
+  'claude': '\u200A',
+  'gemini': '\u2005',
+  'googleusercontent': '\u2005', // Gemini sandboxes
+  'poe': '\u2004',
+  'copilot': '\u2006',
+  'perplexity': '\u2007',
   'pi.ai': '\u2008',
-  'huggingface.co': '\u205F',
+  'huggingface': '\u205F',
   'localhost': '\u2009',
   '127.0.0.1': '\u2009'
 };
 
 function getFingerprint() {
-  return FINGERPRINTS[window.location.hostname] || FINGERPRINTS['localhost'];
+  const h = window.location.hostname;
+  for (const [key, val] of Object.entries(FINGERPRINTS)) {
+    if (h.includes(key)) return val;
+  }
+  return FINGERPRINTS['localhost'];
 }
 
 function getAIName() {
   const h = window.location.hostname;
   if (h.includes('chatgpt') || h.includes('openai')) return 'ChatGPT';
   if (h.includes('claude')) return 'Claude';
-  if (h.includes('gemini')) return 'Gemini';
+  if (h.includes('gemini') || h.includes('googleusercontent')) return 'Gemini';
   if (h.includes('poe')) return 'Poe';
   if (h.includes('copilot')) return 'Copilot';
+
   if (h.includes('perplexity')) return 'Perplexity';
   if (h.includes('pi')) return 'Pi';
   if (h.includes('huggingface')) return 'HuggingChat';
@@ -38,11 +44,14 @@ function getAIName() {
 function injectWatermark(text) {
   const fp = getFingerprint();
   if (!fp || !text) return text;
-  return text.replaceAll(' ', fp);
+  // Use Unicode Property Escape to match ALL Separator, Space characters (U+0020, U+00A0, U+200x, etc)
+  return text.replace(/\p{Zs}/gu, fp);
 }
 
 function showNotification(msg) {
   if (!document.body) {
+    // Wait for body, but also log to console immediately
+    console.log('[TW Pending Notification]', msg);
     document.addEventListener('DOMContentLoaded', () => showNotification(msg));
     return;
   }
@@ -74,66 +83,90 @@ function showNotification(msg) {
   setTimeout(() => n.remove(), 3000);
 }
 
-// Store original clipboard methods safely
-let originalWriteText = null;
-let originalWrite = null;
+// ----------------------------------------------------------------------
+// NUCLEAR OPTION: Patch Clipboard.prototype
+// This affects ALL clipboard instances, even those created before this script runs.
+// ----------------------------------------------------------------------
 
 try {
-  originalWriteText = navigator.clipboard.writeText.bind(navigator.clipboard);
-  originalWrite = navigator.clipboard.write.bind(navigator.clipboard);
-} catch (e) {
-  // Silent fail if clipboard API not available
-}
+  // Graceful degradation if Clipboard API is missing
+  if (window.Clipboard && window.Clipboard.prototype) {
+    const proto = window.Clipboard.prototype;
 
-// METHOD 2: Override Clipboard.writeText (MAIN WORLD)
-if (originalWriteText) {
-  navigator.clipboard.writeText = async function(text) {
-    const fp = getFingerprint();
-    if (fp && text) {
-      const watermarked = injectWatermark(text);
-      const code = fp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
-      console.log(`TW [MAIN]: writeText → ${getAIName()} (U+${code})`);
-      showNotification(`Watermark: ${getAIName()} (U+${code})`);
-      return originalWriteText(watermarked);
-    }
-    return originalWriteText(text);
-  };
-}
+    // 1. Patch writeText
+    const originalWriteText = proto.writeText;
+    proto.writeText = async function(text) {
+      const fp = getFingerprint();
+      if (fp && text) {
+        // Log attempt
+        const code = fp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
+        console.log(`TW [PROTO]: writeText interception → ${getAIName()} (U+${code})`);
 
-// METHOD 3: Override Clipboard.write (MAIN WORLD)
-if (originalWrite) {
-  navigator.clipboard.write = async function(items) {
-    const fp = getFingerprint();
-    if (!fp) return originalWrite(items);
-
-    try {
-      const newItems = await Promise.all(items.map(async (item) => {
-        const blobs = {};
-        for (const type of item.types) {
-          const blob = await item.getType(type);
-          if (type === 'text/plain') {
-            const text = await blob.text();
-            const watermarked = injectWatermark(text);
-            blobs[type] = new Blob([watermarked], { type });
-            const code = fp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
-            console.log(`TW [MAIN]: write() → ${getAIName()} (U+${code})`);
-            showNotification(`Watermark: ${getAIName()} (U+${code})`);
-          } else {
-            blobs[type] = blob;
-          }
+        try {
+          const watermarked = injectWatermark(text);
+          showNotification(`Watermark: ${getAIName()} (U+${code})`);
+          return originalWriteText.call(this, watermarked);
+        } catch (e) {
+          console.error('TW: Injection failed inside writeText', e);
+          return originalWriteText.call(this, text);
         }
-        return new ClipboardItem(blobs);
-      }));
-      return originalWrite(newItems);
-    } catch (err) {
-      return originalWrite(items);
-    }
-  };
+      }
+      return originalWriteText.call(this, text);
+    };
+
+    // 2. Patch write
+    const originalWrite = proto.write;
+    proto.write = async function(items) {
+      const fp = getFingerprint();
+      if (!fp) return originalWrite.call(this, items);
+
+      // Log attempt
+      const code = fp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
+      console.log(`TW [PROTO]: write interception → ${getAIName()} (U+${code})`);
+
+      try {
+        const newItems = await Promise.all(items.map(async (item) => {
+          const blobs = {};
+          // Reconstruct blobs with watermarked text
+          for (const type of item.types) {
+             const blob = await item.getType(type);
+             if (type === 'text/plain') {
+               const text = await blob.text();
+               const watermarked = injectWatermark(text);
+               blobs[type] = new Blob([watermarked], { type });
+               // Notify user strictly once per batch
+               showNotification(`Watermark: ${getAIName()} (U+${code})`);
+             } else {
+               blobs[type] = blob;
+             }
+          }
+          return new ClipboardItem(blobs);
+        }));
+
+        return originalWrite.call(this, newItems);
+
+      } catch (err) {
+        console.error('TW: write interception error', err);
+        // Fallback to original
+        return originalWrite.call(this, items);
+      }
+    };
+
+    console.log('TW: Clipboard prototype patching complete.');
+
+  } else {
+    console.warn('TW: Clipboard API not found in this environment.');
+  }
+
+} catch (e) {
+  console.error('TW: Fatal error patching clipboard prototype', e);
 }
+
+// (Manual copy event removed - handled by content_isolated.js in ISOLATED world)
 
 // Log activation
-const fp = getFingerprint();
-if (fp) {
-  const code = fp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
-  console.log(`TW [MAIN] ACTIVE on ${getAIName()} (U+${code})`);
+const activeFp = getFingerprint();
+if (activeFp) {
+  const c = activeFp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
+  console.log(`TW [MAIN] Ready on ${getAIName()} (U+${c})`);
 }

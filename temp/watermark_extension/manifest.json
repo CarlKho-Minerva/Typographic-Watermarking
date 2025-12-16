@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Typographic Watermark",
+  "version": "1.0",
+  "description": "Injects invisible Unicode signatures when copying from AI chatbots.",
+  "permissions": [
+    "clipboardWrite"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://chatgpt.com/*",
+        "*://claude.ai/*",
+        "*://gemini.google.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

@@ -3,30 +3,35 @@
  * Handles Ctrl+C / Cmd+C events robustly
  */
 
+// Domain mapping: substring/suffix -> fingerprint
 const FINGERPRINTS = {
-  'chatgpt.com': '\u2009',
-  'chat.openai.com': '\u2009',
-  'claude.ai': '\u200A',
-  'gemini.google.com': '\u2005',
-  'poe.com': '\u2004',
-  'copilot.microsoft.com': '\u2006',
-  'perplexity.ai': '\u2007',
-  'www.perplexity.ai': '\u2007',
+  'chatgpt': '\u2009',
+  'openai': '\u2009',
+  'claude': '\u200A',
+  'gemini': '\u2005',
+  'googleusercontent': '\u2005', // Gemini sandboxes
+  'poe': '\u2004',
+  'copilot': '\u2006',
+  'perplexity': '\u2007',
   'pi.ai': '\u2008',
-  'huggingface.co': '\u205F',
+  'huggingface': '\u205F',
   'localhost': '\u2009',
   '127.0.0.1': '\u2009'
 };
 
 function getFingerprint() {
-  return FINGERPRINTS[window.location.hostname] || FINGERPRINTS['localhost'];
+  const h = window.location.hostname;
+  for (const [key, val] of Object.entries(FINGERPRINTS)) {
+    if (h.includes(key)) return val;
+  }
+  return FINGERPRINTS['localhost'];
 }
 
 function getAIName() {
   const h = window.location.hostname;
   if (h.includes('chatgpt') || h.includes('openai')) return 'ChatGPT';
   if (h.includes('claude')) return 'Claude';
-  if (h.includes('gemini')) return 'Gemini';
+  if (h.includes('gemini') || h.includes('googleusercontent')) return 'Gemini';
   if (h.includes('poe')) return 'Poe';
   if (h.includes('copilot')) return 'Copilot';
   if (h.includes('perplexity')) return 'Perplexity';
@@ -38,7 +43,8 @@ function getAIName() {
 function injectWatermark(text) {
   const fp = getFingerprint();
   if (!fp || !text) return text;
-  return text.replaceAll(' ', fp);
+  // Use Unicode Property Escape to match ALL Separator, Space characters (U+0020, U+00A0, U+200x, etc)
+  return text.replace(/\p{Zs}/gu, fp);
 }
 
 function showNotification(msg) {
@@ -74,21 +80,42 @@ function showNotification(msg) {
   setTimeout(() => n.remove(), 3000);
 }
 
+// Helper to pierce Shadow DOM
+function getDeepSelection() {
+  // First try standard selection
+  let sel = window.getSelection();
+  if (sel && sel.toString().length > 0) return sel;
+
+  // Try active element's shadow root
+  let active = document.activeElement;
+  while (active && active.shadowRoot) {
+    const shadowSel = active.shadowRoot.getSelection ? active.shadowRoot.getSelection() : null;
+    if (shadowSel && shadowSel.toString().length > 0) return shadowSel;
+    active = active.shadowRoot.activeElement;
+  }
+  return null;
+}
+
 // METHOD 1: Copy event listener (ISOLATED WORLD)
-document.addEventListener('copy', function(e) {
+// Attaching to window with capture:true is the most aggressive way to see the event first.
+window.addEventListener('copy', function(e) {
+  const sel = getDeepSelection();
+  if (!sel) return; // Silent return if no selection found
+
+  const text = sel.toString();
+  if (!text.trim()) return;
+
   const fp = getFingerprint();
-  if (!fp) return;
+  const watermarked = injectWatermark(text);
 
-  const sel = window.getSelection();
-  if (!sel || !sel.toString().trim()) return;
-
-  const original = sel.toString();
-  const watermarked = injectWatermark(original);
-  const code = fp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
-
+  // Use setData to override
   e.clipboardData.setData('text/plain', watermarked);
   e.preventDefault();
+  e.stopImmediatePropagation(); // CRITICAL: Prevent site from overwriting our dat
 
+  const code = fp.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
   console.log(`TW [ISO]: Copy event → ${getAIName()} (U+${code})`);
   showNotification(`Watermark: ${getAIName()} (U+${code})`);
 }, true); // Capture phase
+
+console.log('TW [ISO]: Loaded');

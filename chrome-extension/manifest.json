@@ -28,11 +28,13 @@
         "https://perplexity.ai/*",
         "https://www.perplexity.ai/*",
         "https://pi.ai/*",
-        "https://huggingface.co/chat/*"
+        "https://huggingface.co/chat/*",
+        "https://*.googleusercontent.com/*"
       ],
       "js": ["content_isolated.js"],
       "run_at": "document_start",
-      "world": "ISOLATED"
+      "world": "ISOLATED",
+      "all_frames": true
     },
     {
       "matches": [
@@ -45,11 +47,13 @@
         "https://perplexity.ai/*",
         "https://www.perplexity.ai/*",
         "https://pi.ai/*",
-        "https://huggingface.co/chat/*"
+        "https://huggingface.co/chat/*",
+        "https://*.googleusercontent.com/*"
       ],
       "js": ["content_main.js"],
       "run_at": "document_start",
-      "world": "MAIN"
+      "world": "MAIN",
+      "all_frames": true
     }
   ],
   "icons": {

@@ -1,0 +1,3 @@
+pyperclip
+pyobjc-framework-Cocoa
+pyobjc-framework-Quartz

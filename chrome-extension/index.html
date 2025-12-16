@@ -562,7 +562,7 @@
               <tr><th>Platform</th><th>Copy Button</th><th>Ctrl+C</th><th>Notes</th></tr>
             </thead>
             <tbody>
-              <tr><td>ChatGPT</td><td>✓ Works</td><td>✗ Limited</td><td>React event handling</td></tr>
+              <tr><td>ChatGPT</td><td>✓ Works</td><td>✓ Works</td><td>Fixed via Capture Phase</td></tr>
               <tr><td>Claude</td><td>✓ Works</td><td>✓ Works</td><td>Standard DOM events</td></tr>
               <tr><td>Gemini</td><td>✓ Works</td><td>✓ Works</td><td>Clipboard API</td></tr>
               <tr><td>Perplexity</td><td>✓ Works</td><td>✓ Works</td><td>Standard DOM events</td></tr>
@@ -606,7 +606,7 @@
           This approach is inherently <strong>fragile by design</strong>. Any text normalization step that converts Unicode to ASCII will strip the watermark <a href="#ref9" class="citation">[9]</a>. Additionally, adversarial users can trivially remove watermarks via regex substitution. We position this not as a security mechanism but as a <em>passive attribution layer</em> for typical use cases—analogous to EXIF metadata in images <a href="#ref10" class="citation">[10]</a>.
         </p>
         <p>
-          The ChatGPT keyboard copy limitation affects approximately 40% of copy operations based on informal testing. Users naturally prefer the copy button for longer responses, limiting real-world impact.
+          With the introduction of global event capture (v0.5.0), the previous limitation on ChatGPT keyboard shortcuts has been resolved.
         </p>
       </div>
 
@@ -620,6 +620,7 @@
       <div class="section">
         <h2 class="section-title">Changelog</h2>
         <p style="font-family: Monaco, monospace; font-size: 10px; line-height: 1.8;">
+          <strong>v0.5.0</strong> (2025-12-17 00:31 UTC+8) — Fixed ChatGPT Ctrl+C bug via event capture, Shadow DOM support for Gemini, robust decoder<br>
           <strong>v0.4.0</strong> (2025-12-16 22:05 UTC+8) — Added text visualizer with hover highlights, homoglyph section, 13 citations<br>
           <strong>v0.3.0</strong> (2025-12-16 21:45 UTC+8) — Added multi-source detection, confidence bar UI<br>
           <strong>v0.2.0</strong> (2025-12-16 21:35 UTC+8) — Clipboard API override for copy buttons<br>
@@ -656,6 +657,18 @@
         </div>
         <h2>Decoder Tool</h2>
         <div style="width: 28px;"></div>
+      </div>
+
+      <div class="legend">
+        <span class="legend-item"><span class="dot" style="background:var(--chatgpt)"></span>ChatGPT</span>
+        <span class="legend-item"><span class="dot" style="background:var(--claude)"></span>Claude</span>
+        <span class="legend-item"><span class="dot" style="background:var(--gemini)"></span>Gemini</span>
+        <span class="legend-item"><span class="dot" style="background:var(--copilot)"></span>Copilot</span>
+      </div>
+
+      <!-- DEBUG OUTPUT -->
+      <div id="debug-output" style="margin-top:10px; font-family:monospace; font-size:12px; color:#666; border:1px solid #333; padding:5px;">
+        Space Analysis: (Paste text to see)
       </div>
 
       <div class="tool-content">
@@ -703,8 +716,8 @@
         if (WATERMARK_CHARS.has(char)) {
           const info = FINGERPRINTS[char];
           html += `<span class="space-marker" title="${info.name} (${info.code})"> </span>`;
-        } else if (char === ' ') {
-          html += `<span class="space-marker regular" title="Regular Space (U+0020)"> </span>`;
+        } else if (char === ' ' || char === '\u00A0') {
+          html += `<span class="space-marker regular" title="Regular Space (U+0020 or U+00A0)"> </span>`;
         } else if (char === '\n') {
           html += '<br>';
         } else {
@@ -714,15 +727,44 @@
       return html;
     }
 
+    // Helper to mimic Python's repr()
+    function debugRepr(text) {
+      return text.split('').map(c => {
+        const code = c.charCodeAt(0);
+        if (code < 32 || code > 126) {
+          return '\\u' + code.toString(16).toUpperCase().padStart(4, '0');
+        }
+        return c;
+      }).join('');
+    }
+
     function decode() {
       const text = document.getElementById('input').value;
-      if (!text.trim()) return;
+      const debugOutput = document.getElementById('debug-output');
+
+      if (!text) return;
+
+      // 1. RAW DEBUG VIEW (Like Python's repr)
+      // This proves exactly what characters are in the box
+      debugOutput.textContent = "RAW BYTES: " + debugRepr(text).substring(0, 200) + (text.length > 200 ? "..." : "");
 
       const resultDiv = document.getElementById('result');
       const resultHeader = document.getElementById('result-header');
       const resultBody = document.getElementById('result-body');
 
-      // Count ALL space types (non-regex method)
+      // 2. PRIMARY DETECTION (The "Python Method")
+      // Simple inclusion checks first. No loops.
+      const directHits = [];
+      if (text.includes('\u2009')) directHits.push('ChatGPT (Thin Space)');
+      if (text.includes('\u200A')) directHits.push('Claude (Hair Space)');
+      if (text.includes('\u2005')) directHits.push('Gemini (Four-Per-Em Space)');
+      if (text.includes('\u2004')) directHits.push('Poe (Three-Per-Em)');
+      if (text.includes('\u2006')) directHits.push('Copilot (Six-Per-Em)');
+      if (text.includes('\u2007')) directHits.push('Perplexity (Figure Space)');
+      if (text.includes('\u205F')) directHits.push('HuggingChat (Medium Math)');
+      if (text.includes('\u2008')) directHits.push('Pi (Punctuation Space)');
+
+      // 3. STATS COUNTING (Secondary)
       let regularSpaces = 0;
       let totalWatermarked = 0;
       const counts = {};
@@ -731,7 +773,7 @@
         if (FINGERPRINTS[char]) {
           counts[char] = (counts[char] || 0) + 1;
           totalWatermarked++;
-        } else if (char === ' ') {
+        } else if (char === ' ' || char === '\u00A0') {
           regularSpaces++;
         }
       }
@@ -749,8 +791,21 @@
 
       resultDiv.classList.add('show');
 
-      if (detectedSources.length > 0) {
+      // DECISION LOGIC: If explicit hit found OR stats found
+      if (directHits.length > 0 || totalWatermarked > 0) {
         resultHeader.textContent = '⚠ WATERMARK DETECTED';
+        resultHeader.style.background = '#000';
+
+        let msg = '<div class="detected-ai">';
+        if (directHits.length > 0) {
+            msg += directHits[0].split(' ')[0] + ' DETECTED';
+        } else {
+            msg += detectedSources[0].name.toUpperCase();
+        }
+        msg += '</div>';
+
+        // Add explicit debug confirmation
+        msg += `<div class="visualizer-hint"> Confirmed via: ${directHits.join(', ') || 'Statistical Count'}</div><hr style="margin:10px 0; border:0; border-bottom:1px solid #eee;">`;
 
         // Build bar segments
         let barHTML = '';
@@ -771,6 +826,7 @@
         breakdownHTML += `<div class="breakdown-row"><span>Regular (U+0020)</span><span class="count">${regularSpaces}</span></div>`;
 
         resultBody.innerHTML = `
+          ${msg}
           <div class="source-tags">
             ${detectedSources.map(s => `<span class="source-tag">${s.name}</span>`).join('')}
           </div>
@@ -795,30 +851,17 @@
           </div>
 
           <div class="breakdown">
-            <div class="breakdown-title">Breakdown by Source</div>
+            <div class="breakdown-title">Detailed Analysis</div>
             ${breakdownHTML}
           </div>
 
-          <div class="visualizer-label">Text Preview (hover to see spaces)</div>
-          <div class="text-visualizer" id="text-viz">${visualizeSpaces(text, detectedSources)}</div>
-          <div class="visualizer-hint">Yellow = AI watermark, Gray = regular space</div>
+          <div class="visualizer-label">Character Visualizer (Hover to Inspect)</div>
+          <div class="text-visualizer">
+            ${visualizeSpaces(text, detectedSources)}
+          </div>
+          <div class="visualizer-hint">Only spaces are highlighted. Hover to see codepoint.</div>
         `;
       } else {
-        resultHeader.textContent = 'ANALYSIS COMPLETE';
-        resultBody.innerHTML = `
-          <div class="source-tags">
-            <span class="source-tag none">No Watermark</span>
-          </div>
-
-          <div class="confidence-section">
-            <div class="confidence-label">
-              <span>Space Breakdown</span>
-              <span>0% Watermarked</span>
-            </div>
-            <div class="confidence-bar">
-              <div class="bar-segment bar-regular" style="width:100%">All Regular</div>
-            </div>
-          </div>
 
           <div class="stats-grid">
             <div class="stat-box">
