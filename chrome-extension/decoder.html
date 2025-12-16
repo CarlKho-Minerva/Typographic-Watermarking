@@ -210,7 +210,7 @@
       letter-spacing: 0.5px;
     }
 
-    textarea {
+    .input-editable {
       width: 100%;
       height: 160px;
       background: #fff;
@@ -218,12 +218,21 @@
       padding: 10px;
       font-family: "Monaco", monospace;
       font-size: 11px;
-      resize: none;
       outline: none;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    textarea:focus { box-shadow: inset 2px 2px 0 #ddd; }
-    textarea::placeholder { color: #888; }
+    .input-editable:focus { box-shadow: inset 2px 2px 0 #ddd; }
+    .input-editable:empty:before {
+      content: attr(placeholder);
+      color: #888;
+    }
+    .input-editable .space {
+      border-radius: 2px;
+      padding: 1px 0;
+    }
 
     .button-row {
       margin-top: 16px;
@@ -339,6 +348,15 @@
     .bar-perplexity { background: #8b5cf6; }
     .bar-poe { background: #7c3aed; }
     .bar-regular { background: #ddd; color: #666; }
+
+    /* Source-specific space colors */
+    .space-chatgpt { background: #10a37f; }
+    .space-claude { background: #d97706; }
+    .space-gemini { background: #4285f4; }
+    .space-copilot { background: #0078d4; }
+    .space-perplexity { background: #8b5cf6; }
+    .space-poe { background: #7c3aed; }
+    .space-regular { background: #e0e0e0; }
 
     /* Stats Grid */
     .stats-grid {
@@ -658,8 +676,8 @@
       </div>
 
       <div class="tool-content">
-        <div class="field-label">Paste Text to Analyze</div>
-        <textarea id="input" placeholder="Paste AI-generated text here to detect its source..."></textarea>
+        <div class="field-label">Paste Text to Analyze <span style="font-size:9px;color:#888;">(spaces highlight live)</span></div>
+        <div id="input" contenteditable="true" class="input-editable" placeholder="Paste AI-generated text here..."></div>
 
         <div class="button-row">
           <button onclick="decode()">Analyze</button>
@@ -692,29 +710,59 @@
     // Build set of all watermark characters for quick lookup
     const WATERMARK_CHARS = new Set(Object.keys(FINGERPRINTS));
 
-    function visualizeSpaces(text, detectedSources) {
-      // Truncate for performance
-      const maxLen = 300;
-      const truncated = text.length > maxLen ? text.substring(0, maxLen) + '...' : text;
+    // Live highlight spaces in input
+    function highlightInput() {
+      const el = document.getElementById('input');
+      const text = el.innerText || '';
 
       let html = '';
-      for (const char of truncated) {
+      for (const char of text) {
         if (WATERMARK_CHARS.has(char)) {
           const info = FINGERPRINTS[char];
-          html += `<span class="space-marker" title="${info.name} (${info.code})"> </span>`;
+          html += `<span class="space space-${info.color}" title="${info.name}"> </span>`;
         } else if (char === ' ') {
-          html += `<span class="space-marker regular" title="Regular Space (U+0020)"> </span>`;
+          html += `<span class="space space-regular" title="Regular"> </span>`;
         } else if (char === '\n') {
           html += '<br>';
         } else {
           html += char.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
       }
-      return html;
+
+      // Preserve cursor position
+      const sel = window.getSelection();
+      const range = sel.rangeCount > 0 ? sel.getRangeAt(0) : null;
+      const offset = range ? range.startOffset : 0;
+
+      el.innerHTML = html;
+
+      // Restore cursor at end
+      if (el.lastChild) {
+        const newRange = document.createRange();
+        newRange.selectNodeContents(el);
+        newRange.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+      }
     }
 
+    // Debounce for performance
+    let highlightTimeout;
+    document.getElementById('input').addEventListener('input', () => {
+      clearTimeout(highlightTimeout);
+      highlightTimeout = setTimeout(highlightInput, 100);
+    });
+
+    // Highlight immediately on paste
+    document.getElementById('input').addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = e.clipboardData.getData('text/plain');
+      document.getElementById('input').innerText = text;
+      setTimeout(highlightInput, 10);
+    });
+
     function decode() {
-      const text = document.getElementById('input').value;
+      const text = document.getElementById('input').innerText || '';
       if (!text.trim()) return;
 
       const resultDiv = document.getElementById('result');
@@ -789,10 +837,6 @@
             <div class="breakdown-title">Breakdown by Source</div>
             ${breakdownHTML}
           </div>
-
-          <div class="visualizer-label">Text Preview (hover to see spaces)</div>
-          <div class="text-visualizer" id="text-viz">${visualizeSpaces(text, detectedSources)}</div>
-          <div class="visualizer-hint">Yellow = AI watermark, Gray = regular space</div>
         `;
       } else {
         resultHeader.textContent = 'ANALYSIS COMPLETE';
