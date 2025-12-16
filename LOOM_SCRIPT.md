@@ -74,9 +74,11 @@ https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
 
 ## 🎯 THE EXPLANATION (1:40 - 1:55)
 
-> "I call it **Typographic Watermarking**. It's not perfect—you can strip it with regex—but for the average student copy-pasting into an essay? It works.
+> "Look—as a student myself, please don't hate me. I'm not trying to catch anyone.
 >
-> Think of it like EXIF data for images, but for text."
+> I'm worried about a future where we can't tell what's real. Fabricated political statements. Fake evidence. Essays that were never written by humans.
+>
+> **Typographic Watermarking** won't stop bad actors—you can strip it with regex—but for everyday use? It creates a paper trail. Think EXIF data for images, but for text."
 
 ---
 
@@ -84,7 +86,7 @@ https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
 
 > "The Chrome extension is free. The decoder is live. Link's in the description.
 >
-> Let me know what you think—I'm writing the arXiv paper right now."
+> If you think this matters, share it. I'm writing the arXiv paper right now."
 
 ---
 

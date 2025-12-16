@@ -30,8 +30,26 @@
         "https://pi.ai/*",
         "https://huggingface.co/chat/*"
       ],
-      "js": ["content.js"],
-      "run_at": "document_start"
+      "js": ["content_isolated.js"],
+      "run_at": "document_start",
+      "world": "ISOLATED"
+    },
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://poe.com/*",
+        "https://copilot.microsoft.com/*",
+        "https://perplexity.ai/*",
+        "https://www.perplexity.ai/*",
+        "https://pi.ai/*",
+        "https://huggingface.co/chat/*"
+      ],
+      "js": ["content_main.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
     }
   ],
   "icons": {
