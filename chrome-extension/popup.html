@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status {
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    .status-active {
+      color: #4ade80;
+      font-weight: 500;
+    }
+    .fingerprints {
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .fingerprint-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .fingerprint-row:last-child { border-bottom: none; }
+    .ai-name { color: #94a3b8; }
+    .unicode { font-family: monospace; color: #60a5fa; }
+    .footer {
+      margin-top: 16px;
+      font-size: 11px;
+      color: #64748b;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔒 Typographic Watermark</h1>
+
+  <div class="status">
+    <span class="status-active">● Active</span> — Watermarking AI-generated text
+  </div>
+
+  <div class="fingerprints">
+    <div class="fingerprint-row">
+      <span class="ai-name">ChatGPT</span>
+      <span class="unicode">U+2009 Thin Space</span>
+    </div>
+    <div class="fingerprint-row">
+      <span class="ai-name">Claude</span>
+      <span class="unicode">U+200A Hair Space</span>
+    </div>
+    <div class="fingerprint-row">
+      <span class="ai-name">Gemini</span>
+      <span class="unicode">U+2005 Four-Per-Em</span>
+    </div>
+    <div class="fingerprint-row">
+      <span class="ai-name">Copilot</span>
+      <span class="unicode">U+2006 Six-Per-Em</span>
+    </div>
+    <div class="fingerprint-row">
+      <span class="ai-name">Perplexity</span>
+      <span class="unicode">U+2007 Figure Space</span>
+    </div>
+    <div class="fingerprint-row">
+      <span class="ai-name">Poe</span>
+      <span class="unicode">U+2004 Three-Per-Em</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    Invisible barcode for AI provenance
+  </div>
+</body>
+</html>

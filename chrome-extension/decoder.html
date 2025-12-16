@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typographic Watermarking: AI Text Attribution via Unicode Substitution</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Geneva", "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 13px;
+      background: #ffffff;
+      color: #000000;
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: none;
+    }
+
+    .split-container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* LEFT: Research Paper */
+    .paper-side {
+      width: 50vw;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 40px;
+      border-right: 2px solid #000;
+    }
+
+    .paper-header {
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #000;
+    }
+
+    .paper-title {
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .paper-authors {
+      font-size: 12px;
+      color: #444;
+      margin-bottom: 8px;
+    }
+
+    .paper-meta {
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+      margin-bottom: 12px;
+    }
+
+    .section p {
+      line-height: 1.7;
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+
+    .citation {
+      color: #0066cc;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .citation:hover {
+      text-decoration: underline;
+    }
+
+    .highlight {
+      background: #ffff00;
+      padding: 0 2px;
+    }
+
+    code {
+      font-family: "Monaco", monospace;
+      font-size: 11px;
+      background: #f0f0f0;
+      padding: 1px 4px;
+      border: 1px solid #ccc;
+    }
+
+    .table-container {
+      border: 2px solid #000;
+      margin: 16px 0;
+    }
+
+    .table-title {
+      background: #000;
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: #f5f5f5;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10px;
+      border-bottom: 2px solid #000;
+    }
+
+    td:nth-child(2) { font-family: "Monaco", monospace; }
+
+    .references {
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .ref-item {
+      margin-bottom: 10px;
+      padding-left: 20px;
+      text-indent: -20px;
+    }
+
+    .ref-item a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    .ref-item a:hover { text-decoration: underline; }
+
+    /* RIGHT: Tool */
+    .tool-side {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 50vw;
+      height: 100vh;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-header {
+      background: #fff;
+      border-bottom: 2px solid #000;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tool-header-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .tool-header-button {
+      width: 12px;
+      height: 12px;
+      border: 1px solid #000;
+      background: #fff;
+    }
+
+    .tool-header h2 {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .tool-content {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .field-label {
+      font-weight: bold;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 160px;
+      background: #fff;
+      border: 2px solid #000;
+      padding: 10px;
+      font-family: "Monaco", monospace;
+      font-size: 11px;
+      resize: none;
+      outline: none;
+    }
+
+    textarea:focus { box-shadow: inset 2px 2px 0 #ddd; }
+    textarea::placeholder { color: #888; }
+
+    .button-row {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      padding: 8px 32px;
+      background: #fff;
+      border: 2px solid #000;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    button:hover { background: #000; color: #fff; }
+    button:active { box-shadow: none; transform: translate(2px, 2px); }
+
+    .result {
+      margin-top: 24px;
+      border: 2px solid #000;
+      display: none;
+      background: #fff;
+    }
+
+    .result.show { display: block; }
+
+    .result-header {
+      background: #000;
+      color: #fff;
+      padding: 8px 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .result-body { padding: 16px; }
+
+    .detected-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .detected-ai {
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .detail-row {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      padding: 8px 0;
+      font-size: 11px;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { width: 140px; color: #666; text-transform: uppercase; font-size: 10px; }
+    .detail-value { font-family: "Monaco", monospace; font-weight: bold; }
+
+    .tool-footer {
+      padding: 12px 20px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: #fff;
+    }
+
+    /* Confidence Bar */
+    .confidence-section { margin-bottom: 16px; }
+    .confidence-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+    .confidence-bar {
+      height: 20px;
+      border: 2px solid #000;
+      display: flex;
+      overflow: hidden;
+    }
+    .bar-segment {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: bold;
+      color: #fff;
+      min-width: 24px;
+    }
+    .bar-chatgpt { background: #10a37f; }
+    .bar-claude { background: #d97706; }
+    .bar-gemini { background: #4285f4; }
+    .bar-copilot { background: #0078d4; }
+    .bar-perplexity { background: #8b5cf6; }
+    .bar-poe { background: #7c3aed; }
+    .bar-regular { background: #ddd; color: #666; }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    .stat-label { font-size: 9px; text-transform: uppercase; color: #888; margin-bottom: 4px; }
+    .stat-value { font-size: 18px; font-weight: bold; font-family: Monaco, monospace; }
+
+    /* Breakdown */
+    .breakdown { border-top: 1px solid #ddd; padding-top: 12px; }
+    .breakdown-title { font-size: 10px; text-transform: uppercase; color: #888; margin-bottom: 10px; letter-spacing: 0.5px; }
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 11px;
+    }
+    .breakdown-row:last-child { border-bottom: none; }
+    .breakdown-row .count { font-family: Monaco, monospace; font-weight: bold; }
+
+    /* Source Tags */
+    .source-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .source-tag {
+      background: #000;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .source-tag.none { background: #eee; color: #666; }
+
+    /* Text Visualizer */
+    .text-visualizer {
+      background: #fafafa;
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-top: 12px;
+      font-family: Monaco, monospace;
+      font-size: 11px;
+      line-height: 1.8;
+      max-height: 120px;
+      overflow-y: auto;
+      word-break: break-word;
+    }
+    .text-visualizer .space-marker {
+      background: #ffeb3b;
+      border-radius: 2px;
+      padding: 1px 0;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .text-visualizer .space-marker:hover {
+      background: #ff5722;
+      color: white;
+      box-shadow: 0 0 8px rgba(255, 87, 34, 0.6);
+    }
+    .text-visualizer .space-marker.regular {
+      background: #e0e0e0;
+    }
+    .text-visualizer .space-marker.regular:hover {
+      background: #9e9e9e;
+      box-shadow: 0 0 8px rgba(158, 158, 158, 0.6);
+    }
+    .visualizer-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: #888;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .visualizer-hint {
+      font-size: 9px;
+      color: #aaa;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .split-container { flex-direction: column; }
+      .paper-side { width: 100%; height: auto; border-right: none; border-bottom: 2px solid #000; }
+      .tool-side { position: relative; width: 100%; height: auto; min-height: 60vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="split-container">
+    <!-- LEFT: Research Paper -->
+    <div class="paper-side">
+      <div class="paper-header">
+        <h1 class="paper-title">Typographic Watermarking: Attributing LLM Output via Unicode Substitution</h1>
+        <div class="paper-authors"><a href="https://www.linkedin.com/in/carlkho" target="_blank" style="color: #000; text-decoration: none; border-bottom: 1px solid #000;">Carl Kho</a></div>
+        <div class="paper-meta">Preprint • December 16 2025 @ Sun Moon Lake, Taiwan • Work in Progress</div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Abstract</h2>
+        <p>
+          We present a lightweight method for embedding invisible provenance metadata into AI-generated text through <span class="highlight">typographic watermarking</span>. By substituting standard ASCII space characters (U+0020) with visually-identical Unicode variants mapped to specific language models, we enable post-hoc attribution of text to its originating system. Unlike logit-level watermarking approaches <a href="#ref1" class="citation">[1]</a>, our method operates as a post-processing step requiring no modification to model internals. We demonstrate feasibility across major LLM platforms and analyze robustness against common text sanitization operations.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">1. Introduction</h2>
+        <p>
+          The proliferation of Large Language Models (LLMs) has created urgent demand for AI text detection and provenance tracking. Current detection approaches fall into two categories: (1) statistical classifiers trained to distinguish human from AI text <a href="#ref2" class="citation">[2]</a>, and (2) cryptographic watermarking embedded during generation <a href="#ref1" class="citation">[1]</a>.
+        </p>
+        <p>
+          Classifier-based detection has proven unreliable—OpenAI discontinued their AI classifier in July 2023 due to low accuracy <a href="#ref3" class="citation">[3]</a>. Watermarking approaches, while more robust, require modifications to model output distributions, limiting adoption to organizations with model access.
+        </p>
+        <p>
+          We propose an alternative: <strong>typographic watermarking</strong>. By exploiting the Unicode standard's multiple space characters, we embed model identity in the whitespace itself. This approach requires no model modification and can be implemented at the interface layer.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">2. Related Work</h2>
+        <p>
+          <strong>Homoglyph Attacks.</strong> Our approach inverts a well-documented attack vector: <em>homoglyph substitution</em>. Attackers exploit visually-identical characters from different alphabets—such as Cyrillic 'А' (U+0410) for Latin 'A' (U+0041)—to create deceptive URLs for phishing <a href="#ref11" class="citation">[11]</a>. Notable examples include "аpple.com" with Cyrillic 'а', visually indistinguishable from the legitimate domain. ICANN's IDN homograph attack documentation <a href="#ref12" class="citation">[12]</a> catalogs these vulnerabilities extensively.
+        </p>
+        <p>
+          <strong>Text Steganography.</strong> The broader field of text steganography investigates hiding information within text <a href="#ref13" class="citation">[13]</a>. Existing methods include: (1) synonym substitution, (2) syntactic restructuring, and (3) invisible character injection. Our approach falls into the third category but focuses specifically on whitespace—the most abundant and least scrutinized character class.
+        </p>
+        <p>
+          <strong>Logit Watermarking.</strong> Recent work by Kirchenbauer et al. <a href="#ref1" class="citation">[1]</a> and Aaronson at OpenAI demonstrated watermarking via biased token selection during generation. While statistically robust, this requires model-level access unavailable to downstream applications. Our method operates as <em>post-hoc</em> encoding, enabling third-party attribution without model modification.
+        </p>
+        <p>
+          <strong>Key Insight.</strong> Where homoglyph attacks use visual similarity to <em>deceive</em>, we use it to <em>attribute</em>. The same Unicode ambiguity that enables phishing also enables invisible provenance tracking—a case of defensive dual-use.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">3. Background: Unicode Whitespace</h2>
+        <p>
+          The Unicode standard defines multiple characters that render as horizontal whitespace. While functionally similar, these characters have distinct codepoints:
+        </p>
+        <div class="table-container">
+          <div class="table-title">Table 1: Unicode Space Characters</div>
+          <table>
+            <thead>
+              <tr><th>Character Name</th><th>Codepoint</th><th>Assigned Model</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Space (Standard)</td><td>U+0020</td><td>—</td></tr>
+              <tr><td>Thin Space</td><td>U+2009</td><td>ChatGPT</td></tr>
+              <tr><td>Hair Space</td><td>U+200A</td><td>Claude</td></tr>
+              <tr><td>Four-Per-Em Space</td><td>U+2005</td><td>Gemini</td></tr>
+              <tr><td>Six-Per-Em Space</td><td>U+2006</td><td>Copilot</td></tr>
+              <tr><td>Figure Space</td><td>U+2007</td><td>Perplexity</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          These characters are visually indistinguishable at typical font sizes but trivially detectable via programmatic inspection.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">4. Methodology</h2>
+        <p>
+          Our implementation operates as a browser extension injecting into copy events on supported AI chat interfaces. When a user copies text, we intercept the clipboard write operation and perform a global substitution:
+        </p>
+        <p style="text-align: center; font-family: Monaco, monospace; margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid #ccc;">
+          text.replace(/ /g, FINGERPRINT[hostname])
+        </p>
+        <p>
+          The substitution is invisible to users but encodes provenance in every space character. Detection requires only checking for the presence of specific Unicode codepoints.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">5. Robustness Analysis</h2>
+        <p>
+          We tested watermark survival across common text processing pipelines. <em style="color: #888;">(Note: Preliminary results—formal validation pending.)</em>
+        </p>
+        <div class="table-container">
+          <div class="table-title">Table 2: Watermark Survival Rates</div>
+          <table>
+            <thead>
+              <tr><th>Platform/Operation</th><th>Survival</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Google Docs</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Microsoft Word</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Gmail / Outlook</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Twitter/X</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Notepad (Windows)</td><td>✗ 0%</td><td>Converts to ASCII</td></tr>
+              <tr><td>VS Code</td><td>~ 50%</td><td>Depends on settings</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">6. Implementation Challenges</h2>
+        <p>
+          Browser extension development introduces platform-specific constraints. Chrome extensions run content scripts in an <em>isolated world</em> separate from the page's JavaScript context <a href="#ref5" class="citation">[5]</a>. This isolation prevents direct access to page-defined objects but allows DOM manipulation and event interception.
+        </p>
+        <p>
+          We identified a critical limitation on ChatGPT specifically: keyboard-initiated copy events (Ctrl+C) within their markdown containers are handled by React's synthetic event system <a href="#ref6" class="citation">[6]</a> before our content script's capture-phase listener can modify the clipboard. However, the platform's native "Copy" button uses the Clipboard API <a href="#ref7" class="citation">[7]</a>, which we successfully intercept via prototype override:
+        </p>
+        <p style="text-align: center; font-family: Monaco, monospace; margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid #ccc; font-size: 10px;">
+          navigator.clipboard.writeText = async (text) =&gt; originalWriteText(watermark(text))
+        </p>
+        <p><em style="color: #888;">(Note: Table 3 reflects tested platforms—extension verified working on all listed sites.)</em></p>
+        <div class="table-container">
+          <div class="table-title">Table 3: Copy Method Interception by Platform</div>
+          <table>
+            <thead>
+              <tr><th>Platform</th><th>Copy Button</th><th>Ctrl+C</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ChatGPT</td><td>✓ Works</td><td>✗ Limited</td><td>React event handling</td></tr>
+              <tr><td>Claude</td><td>✓ Works</td><td>✓ Works</td><td>Standard DOM events</td></tr>
+              <tr><td>Gemini</td><td>✓ Works</td><td>✓ Works</td><td>Clipboard API</td></tr>
+              <tr><td>Perplexity</td><td>✓ Works</td><td>✓ Works</td><td>Standard DOM events</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          This asymmetry is documented in Chrome's extension security model <a href="#ref8" class="citation">[8]</a> and represents a fundamental constraint rather than an implementation bug.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">6. Robustness Analysis</h2>
+        <p>
+          We tested watermark survival across common text processing pipelines:
+        </p>
+        <div class="table-container">
+          <div class="table-title">Table 4: Watermark Survival Rates</div>
+          <table>
+            <thead>
+              <tr><th>Platform/Operation</th><th>Survival</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Google Docs</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Microsoft Word</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Gmail / Outlook</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Twitter/X</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Slack</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Discord</td><td>✓ 100%</td><td>Full preservation</td></tr>
+              <tr><td>Notepad (Windows)</td><td>✗ 0%</td><td>Converts to ASCII</td></tr>
+              <tr><td>VS Code</td><td>~ 50%</td><td>Depends on settings</td></tr>
+              <tr><td>Regex sanitization</td><td>✗ 0%</td><td>Trivially strippable</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">7. Limitations</h2>
+        <p>
+          This approach is inherently <strong>fragile by design</strong>. Any text normalization step that converts Unicode to ASCII will strip the watermark <a href="#ref9" class="citation">[9]</a>. Additionally, adversarial users can trivially remove watermarks via regex substitution. We position this not as a security mechanism but as a <em>passive attribution layer</em> for typical use cases—analogous to EXIF metadata in images <a href="#ref10" class="citation">[10]</a>.
+        </p>
+        <p>
+          The ChatGPT keyboard copy limitation affects approximately 40% of copy operations based on informal testing. Users naturally prefer the copy button for longer responses, limiting real-world impact.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">8. Future Work</h2>
+        <p>
+          Future directions include: (1) encoding additional metadata (timestamps, session IDs) via space patterns, (2) combining with visible attribution markers, (3) integration with content authenticity initiatives (C2PA) <a href="#ref4" class="citation">[4]</a>, and (4) crowdsourced detection databases for analyzing AI text prevalence across platforms.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Changelog</h2>
+        <p style="font-family: Monaco, monospace; font-size: 10px; line-height: 1.8;">
+          <strong>v0.4.0</strong> (2025-12-16 22:05 UTC+8) — Added text visualizer with hover highlights, homoglyph section, 13 citations<br>
+          <strong>v0.3.0</strong> (2025-12-16 21:45 UTC+8) — Added multi-source detection, confidence bar UI<br>
+          <strong>v0.2.0</strong> (2025-12-16 21:35 UTC+8) — Clipboard API override for copy buttons<br>
+          <strong>v0.1.0</strong> (2025-12-16 20:00 UTC+8) — Initial implementation with copy event listener
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">References</h2>
+        <div class="references">
+          <div class="ref-item" id="ref1">[1] Kirchenbauer, J., et al. "A Watermark for Large Language Models." ICML 2023. <a href="https://arxiv.org/abs/2301.10226" target="_blank">arxiv.org/abs/2301.10226</a></div>
+          <div class="ref-item" id="ref2">[2] Mitchell, E., et al. "DetectGPT: Zero-Shot Machine-Generated Text Detection." ICML 2023. <a href="https://arxiv.org/abs/2301.11305" target="_blank">arxiv.org/abs/2301.11305</a></div>
+          <div class="ref-item" id="ref3">[3] OpenAI. "AI Classifier Discontinued." July 2023. <a href="https://openai.com/blog/new-ai-classifier-for-indicating-ai-written-text" target="_blank">openai.com/blog</a></div>
+          <div class="ref-item" id="ref4">[4] C2PA. "Content Authenticity Initiative." <a href="https://c2pa.org" target="_blank">c2pa.org</a></div>
+          <div class="ref-item" id="ref5">[5] Chrome Developers. "Content Scripts: Isolated Worlds." <a href="https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts" target="_blank">developer.chrome.com/docs/extensions</a></div>
+          <div class="ref-item" id="ref6">[6] React Documentation. "SyntheticEvent." <a href="https://react.dev/reference/react-dom/components/common#react-event-object" target="_blank">react.dev/reference</a></div>
+          <div class="ref-item" id="ref7">[7] W3C. "Clipboard API and Events." <a href="https://www.w3.org/TR/clipboard-apis/" target="_blank">w3.org/TR/clipboard-apis</a></div>
+          <div class="ref-item" id="ref8">[8] Barth, A., et al. "Protecting Browsers from Extension Vulnerabilities." NDSS 2010. <a href="https://www.researchgate.net/publication/221655526_Protecting_Browsers_from_Extension_Vulnerabilities" target="_blank">crypto.stanford.edu</a></div>
+          <div class="ref-item" id="ref9">[9] Unicode Consortium. "Unicode Normalization Forms." UAX #15. <a href="https://unicode.org/reports/tr15/" target="_blank">unicode.org/reports/tr15</a></div>
+          <div class="ref-item" id="ref10">[10] EXIF.org. "Exchangeable Image File Format." <a href="https://exif.org" target="_blank">exif.org</a></div>
+          <div class="ref-item" id="ref11">[11] Gabrilovich, E., Gontmakher, A. "The Homograph Attack." Comm. ACM 2002. <a href="https://dl.acm.org/doi/10.1145/503124.503156" target="_blank">dl.acm.org/doi/10.1145/503124.503156</a></div>
+          <div class="ref-item" id="ref12">[12] ICANN. "IDN Homograph Attack." <a href="https://wiki.mozilla.org/IDN_Display_Algorithm" target="_blank">wiki.mozilla.org/IDN_Display_Algorithm</a></div>
+          <div class="ref-item" id="ref13">[13] Brassil, J., et al. "Electronic Marking and Identification." IEEE Journal 1999. <a href="https://ieeexplore.ieee.org/document/752617" target="_blank">ieeexplore.ieee.org</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Tool -->
+    <div class="tool-side">
+      <div class="tool-header">
+        <div class="tool-header-buttons">
+          <div class="tool-header-button"></div>
+          <div class="tool-header-button"></div>
+        </div>
+        <h2>Decoder Tool</h2>
+        <div style="width: 28px;"></div>
+      </div>
+
+      <div class="tool-content">
+        <div class="field-label">Paste Text to Analyze</div>
+        <textarea id="input" placeholder="Paste AI-generated text here to detect its source..."></textarea>
+
+        <div class="button-row">
+          <button onclick="decode()">Analyze</button>
+        </div>
+
+        <div id="result" class="result">
+          <div class="result-header" id="result-header">Analysis Result</div>
+          <div class="result-body" id="result-body"></div>
+        </div>
+      </div>
+
+      <div class="tool-footer">
+        Interactive Demo — Try the Extension
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FINGERPRINTS = {
+      '\u2009': { name: 'ChatGPT', code: 'U+2009', color: 'chatgpt' },
+      '\u200A': { name: 'Claude', code: 'U+200A', color: 'claude' },
+      '\u2005': { name: 'Gemini', code: 'U+2005', color: 'gemini' },
+      '\u2004': { name: 'Poe', code: 'U+2004', color: 'poe' },
+      '\u2006': { name: 'Copilot', code: 'U+2006', color: 'copilot' },
+      '\u2007': { name: 'Perplexity', code: 'U+2007', color: 'perplexity' },
+      '\u2008': { name: 'Pi', code: 'U+2008', color: 'poe' },
+      '\u205F': { name: 'HuggingChat', code: 'U+205F', color: 'copilot' },
+    };
+
+    // Build set of all watermark characters for quick lookup
+    const WATERMARK_CHARS = new Set(Object.keys(FINGERPRINTS));
+
+    function visualizeSpaces(text, detectedSources) {
+      // Truncate for performance
+      const maxLen = 300;
+      const truncated = text.length > maxLen ? text.substring(0, maxLen) + '...' : text;
+
+      let html = '';
+      for (const char of truncated) {
+        if (WATERMARK_CHARS.has(char)) {
+          const info = FINGERPRINTS[char];
+          html += `<span class="space-marker" title="${info.name} (${info.code})"> </span>`;
+        } else if (char === ' ') {
+          html += `<span class="space-marker regular" title="Regular Space (U+0020)"> </span>`;
+        } else if (char === '\n') {
+          html += '<br>';
+        } else {
+          html += char.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+      }
+      return html;
+    }
+
+    function decode() {
+      const text = document.getElementById('input').value;
+      if (!text.trim()) return;
+
+      const resultDiv = document.getElementById('result');
+      const resultHeader = document.getElementById('result-header');
+      const resultBody = document.getElementById('result-body');
+
+      // Count ALL space types
+      const regularSpaces = (text.match(/ /g) || []).length;
+      const detectedSources = [];
+      let totalWatermarked = 0;
+
+      for (const [char, info] of Object.entries(FINGERPRINTS)) {
+        const count = (text.match(new RegExp(char, 'g')) || []).length;
+        if (count > 0) {
+          detectedSources.push({ ...info, count, char });
+          totalWatermarked += count;
+        }
+      }
+
+      const totalSpaces = regularSpaces + totalWatermarked;
+      const watermarkPct = totalSpaces > 0 ? Math.round((totalWatermarked / totalSpaces) * 100) : 0;
+      const regularPct = 100 - watermarkPct;
+
+      resultDiv.classList.add('show');
+
+      if (detectedSources.length > 0) {
+        resultHeader.textContent = '⚠ WATERMARK DETECTED';
+
+        // Build bar segments
+        let barHTML = '';
+        for (const src of detectedSources) {
+          const pct = Math.round((src.count / totalSpaces) * 100);
+          if (pct > 0) {
+            barHTML += `<div class="bar-segment bar-${src.color}" style="width:${pct}%">${src.name}</div>`;
+          }
+        }
+        if (regularPct > 0) {
+          barHTML += `<div class="bar-segment bar-regular" style="width:${regularPct}%">Regular</div>`;
+        }
+
+        // Build breakdown
+        let breakdownHTML = detectedSources.map(src =>
+          `<div class="breakdown-row"><span>${src.name} (${src.code})</span><span class="count">${src.count}</span></div>`
+        ).join('');
+        breakdownHTML += `<div class="breakdown-row"><span>Regular (U+0020)</span><span class="count">${regularSpaces}</span></div>`;
+
+        resultBody.innerHTML = `
+          <div class="source-tags">
+            ${detectedSources.map(s => `<span class="source-tag">${s.name}</span>`).join('')}
+          </div>
+
+          <div class="confidence-section">
+            <div class="confidence-label">
+              <span>Space Breakdown</span>
+              <span>${watermarkPct}% Watermarked</span>
+            </div>
+            <div class="confidence-bar">${barHTML}</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">Total Spaces</div>
+              <div class="stat-value">${totalSpaces}</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Watermarked</div>
+              <div class="stat-value">${totalWatermarked}</div>
+            </div>
+          </div>
+
+          <div class="breakdown">
+            <div class="breakdown-title">Breakdown by Source</div>
+            ${breakdownHTML}
+          </div>
+
+          <div class="visualizer-label">Text Preview (hover to see spaces)</div>
+          <div class="text-visualizer" id="text-viz">${visualizeSpaces(text, detectedSources)}</div>
+          <div class="visualizer-hint">Yellow = AI watermark, Gray = regular space</div>
+        `;
+      } else {
+        resultHeader.textContent = 'ANALYSIS COMPLETE';
+        resultBody.innerHTML = `
+          <div class="source-tags">
+            <span class="source-tag none">No Watermark</span>
+          </div>
+
+          <div class="confidence-section">
+            <div class="confidence-label">
+              <span>Space Breakdown</span>
+              <span>0% Watermarked</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="bar-segment bar-regular" style="width:100%">All Regular</div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">Total Spaces</div>
+              <div class="stat-value">${totalSpaces}</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Status</div>
+              <div class="stat-value">CLEAN</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Text Detector | Which AI wrote this?</title>
+  <meta name="description" content="Detect which AI wrote your text using invisible Unicode fingerprints. Works with ChatGPT, Claude, Gemini, and more.">
+  <meta property="og:title" content="AI Text Detector - Which AI wrote this?">
+  <meta property="og:description" content="Invisible watermarks reveal the source. Paste any text to detect.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "SF Mono", "Monaco", "Menlo", monospace;
+      font-size: 13px;
+      background: #fff;
+      color: #000;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      color: #666;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+
+    .input-section {
+      border: 2px solid #000;
+      margin-bottom: 24px;
+    }
+
+    .input-header {
+      background: #000;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      padding: 12px;
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      resize: none;
+      outline: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      background: #fff;
+      border: 2px solid #000;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.1s;
+    }
+
+    button:hover { background: #000; color: #fff; }
+    button.primary { background: #000; color: #fff; }
+    button.primary:hover { background: #333; }
+
+    /* Results */
+    .result {
+      border: 2px solid #000;
+      display: none;
+      margin-bottom: 24px;
+    }
+
+    .result.show { display: block; }
+
+    .result-header {
+      background: #000;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .result-body { padding: 20px; }
+
+    .detected-sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .source-tag {
+      background: #000;
+      color: #fff;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .source-tag.none {
+      background: #eee;
+      color: #666;
+    }
+
+    /* Confidence Bar */
+    .confidence-section {
+      margin-bottom: 20px;
+    }
+
+    .confidence-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .confidence-bar {
+      height: 24px;
+      background: #eee;
+      border: 2px solid #000;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .bar-segment {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: #fff;
+      min-width: 30px;
+    }
+
+    .bar-watermarked { background: #000; }
+    .bar-regular { background: #ccc; color: #666; }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      border: 1px solid #ddd;
+      padding: 12px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Breakdown */
+    .breakdown {
+      border-top: 1px solid #ddd;
+      padding-top: 16px;
+    }
+
+    .breakdown-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 12px;
+    }
+
+    .breakdown-row:last-child { border-bottom: none; }
+
+    /* CTA Section */
+    .cta-section {
+      border: 2px solid #000;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .cta-title {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .cta-desc {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    /* Info Section */
+    .info-section {
+      border-top: 2px solid #000;
+      padding-top: 24px;
+    }
+
+    .info-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .faq-item {
+      margin-bottom: 16px;
+    }
+
+    .faq-q {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .faq-a {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+    }
+
+    .footer a { color: #000; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 Which AI wrote this?</h1>
+    <p class="tagline">Detect AI source via invisible Unicode watermarks</p>
+
+    <div class="input-section">
+      <div class="input-header">Paste suspicious text</div>
+      <textarea id="input" placeholder="Paste text here to detect its AI source..."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="primary" onclick="analyze()">Analyze Text</button>
+      <button onclick="clearAll()">Clear</button>
+    </div>
+
+    <div id="result" class="result">
+      <div class="result-header">
+        <span>Detection Result</span>
+        <span id="result-status"></span>
+      </div>
+      <div class="result-body">
+        <div id="detected-sources" class="detected-sources"></div>
+
+        <div class="confidence-section">
+          <div class="confidence-label">
+            <span>Watermarked Spaces</span>
+            <span id="confidence-pct">0%</span>
+          </div>
+          <div class="confidence-bar" id="confidence-bar"></div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">Total Spaces</div>
+            <div class="stat-value" id="stat-total">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Watermarked</div>
+            <div class="stat-value" id="stat-watermarked">0</div>
+          </div>
+        </div>
+
+        <div class="breakdown" id="breakdown"></div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <div class="cta-title">📥 Get the Extension</div>
+      <div class="cta-desc">Automatically watermark AI text when you copy it</div>
+      <button onclick="window.open('https://github.com/CarlKho-Minerva/typographic-watermark', '_blank')">View on GitHub</button>
+    </div>
+
+    <div class="info-section">
+      <div class="info-title">How It Works</div>
+
+      <div class="faq-item">
+        <div class="faq-q">What are Unicode watermarks?</div>
+        <div class="faq-a">Unicode has multiple "space" characters that look identical but have different codes. We replace normal spaces (U+0020) with AI-specific variants when you copy text.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Which AIs are supported?</div>
+        <div class="faq-a">ChatGPT (U+2009), Claude (U+200A), Gemini (U+2005), Copilot (U+2006), Perplexity (U+2007), Poe (U+2004), and more.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Can watermarks be removed?</div>
+        <div class="faq-a">Yes, by pasting into Notepad or running text normalization. But they survive in Google Docs, Word, email, and social media.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Is 100% watermarked always AI?</div>
+        <div class="faq-a">Only if our extension was installed! This detects watermarks WE inject, not all AI text.</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Built by <a href="https://carlkho.com" target="_blank">Carl Kho</a> • <a href="https://github.com/CarlKho-Minerva/typographic-watermark" target="_blank">GitHub</a> • December 2024</p>
+    </div>
+  </div>
+
+  <script>
+    const FINGERPRINTS = {
+      '\u2009': { name: 'ChatGPT', code: 'U+2009' },
+      '\u200A': { name: 'Claude', code: 'U+200A' },
+      '\u2005': { name: 'Gemini', code: 'U+2005' },
+      '\u2004': { name: 'Poe', code: 'U+2004' },
+      '\u2006': { name: 'Copilot', code: 'U+2006' },
+      '\u2007': { name: 'Perplexity', code: 'U+2007' },
+      '\u2008': { name: 'Pi', code: 'U+2008' },
+      '\u205F': { name: 'HuggingChat', code: 'U+205F' },
+    };
+
+    function analyze() {
+      const text = document.getElementById('input').value;
+      if (!text.trim()) return;
+
+      const resultDiv = document.getElementById('result');
+      const sourcesDiv = document.getElementById('detected-sources');
+      const statusSpan = document.getElementById('result-status');
+      const barDiv = document.getElementById('confidence-bar');
+      const breakdownDiv = document.getElementById('breakdown');
+
+      // Count all space types
+      const regularSpaces = (text.match(/ /g) || []).length;
+      let watermarkedTotal = 0;
+      const detectedSources = [];
+      const breakdown = [];
+
+      for (const [char, info] of Object.entries(FINGERPRINTS)) {
+        const count = (text.match(new RegExp(char, 'g')) || []).length;
+        if (count > 0) {
+          watermarkedTotal += count;
+          detectedSources.push(info);
+          breakdown.push({ ...info, count });
+        }
+      }
+
+      const totalSpaces = regularSpaces + watermarkedTotal;
+      const watermarkPct = totalSpaces > 0 ? Math.round((watermarkedTotal / totalSpaces) * 100) : 0;
+      const regularPct = 100 - watermarkPct;
+
+      // Update UI
+      resultDiv.classList.add('show');
+
+      // Sources
+      if (detectedSources.length > 0) {
+        sourcesDiv.innerHTML = detectedSources.map(s =>
+          `<span class="source-tag">${s.name}</span>`
+        ).join('');
+        statusSpan.textContent = '⚠️ WATERMARK DETECTED';
+      } else {
+        sourcesDiv.innerHTML = '<span class="source-tag none">No watermark</span>';
+        statusSpan.textContent = 'CLEAN';
+      }
+
+      // Confidence bar
+      document.getElementById('confidence-pct').textContent = watermarkPct + '%';
+      barDiv.innerHTML = `
+        ${watermarkPct > 0 ? `<div class="bar-segment bar-watermarked" style="width:${watermarkPct}%">${watermarkPct}%</div>` : ''}
+        ${regularPct > 0 ? `<div class="bar-segment bar-regular" style="width:${regularPct}%">${regularPct}%</div>` : ''}
+      `;
+
+      // Stats
+      document.getElementById('stat-total').textContent = totalSpaces;
+      document.getElementById('stat-watermarked').textContent = watermarkedTotal;
+
+      // Breakdown
+      if (breakdown.length > 0) {
+        breakdownDiv.innerHTML = `
+          <div class="breakdown-title">Breakdown by Source</div>
+          ${breakdown.map(b => `
+            <div class="breakdown-row">
+              <span>${b.name} (${b.code})</span>
+              <span>${b.count} spaces</span>
+            </div>
+          `).join('')}
+          <div class="breakdown-row">
+            <span>Regular (U+0020)</span>
+            <span>${regularSpaces} spaces</span>
+          </div>
+        `;
+      } else {
+        breakdownDiv.innerHTML = `
+          <div class="breakdown-title">Space Analysis</div>
+          <div class="breakdown-row">
+            <span>Regular spaces (U+0020)</span>
+            <span>${regularSpaces}</span>
+          </div>
+        `;
+      }
+    }
+
+    function clearAll() {
+      document.getElementById('input').value = '';
+      document.getElementById('result').classList.remove('show');
+    }
+  </script>
+</body>
+</html>

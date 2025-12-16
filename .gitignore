@@ -1,0 +1,21 @@
+# Pomodoro recordings (personal)
+pomos/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# Virtual environment
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Node modules (if any)
+node_modules/

@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Typographic Watermark",
+  "version": "0.1.0",
+  "description": "Invisible AI text attribution via Unicode substitution",
+  "permissions": ["clipboardWrite", "clipboardRead", "activeTab"],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://poe.com/*",
+    "https://copilot.microsoft.com/*",
+    "https://perplexity.ai/*",
+    "https://www.perplexity.ai/*",
+    "https://pi.ai/*",
+    "https://huggingface.co/chat/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://poe.com/*",
+        "https://copilot.microsoft.com/*",
+        "https://perplexity.ai/*",
+        "https://www.perplexity.ai/*",
+        "https://pi.ai/*",
+        "https://huggingface.co/chat/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon48.png"
+  }
+}

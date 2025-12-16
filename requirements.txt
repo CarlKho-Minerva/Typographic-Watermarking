@@ -1,0 +1,10 @@
+# Typographic Watermarking - AI Text Attribution via Unicode Substitution
+# For the macOS clipboard watermark daemon
+
+pyperclip>=1.8.2
+pyobjc-framework-Cocoa>=10.0  # For AppKit/NSWorkspace
+pyobjc-framework-Quartz>=10.0
+
+# Jupyter for notebook development
+jupyter>=1.0.0
+ipykernel>=6.0.0
