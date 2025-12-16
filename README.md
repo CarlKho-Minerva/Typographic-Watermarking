@@ -35,7 +35,7 @@ A Chrome extension that embeds invisible provenance metadata into AI-generated t
 4. Click **Load unpacked** → select `chrome-extension/`
 
 ### Web Detector
-Visit [typographic-watermark.vercel.app](https://typographic-watermark.vercel.app) to paste and analyze text.
+Visit [typographic-watermark.vercel.app](https://typographic-watermarking.vercel.app/) to paste and analyze text.
 
 ## How Detection Works
 

@@ -1,3 +1,5 @@
+https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
+
 # Typographic Watermarking — Loom Demo Script
 ## Duration: 2 minutes | Last Updated: 2025-12-16 22:00 UTC+8
 
