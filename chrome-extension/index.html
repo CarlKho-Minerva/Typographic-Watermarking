@@ -494,7 +494,7 @@
       <div class="section">
         <h2 class="section-title">Abstract</h2>
         <p>
-          We present a lightweight method for embedding invisible provenance metadata into AI-generated text through <span class="highlight">typographic watermarking</span>. By substituting standard ASCII space characters (U+0020) with visually-identical Unicode variants mapped to specific language models, we enable post-hoc attribution of text to its originating system. Unlike logit-level watermarking approaches <a href="#ref1" class="citation">[1]</a>, our method operates as a post-processing step requiring no modification to model internals. We demonstrate feasibility across major LLM platforms and analyze robustness against common text sanitization operations.
+          I present a lightweight method for embedding invisible provenance metadata into AI-generated text through <span class="highlight">typographic watermarking</span>. By substituting standard ASCII space characters (U+0020) with visually-identical Unicode variants mapped to specific language models, I enable post-hoc attribution of text to its originating system. Unlike logit-level watermarking approaches <a href="#ref1" class="citation">[1]</a>, this method operates as a post-processing step requiring no modification to model internals. I demonstrate feasibility across major LLM platforms and analyze robustness against common text sanitization operations.
         </p>
       </div>
 
@@ -507,23 +507,23 @@
           Classifier-based detection has proven unreliable—OpenAI discontinued their AI classifier in July 2023 due to low accuracy <a href="#ref3" class="citation">[3]</a>. Watermarking approaches, while more robust, require modifications to model output distributions, limiting adoption to organizations with model access.
         </p>
         <p>
-          We propose an alternative: <strong>typographic watermarking</strong>. By exploiting the Unicode standard's multiple space characters, we embed model identity in the whitespace itself. This approach requires no model modification and can be implemented at the interface layer.
+          I propose an alternative: <strong>typographic watermarking</strong>. By exploiting the Unicode standard's multiple space characters, I embed model identity in the whitespace itself. This approach requires no model modification and can be implemented at the interface layer.
         </p>
       </div>
 
       <div class="section">
         <h2 class="section-title">2. Related Work</h2>
         <p>
-          <strong>Homoglyph Attacks.</strong> Our approach inverts a well-documented attack vector: <em>homoglyph substitution</em>. Attackers exploit visually-identical characters from different alphabets—such as Cyrillic 'А' (U+0410) for Latin 'A' (U+0041)—to create deceptive URLs for phishing <a href="#ref11" class="citation">[11]</a>. Notable examples include "аpple.com" with Cyrillic 'а', visually indistinguishable from the legitimate domain. ICANN's IDN homograph attack documentation <a href="#ref12" class="citation">[12]</a> catalogs these vulnerabilities extensively.
+          <strong>Homoglyph Attacks.</strong> My approach inverts a well-documented attack vector: <em>homoglyph substitution</em>. Attackers exploit visually-identical characters from different alphabets—such as Cyrillic 'А' (U+0410) for Latin 'A' (U+0041)—to create deceptive URLs for phishing <a href="#ref11" class="citation">[11]</a>. Notable examples include "аpple.com" with Cyrillic 'а', visually indistinguishable from the legitimate domain. ICANN's IDN homograph attack documentation <a href="#ref12" class="citation">[12]</a> catalogs these vulnerabilities extensively.
         </p>
         <p>
-          <strong>Text Steganography.</strong> The broader field of text steganography investigates hiding information within text <a href="#ref13" class="citation">[13]</a>. Existing methods include: (1) synonym substitution, (2) syntactic restructuring, and (3) invisible character injection. Our approach falls into the third category but focuses specifically on whitespace—the most abundant and least scrutinized character class.
+          <strong>Text Steganography.</strong> The broader field of text steganography investigates hiding information within text <a href="#ref13" class="citation">[13]</a>. Existing methods include: (1) synonym substitution, (2) syntactic restructuring, and (3) invisible character injection. My approach falls into the third category but focuses specifically on whitespace—the most abundant and least scrutinized character class.
         </p>
         <p>
-          <strong>Logit Watermarking.</strong> Recent work by Kirchenbauer et al. <a href="#ref1" class="citation">[1]</a> and Aaronson at OpenAI demonstrated watermarking via biased token selection during generation. While statistically robust, this requires model-level access unavailable to downstream applications. Our method operates as <em>post-hoc</em> encoding, enabling third-party attribution without model modification.
+          <strong>Logit Watermarking.</strong> Recent work by Kirchenbauer et al. <a href="#ref1" class="citation">[1]</a> and Aaronson at OpenAI demonstrated watermarking via biased token selection during generation. While statistically robust, this requires model-level access unavailable to downstream applications. My method operates as <em>post-hoc</em> encoding, enabling third-party attribution without model modification.
         </p>
         <p>
-          <strong>Key Insight.</strong> Where homoglyph attacks use visual similarity to <em>deceive</em>, we use it to <em>attribute</em>. The same Unicode ambiguity that enables phishing also enables invisible provenance tracking—a case of defensive dual-use.
+          <strong>Key Insight.</strong> Where homoglyph attacks use visual similarity to <em>deceive</em>, I use it to <em>attribute</em>. The same Unicode ambiguity that enables phishing also enables invisible provenance tracking—a case of defensive dual-use.
         </p>
       </div>
 
@@ -556,7 +556,7 @@
       <div class="section">
         <h2 class="section-title">4. Methodology</h2>
         <p>
-          Our implementation operates as a browser extension injecting into copy events on supported AI chat interfaces. When a user copies text, we intercept the clipboard write operation and perform a global substitution:
+          My implementation operates as a browser extension injecting into copy events on supported AI chat interfaces. When a user copies text, I intercept the clipboard write operation and perform a global substitution:
         </p>
         <p style="text-align: center; font-family: var(--font-mono); margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid var(--color-border);">
           text.replace(/ /g, FINGERPRINT[hostname])
@@ -569,7 +569,7 @@
       <div class="section">
         <h2 class="section-title">5. Robustness Analysis</h2>
         <p>
-          We tested watermark survival across common text processing pipelines. <em style="color: var(--color-text-muted);">(Note: Preliminary results—formal validation pending.)</em>
+          I tested watermark survival across common text processing pipelines. <em style="color: var(--color-text-muted);">(Note: Preliminary results—formal validation pending.)</em>
         </p>
         <div class="table-container">
           <div class="table-title">Table 2: Watermark Survival Rates</div>
@@ -595,7 +595,7 @@
           Browser extension development introduces platform-specific constraints. Chrome extensions run content scripts in an <em>isolated world</em> separate from the page's JavaScript context <a href="#ref5" class="citation">[5]</a>. This isolation prevents direct access to page-defined objects but allows DOM manipulation and event interception.
         </p>
         <p>
-          We identified a critical limitation on ChatGPT specifically: keyboard-initiated copy events (Ctrl+C) within their markdown containers are handled by React's synthetic event system <a href="#ref6" class="citation">[6]</a> before our content script's capture-phase listener can modify the clipboard. However, the platform's native "Copy" button uses the Clipboard API <a href="#ref7" class="citation">[7]</a>, which we successfully intercept via prototype override:
+          I identified a critical limitation on ChatGPT specifically: keyboard-initiated copy events (Ctrl+C) within their markdown containers are handled by React's synthetic event system <a href="#ref6" class="citation">[6]</a> before my content script's capture-phase listener can modify the clipboard. However, the platform's native "Copy" button uses the Clipboard API <a href="#ref7" class="citation">[7]</a>, which I successfully intercept via prototype override:
         </p>
         <p style="text-align: center; font-family: var(--font-mono); margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid var(--color-border); font-size: 10px;">
           navigator.clipboard.writeText = async (text) =&gt; originalWriteText(watermark(text))
@@ -623,7 +623,7 @@
       <div class="section">
         <h2 class="section-title">6. Robustness Analysis</h2>
         <p>
-          We tested watermark survival across common text processing pipelines:
+          I tested watermark survival across common text processing pipelines:
         </p>
         <div class="table-container">
           <div class="table-title">Table 4: Watermark Survival Rates</div>
@@ -649,7 +649,7 @@
       <div class="section">
         <h2 class="section-title">7. Limitations</h2>
         <p>
-          This approach is inherently <strong>fragile by design</strong>. Any text normalization step that converts Unicode to ASCII will strip the watermark <a href="#ref9" class="citation">[9]</a>. Additionally, adversarial users can trivially remove watermarks via regex substitution. We position this not as a security mechanism but as a <em>passive attribution layer</em> for typical use cases—analogous to EXIF metadata in images <a href="#ref10" class="citation">[10]</a>.
+          This approach is inherently <strong>fragile by design</strong>. Any text normalization step that converts Unicode to ASCII will strip the watermark <a href="#ref9" class="citation">[9]</a>. Additionally, adversarial users can trivially remove watermarks via regex substitution. I position this not as a security mechanism but as a <em>passive attribution layer</em> for typical use cases—analogous to EXIF metadata in images <a href="#ref10" class="citation">[10]</a>.
         </p>
         <p>
           With the introduction of global event capture (v0.5.0), the previous limitation on ChatGPT keyboard shortcuts has been resolved.
