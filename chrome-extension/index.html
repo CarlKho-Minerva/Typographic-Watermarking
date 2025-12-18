@@ -488,7 +488,7 @@
       <div class="paper-header">
         <h1 class="paper-title">Typographic Watermarking: Attributing LLM Output via Unicode Substitution</h1>
         <div class="paper-authors"><a href="https://www.linkedin.com/in/carlkho" target="_blank" style="color: var(--color-text-main); text-decoration: none; border-bottom: 1px solid var(--color-border-strong);">Carl Kho</a></div>
-        <div class="paper-meta">Preprint • December 16 2025 @ Sun Moon Lake, Taiwan • Work in Progress</div>
+        <div class="paper-meta">Preprint • December 18, 2025 @ Sun Moon Lake, Taiwan • v0.5.0</div>
       </div>
 
       <div class="section">
@@ -610,13 +610,13 @@
             <tbody>
               <tr><td>ChatGPT</td><td>✓ Works</td><td>✓ Works</td><td>Fixed via Capture Phase</td></tr>
               <tr><td>Claude</td><td>✓ Works</td><td>✓ Works</td><td>Standard DOM events</td></tr>
-              <tr><td>Gemini</td><td>✓ Works</td><td>✓ Works</td><td>Clipboard API</td></tr>
+              <tr><td>Gemini</td><td>✓ Works</td><td>✓ Works</td><td>Shadow DOM + Iframe</td></tr>
               <tr><td>Perplexity</td><td>✓ Works</td><td>✓ Works</td><td>Standard DOM events</td></tr>
             </tbody>
           </table>
         </div>
         <p>
-          This asymmetry is documented in Chrome's extension security model <a href="#ref8" class="citation">[8]</a> and represents a fundamental constraint rather than an implementation bug.
+          <strong>Implementation Note (v0.5.0):</strong> The critical fix required three techniques: (1) registering the copy listener in the <em>capture phase</em> (<code>useCapture: true</code>) to run before React's synthetic event system, (2) calling <code>event.stopImmediatePropagation()</code> to prevent the site's own handlers from overwriting the clipboard, and (3) extending permissions to <code>*.googleusercontent.com</code> to inject into Gemini's sandboxed iframes. These details are essential for reproducibility.
         </p>
       </div>
 
