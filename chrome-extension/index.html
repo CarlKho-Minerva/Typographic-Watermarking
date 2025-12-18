@@ -7,14 +7,47 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    :root {
+      /* Colors */
+      --color-bg-paper: #ffffff;
+      --color-bg-tool: #fcfcfc;
+      --color-text-main: #111111;
+      --color-text-muted: #666666;
+      --color-border: #e0e0e0;
+      --color-border-strong: #000000;
+      --color-accent: #000000;
+      --color-highlight: #fff000;
+
+      /* Source Colors */
+      --color-chatgpt: #10a37f;
+      --color-claude: #d97706;
+      --color-gemini: #4285f4;
+      --color-copilot: #0078d4;
+      --color-perplexity: #8b5cf6;
+      --color-poe: #7c3aed;
+      --color-regular: #cccccc;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-s: 8px;
+      --space-m: 16px;
+      --space-l: 24px;
+      --space-xl: 40px;
+
+      /* Typography */
+      --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
     body {
-      font-family: "Geneva", "Helvetica Neue", Helvetica, sans-serif;
+      font-family: var(--font-main);
       font-size: 13px;
-      background: #ffffff;
-      color: #000000;
+      background: var(--color-bg-paper);
+      color: var(--color-text-main);
       height: 100vh;
       overflow: hidden;
-      -webkit-font-smoothing: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .split-container {
@@ -27,14 +60,15 @@
       width: 50vw;
       height: 100vh;
       overflow-y: auto;
-      padding: 40px;
-      border-right: 2px solid #000;
+      padding: var(--space-xl);
+      border-right: 2px solid var(--color-border-strong);
+      background: var(--color-bg-paper);
     }
 
     .paper-header {
-      margin-bottom: 32px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid #000;
+      margin-bottom: var(--space-l);
+      padding-bottom: var(--space-m);
+      border-bottom: 2px solid var(--color-border-strong);
     }
 
     .paper-title {
@@ -52,7 +86,7 @@
 
     .paper-meta {
       font-size: 10px;
-      color: #888;
+      color: var(--color-text-muted);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
@@ -63,12 +97,12 @@
 
     .section-title {
       font-size: 11px;
-      font-weight: bold;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      border-bottom: 1px solid #000;
-      padding-bottom: 4px;
-      margin-bottom: 12px;
+      border-bottom: 1px solid var(--color-border-strong);
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-m);
     }
 
     .section p {
@@ -78,7 +112,7 @@
     }
 
     .citation {
-      color: #0066cc;
+      color: var(--color-copilot); /* Use a blue-ish token */
       text-decoration: none;
       cursor: pointer;
     }
@@ -88,25 +122,25 @@
     }
 
     .highlight {
-      background: #ffff00;
+      background: var(--color-highlight);
       padding: 0 2px;
     }
 
     code {
-      font-family: "Monaco", monospace;
+      font-family: var(--font-mono);
       font-size: 11px;
-      background: #f0f0f0;
-      padding: 1px 4px;
-      border: 1px solid #ccc;
+      background: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 3px;
     }
 
     .table-container {
-      border: 2px solid #000;
-      margin: 16px 0;
+      border: 2px solid var(--color-border-strong);
+      margin: var(--space-m) 0;
     }
 
     .table-title {
-      background: #000;
+      background: var(--color-border-strong);
       color: #fff;
       padding: 6px 10px;
       font-size: 10px;
@@ -123,18 +157,18 @@
     th, td {
       padding: 8px 10px;
       text-align: left;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid var(--color-border);
     }
 
     th {
-      background: #f5f5f5;
-      font-weight: bold;
+      background: #f8f8f8;
+      font-weight: 600;
       text-transform: uppercase;
       font-size: 10px;
-      border-bottom: 2px solid #000;
+      border-bottom: 2px solid var(--color-border-strong);
     }
 
-    td:nth-child(2) { font-family: "Monaco", monospace; }
+    td:nth-child(2) { font-family: var(--font-mono); }
 
     .references {
       font-size: 11px;
@@ -148,7 +182,7 @@
     }
 
     .ref-item a {
-      color: #0066cc;
+      color: var(--color-copilot);
       text-decoration: none;
     }
 
@@ -161,14 +195,14 @@
       top: 0;
       width: 50vw;
       height: 100vh;
-      background: #fafafa;
+      background: var(--color-bg-tool);
       display: flex;
       flex-direction: column;
     }
 
     .tool-header {
-      background: #fff;
-      border-bottom: 2px solid #000;
+      background: var(--color-bg-paper);
+      border-bottom: 2px solid var(--color-border-strong);
       padding: 12px 20px;
       display: flex;
       align-items: center;
@@ -183,7 +217,7 @@
     .tool-header-button {
       width: 12px;
       height: 12px;
-      border: 1px solid #000;
+      border: 1px solid var(--color-border-strong);
       background: #fff;
     }
 
@@ -191,7 +225,7 @@
       flex: 1;
       text-align: center;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
@@ -213,61 +247,73 @@
     textarea {
       width: 100%;
       height: 160px;
-      background: #fff;
-      border: 2px solid #000;
-      padding: 10px;
-      font-family: "Monaco", monospace;
+      background: var(--color-bg-paper);
+      border: 2px solid var(--color-border-strong);
+      padding: var(--space-m);
+      font-family: var(--font-mono);
       font-size: 11px;
       resize: none;
       outline: none;
       white-space: pre-wrap;
+      transition: box-shadow 0.15s;
     }
 
-    textarea:focus { box-shadow: inset 2px 2px 0 #ddd; }
-    textarea::placeholder { color: #888; }
+    textarea:focus { box-shadow: 4px 4px 0 rgba(0,0,0,0.1); }
+    textarea::placeholder { color: var(--color-text-muted); }
 
     .button-row {
-      margin-top: 16px;
+      margin-top: var(--space-m);
       display: flex;
       justify-content: center;
     }
 
     button {
-      padding: 8px 32px;
-      background: #fff;
-      border: 2px solid #000;
+      padding: 10px 32px;
+      background: var(--color-bg-paper);
+      border: 2px solid var(--color-border-strong);
+      color: var(--color-text-main);
       font-family: inherit;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 700;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 1px;
-      box-shadow: 2px 2px 0 #000;
+      box-shadow: 3px 3px 0 var(--color-border-strong);
+      transition: all 0.1s;
     }
 
-    button:hover { background: #000; color: #fff; }
-    button:active { box-shadow: none; transform: translate(2px, 2px); }
+    button:hover {
+      background: var(--color-accent);
+      color: #ffffff;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+    }
+    button:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--color-border-strong);
+    }
 
     .result {
-      margin-top: 24px;
-      border: 2px solid #000;
+      margin-top: var(--space-l);
+      border: 2px solid var(--color-border-strong);
       display: none;
-      background: #fff;
+      background: var(--color-bg-paper);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.05);
     }
 
     .result.show { display: block; }
 
     .result-header {
-      background: #000;
+      background: var(--color-border-strong);
       color: #fff;
-      padding: 8px 12px;
-      font-weight: bold;
+      padding: 10px 14px;
+      font-weight: 700;
       text-transform: uppercase;
       font-size: 10px;
       letter-spacing: 1px;
     }
 
-    .result-body { padding: 16px; }
+    .result-body { padding: var(--space-m); }
 
     .detected-label {
       font-size: 10px;
@@ -292,8 +338,8 @@
     }
 
     .detail-row:last-child { border-bottom: none; }
-    .detail-label { width: 140px; color: #666; text-transform: uppercase; font-size: 10px; }
-    .detail-value { font-family: "Monaco", monospace; font-weight: bold; }
+    .detail-label { width: 140px; color: var(--color-text-muted); text-transform: uppercase; font-size: 10px; }
+    .detail-value { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-weight: bold; }
 
     .tool-footer {
       padding: 12px 20px;
@@ -307,19 +353,19 @@
     }
 
     /* Confidence Bar */
-    .confidence-section { margin-bottom: 16px; }
+    .confidence-section { margin-bottom: var(--space-m); }
     .confidence-label {
       display: flex;
       justify-content: space-between;
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #666;
+      color: var(--color-text-muted);
       margin-bottom: 6px;
     }
     .confidence-bar {
       height: 20px;
-      border: 2px solid #000;
+      border: 2px solid var(--color-border-strong);
       display: flex;
       overflow: hidden;
     }
@@ -329,17 +375,17 @@
       align-items: center;
       justify-content: center;
       font-size: 9px;
-      font-weight: bold;
+      font-weight: 700;
       color: #fff;
       min-width: 24px;
     }
-    .bar-chatgpt { background: #10a37f; }
-    .bar-claude { background: #d97706; }
-    .bar-gemini { background: #4285f4; }
-    .bar-copilot { background: #0078d4; }
-    .bar-perplexity { background: #8b5cf6; }
-    .bar-poe { background: #7c3aed; }
-    .bar-regular { background: #ddd; color: #666; }
+    .bar-chatgpt { background: var(--color-chatgpt); }
+    .bar-claude { background: var(--color-claude); }
+    .bar-gemini { background: var(--color-gemini); }
+    .bar-copilot { background: var(--color-copilot); }
+    .bar-perplexity { background: var(--color-perplexity); }
+    .bar-poe { background: var(--color-poe); }
+    .bar-regular { background: var(--color-regular); color: var(--color-text-muted); }
 
     /* Stats Grid */
     .stats-grid {
@@ -354,39 +400,39 @@
       text-align: center;
     }
     .stat-label { font-size: 9px; text-transform: uppercase; color: #888; margin-bottom: 4px; }
-    .stat-value { font-size: 18px; font-weight: bold; font-family: Monaco, monospace; }
+    .stat-value { font-size: 18px; font-weight: bold; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
 
     /* Breakdown */
-    .breakdown { border-top: 1px solid #ddd; padding-top: 12px; }
-    .breakdown-title { font-size: 10px; text-transform: uppercase; color: #888; margin-bottom: 10px; letter-spacing: 0.5px; }
+    .breakdown { border-top: 1px solid var(--color-border); padding-top: 12px; }
+    .breakdown-title { font-size: 10px; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 10px; letter-spacing: 0.5px; }
     .breakdown-row {
       display: flex;
       justify-content: space-between;
       padding: 6px 0;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--color-bg-tool);
       font-size: 11px;
     }
     .breakdown-row:last-child { border-bottom: none; }
-    .breakdown-row .count { font-family: Monaco, monospace; font-weight: bold; }
+    .breakdown-row .count { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-weight: bold; }
 
     /* Source Tags */
     .source-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
     .source-tag {
-      background: #000;
+      background: var(--color-accent);
       color: #fff;
       padding: 4px 10px;
       font-size: 11px;
-      font-weight: bold;
+      font-weight: 700;
     }
-    .source-tag.none { background: #eee; color: #666; }
+    .source-tag.none { background: var(--color-border); color: var(--color-text-muted); }
 
     /* Text Visualizer */
     .text-visualizer {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      padding: 12px;
+      background: var(--color-bg-paper);
+      border: 1px solid var(--color-border);
+      padding: var(--space-m);
       margin-top: 12px;
-      font-family: Monaco, monospace;
+      font-family: var(--font-mono);
       font-size: 11px;
       line-height: 1.8;
       max-height: 120px;
@@ -394,23 +440,23 @@
       word-break: break-word;
     }
     .text-visualizer .space-marker {
-      background: #ffeb3b;
+      background: var(--color-highlight);
       border-radius: 2px;
       padding: 1px 0;
       cursor: pointer;
       transition: all 0.15s ease;
     }
     .text-visualizer .space-marker:hover {
-      background: #ff5722;
+      background: var(--color-accent);
       color: white;
-      box-shadow: 0 0 8px rgba(255, 87, 34, 0.6);
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
     }
     .text-visualizer .space-marker.regular {
-      background: #e0e0e0;
+      background: var(--color-border);
     }
     .text-visualizer .space-marker.regular:hover {
-      background: #9e9e9e;
-      box-shadow: 0 0 8px rgba(158, 158, 158, 0.6);
+      background: var(--color-text-muted);
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
     .visualizer-label {
       font-size: 9px;
@@ -430,7 +476,7 @@
     /* Responsive */
     @media (max-width: 900px) {
       .split-container { flex-direction: column; }
-      .paper-side { width: 100%; height: auto; border-right: none; border-bottom: 2px solid #000; }
+      .paper-side { width: 100%; height: auto; border-right: none; border-bottom: 2px solid var(--color-border-strong); }
       .tool-side { position: relative; width: 100%; height: auto; min-height: 60vh; }
     }
   </style>
@@ -441,7 +487,7 @@
     <div class="paper-side">
       <div class="paper-header">
         <h1 class="paper-title">Typographic Watermarking: Attributing LLM Output via Unicode Substitution</h1>
-        <div class="paper-authors"><a href="https://www.linkedin.com/in/carlkho" target="_blank" style="color: #000; text-decoration: none; border-bottom: 1px solid #000;">Carl Kho</a></div>
+        <div class="paper-authors"><a href="https://www.linkedin.com/in/carlkho" target="_blank" style="color: var(--color-text-main); text-decoration: none; border-bottom: 1px solid var(--color-border-strong);">Carl Kho</a></div>
         <div class="paper-meta">Preprint • December 16 2025 @ Sun Moon Lake, Taiwan • Work in Progress</div>
       </div>
 
@@ -512,7 +558,7 @@
         <p>
           Our implementation operates as a browser extension injecting into copy events on supported AI chat interfaces. When a user copies text, we intercept the clipboard write operation and perform a global substitution:
         </p>
-        <p style="text-align: center; font-family: Monaco, monospace; margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid #ccc;">
+        <p style="text-align: center; font-family: var(--font-mono); margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid var(--color-border);">
           text.replace(/ /g, FINGERPRINT[hostname])
         </p>
         <p>
@@ -523,7 +569,7 @@
       <div class="section">
         <h2 class="section-title">5. Robustness Analysis</h2>
         <p>
-          We tested watermark survival across common text processing pipelines. <em style="color: #888;">(Note: Preliminary results—formal validation pending.)</em>
+          We tested watermark survival across common text processing pipelines. <em style="color: var(--color-text-muted);">(Note: Preliminary results—formal validation pending.)</em>
         </p>
         <div class="table-container">
           <div class="table-title">Table 2: Watermark Survival Rates</div>
@@ -551,10 +597,10 @@
         <p>
           We identified a critical limitation on ChatGPT specifically: keyboard-initiated copy events (Ctrl+C) within their markdown containers are handled by React's synthetic event system <a href="#ref6" class="citation">[6]</a> before our content script's capture-phase listener can modify the clipboard. However, the platform's native "Copy" button uses the Clipboard API <a href="#ref7" class="citation">[7]</a>, which we successfully intercept via prototype override:
         </p>
-        <p style="text-align: center; font-family: Monaco, monospace; margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid #ccc; font-size: 10px;">
+        <p style="text-align: center; font-family: var(--font-mono); margin: 16px 0; padding: 12px; background: #f5f5f5; border: 1px solid var(--color-border); font-size: 10px;">
           navigator.clipboard.writeText = async (text) =&gt; originalWriteText(watermark(text))
         </p>
-        <p><em style="color: #888;">(Note: Table 3 reflects tested platforms—extension verified working on all listed sites.)</em></p>
+        <p><em style="color: var(--color-text-muted);">(Note: Table 3 reflects tested platforms—extension verified working on all listed sites.)</em></p>
         <div class="table-container">
           <div class="table-title">Table 3: Copy Method Interception by Platform</div>
           <table>
@@ -619,7 +665,7 @@
 
       <div class="section">
         <h2 class="section-title">Changelog</h2>
-        <p style="font-family: Monaco, monospace; font-size: 10px; line-height: 1.8;">
+        <p style="font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; font-size: 10px; line-height: 1.8;">
           <strong>v0.5.0</strong> (2025-12-17 00:31 UTC+8) — Fixed ChatGPT Ctrl+C bug via event capture, Shadow DOM support for Gemini, robust decoder<br>
           <strong>v0.4.0</strong> (2025-12-16 22:05 UTC+8) — Added text visualizer with hover highlights, homoglyph section, 13 citations<br>
           <strong>v0.3.0</strong> (2025-12-16 21:45 UTC+8) — Added multi-source detection, confidence bar UI<br>
@@ -659,17 +705,7 @@
         <div style="width: 28px;"></div>
       </div>
 
-      <div class="legend">
-        <span class="legend-item"><span class="dot" style="background:var(--chatgpt)"></span>ChatGPT</span>
-        <span class="legend-item"><span class="dot" style="background:var(--claude)"></span>Claude</span>
-        <span class="legend-item"><span class="dot" style="background:var(--gemini)"></span>Gemini</span>
-        <span class="legend-item"><span class="dot" style="background:var(--copilot)"></span>Copilot</span>
-      </div>
 
-      <!-- DEBUG OUTPUT -->
-      <div id="debug-output" style="margin-top:10px; font-family:monospace; font-size:12px; color:#666; border:1px solid #333; padding:5px;">
-        Space Analysis: (Paste text to see)
-      </div>
 
       <div class="tool-content">
         <div class="field-label">Paste Text to Analyze</div>
@@ -740,13 +776,7 @@
 
     function decode() {
       const text = document.getElementById('input').value;
-      const debugOutput = document.getElementById('debug-output');
-
       if (!text) return;
-
-      // 1. RAW DEBUG VIEW (Like Python's repr)
-      // This proves exactly what characters are in the box
-      debugOutput.textContent = "RAW BYTES: " + debugRepr(text).substring(0, 200) + (text.length > 200 ? "..." : "");
 
       const resultDiv = document.getElementById('result');
       const resultHeader = document.getElementById('result-header');
@@ -862,9 +892,15 @@
           <div class="visualizer-hint">Only spaces are highlighted. Hover to see codepoint.</div>
         `;
       } else {
-
-          <div class="stats-grid">
-            <div class="stat-box">
+        resultHeader.textContent = 'NO WATERMARK DETECTED';
+        resultHeader.style.background = '#666';
+        resultBody.innerHTML = `
+          <div class="detected-ai" style="color:#888;">CLEAN</div>
+          <div class="detail-row" style="justify-content:center; color:#666;">
+            No known AI watermark characters found.
+          </div>
+          <div class="stats-grid" style="margin-top:20px;">
+             <div class="stat-box">
               <div class="stat-label">Total Spaces</div>
               <div class="stat-value">${totalSpaces}</div>
             </div>
@@ -872,6 +908,9 @@
               <div class="stat-label">Status</div>
               <div class="stat-value">CLEAN</div>
             </div>
+          </div>
+          <div style="font-family:monospace; font-size:10px; color:#aaa; margin-top:10px;">
+             Raw Check: ${directHits.length} hits
           </div>
         `;
       }
