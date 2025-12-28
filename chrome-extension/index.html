@@ -440,19 +440,23 @@
       word-break: break-word;
     }
     .text-visualizer .space-marker {
-      background: var(--color-highlight);
       border-radius: 2px;
       padding: 1px 0;
       cursor: pointer;
       transition: all 0.15s ease;
     }
     .text-visualizer .space-marker:hover {
-      background: var(--color-accent);
-      color: white;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      filter: brightness(1.2);
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
     }
+    .text-visualizer .space-marker.chatgpt { background: var(--color-chatgpt); }
+    .text-visualizer .space-marker.claude { background: var(--color-claude); }
+    .text-visualizer .space-marker.gemini { background: var(--color-gemini); }
+    .text-visualizer .space-marker.copilot { background: var(--color-copilot); }
+    .text-visualizer .space-marker.perplexity { background: var(--color-perplexity); }
+    .text-visualizer .space-marker.poe { background: var(--color-poe); }
     .text-visualizer .space-marker.regular {
-      background: var(--color-border);
+      background: var(--color-regular);
     }
     .text-visualizer .space-marker.regular:hover {
       background: var(--color-text-muted);
@@ -716,10 +720,10 @@
           I explicitly characterize the adversary profile to clarify the scope of this approach:
         </p>
         <p>
-          <strong>Target Adversary: Casual Plagiarist.</strong> The primary use case is detecting unsophisticated misuse—students submitting AI-generated essays, content farms republishing LLM output, or professionals passing off AI drafts as original work. These actors typically copy-paste without post-processing.
+          <strong>Primary Use Case: AI Provider Adoption.</strong> This proof-of-concept demonstrates how AI companies (OpenAI, Anthropic, Google) could embed typographic watermarks at the API response layer. The primary value is <em>systemic transparency</em>—enabling provenance tracking across the AI ecosystem without requiring user action or model modification.
         </p>
         <p>
-          <strong>Non-Target Adversary: Motivated Attacker.</strong> A technically sophisticated adversary can trivially strip watermarks via regex: <code>text.replace(/[\u2000-\u206F]/g, ' ')</code>. This approach provides <em>no security guarantee</em> against intentional circumvention.
+          <strong>Secondary Use Case: Institutional Compliance.</strong> Organizations concerned about AI text in sensitive contexts—journalism, legal documents, medical records—could use detection tools to flag text requiring human verification. This positions watermarking as an <em>audit layer</em>, not a punitive mechanism.
         </p>
         <p>
           <strong>Analogy: EXIF Metadata.</strong> I position typographic watermarking analogously to image EXIF data <a href="#ref10" class="citation">[10]</a>—useful for provenance tracking in normal workflows, trivially strippable by adversaries, but effective for the majority of casual use cases. Like EXIF, the value lies in <em>passive attribution</em> rather than active security.
@@ -933,7 +937,7 @@
       for (const char of truncated) {
         if (WATERMARK_CHARS.has(char)) {
           const info = FINGERPRINTS[char];
-          html += `<span class="space-marker" title="${info.name} (${info.code})"> </span>`;
+          html += `<span class="space-marker ${info.color}" title="${info.name} (${info.code})"> </span>`;
         } else if (char === ' ' || char === '\u00A0') {
           html += `<span class="space-marker regular" title="Regular Space (U+0020 or U+00A0)"> </span>`;
         } else if (char === '\n') {
