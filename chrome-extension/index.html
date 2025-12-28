@@ -439,26 +439,36 @@
       overflow-y: auto;
       word-break: break-word;
     }
-    .text-visualizer .space-marker {
+    .text-visualizer .space-marker,
+    .visualizer-modal-body .space-marker {
       border-radius: 2px;
       padding: 1px 0;
       cursor: pointer;
       transition: all 0.15s ease;
     }
-    .text-visualizer .space-marker:hover {
+    .text-visualizer .space-marker:hover,
+    .visualizer-modal-body .space-marker:hover {
       filter: brightness(1.2);
       box-shadow: 0 0 8px rgba(0,0,0,0.3);
     }
-    .text-visualizer .space-marker.chatgpt { background: var(--color-chatgpt); }
-    .text-visualizer .space-marker.claude { background: var(--color-claude); }
-    .text-visualizer .space-marker.gemini { background: var(--color-gemini); }
-    .text-visualizer .space-marker.copilot { background: var(--color-copilot); }
-    .text-visualizer .space-marker.perplexity { background: var(--color-perplexity); }
-    .text-visualizer .space-marker.poe { background: var(--color-poe); }
-    .text-visualizer .space-marker.regular {
+    .text-visualizer .space-marker.chatgpt,
+    .visualizer-modal-body .space-marker.chatgpt { background: var(--color-chatgpt); }
+    .text-visualizer .space-marker.claude,
+    .visualizer-modal-body .space-marker.claude { background: var(--color-claude); }
+    .text-visualizer .space-marker.gemini,
+    .visualizer-modal-body .space-marker.gemini { background: var(--color-gemini); }
+    .text-visualizer .space-marker.copilot,
+    .visualizer-modal-body .space-marker.copilot { background: var(--color-copilot); }
+    .text-visualizer .space-marker.perplexity,
+    .visualizer-modal-body .space-marker.perplexity { background: var(--color-perplexity); }
+    .text-visualizer .space-marker.poe,
+    .visualizer-modal-body .space-marker.poe { background: var(--color-poe); }
+    .text-visualizer .space-marker.regular,
+    .visualizer-modal-body .space-marker.regular {
       background: var(--color-regular);
     }
-    .text-visualizer .space-marker.regular:hover {
+    .text-visualizer .space-marker.regular:hover,
+    .visualizer-modal-body .space-marker.regular:hover {
       background: var(--color-text-muted);
       box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
@@ -999,6 +1009,16 @@
     </div>
   </div>
 
+  <!-- Fullscreen Visualizer Modal -->
+  <div class="visualizer-modal-backdrop" id="visualizerBackdrop" onclick="closeVisualizerFullscreen()"></div>
+  <div class="visualizer-modal" id="visualizerModal">
+    <div class="visualizer-modal-header">
+      <h3>Character Visualizer</h3>
+      <button class="visualizer-modal-close" onclick="closeVisualizerFullscreen()">×</button>
+    </div>
+    <div class="visualizer-modal-body" id="visualizerModalBody"></div>
+  </div>
+
   <script>
     const FINGERPRINTS = {
       '\u2009': { name: 'ChatGPT', code: 'U+2009', color: 'chatgpt' },
@@ -1013,6 +1033,26 @@
 
     // Build set of all watermark characters for quick lookup
     const WATERMARK_CHARS = new Set(Object.keys(FINGERPRINTS));
+
+    // Fullscreen visualizer functions
+    function openVisualizerFullscreen() {
+      const content = document.getElementById('visualizerContent');
+      const modal = document.getElementById('visualizerModal');
+      const backdrop = document.getElementById('visualizerBackdrop');
+      const modalBody = document.getElementById('visualizerModalBody');
+      if (content && modal && modalBody) {
+        modalBody.innerHTML = content.innerHTML;
+        modal.classList.add('show');
+        backdrop.classList.add('show');
+      }
+    }
+    function closeVisualizerFullscreen() {
+      document.getElementById('visualizerModal').classList.remove('show');
+      document.getElementById('visualizerBackdrop').classList.remove('show');
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVisualizerFullscreen();
+    });
 
     function visualizeSpaces(text, detectedSources) {
       // Show full text (no truncation)
