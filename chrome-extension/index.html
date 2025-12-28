@@ -477,6 +477,92 @@
       font-style: italic;
     }
 
+    /* Fullscreen Visualizer Modal */
+    .visualizer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .fullscreen-btn {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      padding: 4px 8px;
+      font-size: 9px;
+      cursor: pointer;
+      box-shadow: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .fullscreen-btn:hover {
+      background: var(--color-accent);
+      color: white;
+      transform: none;
+      box-shadow: none;
+    }
+    .visualizer-modal {
+      display: none;
+      position: fixed;
+      top: 10vh;
+      left: 10vw;
+      width: 80vw;
+      height: 80vh;
+      background: var(--color-bg-paper);
+      border: 2px solid var(--color-border-strong);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      z-index: 2000;
+      flex-direction: column;
+    }
+    .visualizer-modal.show {
+      display: flex;
+    }
+    .visualizer-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1999;
+    }
+    .visualizer-modal-backdrop.show {
+      display: block;
+    }
+    .visualizer-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--color-border-strong);
+      background: var(--color-bg-tool);
+    }
+    .visualizer-modal-header h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+    .visualizer-modal-close {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 8px;
+      box-shadow: none;
+    }
+    .visualizer-modal-close:hover {
+      background: transparent;
+      color: var(--color-text-main);
+      transform: none;
+      box-shadow: none;
+    }
+    .visualizer-modal-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 2;
+      word-break: break-word;
+    }
+
     /* Panel Toggle Controls */
     .panel-toggle-bar {
       position: fixed;
@@ -931,9 +1017,7 @@
     function visualizeSpaces(text, detectedSources) {
       // Show full text (no truncation)
       let html = '';
-
-      let html = '';
-      for (const char of truncated) {
+      for (const char of text) {
         if (WATERMARK_CHARS.has(char)) {
           const info = FINGERPRINTS[char];
           html += `<span class="space-marker ${info.color}" title="${info.name} (${info.code})"> </span>`;
@@ -1070,11 +1154,14 @@
             ${breakdownHTML}
           </div>
 
-          <div class="visualizer-label">Character Visualizer (Hover to Inspect)</div>
-          <div class="text-visualizer">
+          <div class="visualizer-header">
+            <div class="visualizer-label">Character Visualizer (Hover to Inspect)</div>
+            <button class="fullscreen-btn" onclick="openVisualizerFullscreen()">⛶ Fullscreen</button>
+          </div>
+          <div class="text-visualizer" id="visualizerContent">
             ${visualizeSpaces(text, detectedSources)}
           </div>
-          <div class="visualizer-hint">Only spaces are highlighted. Hover to see codepoint.</div>
+          <div class="visualizer-hint">Only spaces are highlighted. Hover to see codepoint. Press ESC to close fullscreen.</div>
         `;
       } else {
         resultHeader.textContent = 'NO WATERMARK DETECTED';
