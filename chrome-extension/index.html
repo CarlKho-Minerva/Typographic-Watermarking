@@ -818,6 +818,9 @@
           This approach is inherently <strong>fragile by design</strong>. Any text normalization step that converts Unicode to ASCII will strip the watermark <a href="#ref9" class="citation">[9]</a>. Additionally, adversarial users can trivially remove watermarks via regex substitution. I position this not as a security mechanism but as a <em>passive attribution layer</em> for typical use cases—analogous to EXIF metadata in images <a href="#ref10" class="citation">[10]</a>.
         </p>
         <p>
+          <strong>Critical caveat:</strong> This proof-of-concept operates as a third-party browser extension—inherently limited by the adversarial relationship between the extension and the page. However, the core technique becomes <em>significantly more robust</em> when implemented by AI providers themselves. If OpenAI, Anthropic, or Google embedded typographic watermarks at the API response layer, circumvention would require actively stripping Unicode—a deliberate act that shifts the burden of plausible deniability. The fragility of this PoC is a limitation of the deployment context, not the technique itself.
+        </p>
+        <p>
           With the introduction of global event capture (v0.5.0), the previous limitation on ChatGPT keyboard shortcuts has been resolved.
         </p>
       </div>
@@ -826,6 +829,9 @@
         <h2 class="section-title">10. Future Work</h2>
         <p>
           Future directions include: (1) encoding additional metadata (timestamps, session IDs) via space patterns, (2) combining with visible attribution markers, (3) integration with content authenticity initiatives (C2PA) <a href="#ref4" class="citation">[4]</a>, and (4) crowdsourced detection databases for analyzing AI text prevalence across platforms.
+        </p>
+        <p>
+          <strong>Industry Adoption Path.</strong> This work demonstrates a lightweight, zero-modification approach to LLM output attribution. For AI providers, implementing typographic watermarking at the response layer would require minimal engineering effort—a single string replacement operation—while providing a passive provenance signal across all consumer-facing output. Unlike logit-level watermarking <a href="#ref1" class="citation">[1]</a>, this approach imposes no computational overhead during inference. I propose this as a complementary layer: logit watermarks for cryptographic verification, typographic watermarks for ambient attribution.
         </p>
         <p>
           <strong>HCI Research Directions.</strong> An intriguing question for human-computer interaction research: <em>Do users behave differently when they know their AI-generated text carries provenance metadata?</em> Transparent attribution systems may shift social norms around AI assistance—from concealment toward acknowledged collaboration. This connects to broader work on <em>ambient AI awareness</em> and <em>fluid interfaces</em> where human and machine contributions are seamlessly but transparently integrated.
