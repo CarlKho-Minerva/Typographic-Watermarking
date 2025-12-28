@@ -19,12 +19,12 @@
       --color-highlight: #fff000;
 
       /* Source Colors */
-      --color-chatgpt: #10a37f;
-      --color-claude: #d97706;
-      --color-gemini: #4285f4;
-      --color-copilot: #0078d4;
-      --color-perplexity: #8b5cf6;
-      --color-poe: #7c3aed;
+      --color-chatgpt: #10a37f;   /* Green */
+      --color-claude: #d97706;    /* Orange */
+      --color-gemini: #4285f4;    /* Blue */
+      --color-copilot: #06b6d4;   /* Cyan/Teal */
+      --color-perplexity: #8b5cf6; /* Purple */
+      --color-poe: #e11d48;       /* Rose/Pink */
       --color-regular: #cccccc;
 
       /* Spacing */
@@ -929,9 +929,8 @@
     const WATERMARK_CHARS = new Set(Object.keys(FINGERPRINTS));
 
     function visualizeSpaces(text, detectedSources) {
-      // Truncate for performance
-      const maxLen = 300;
-      const truncated = text.length > maxLen ? text.substring(0, maxLen) + '...' : text;
+      // Show full text (no truncation)
+      let html = '';
 
       let html = '';
       for (const char of truncated) {
