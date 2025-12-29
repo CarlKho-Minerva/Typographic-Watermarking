@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carl Kho - Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Colors */
+      --color-bg-paper: #ffffff;
+      --color-bg-tool: #fcfcfc;
+      --color-text-main: #111111;
+      --color-text-muted: #666666;
+      --color-border: #e0e0e0;
+      --color-border-strong: #000000;
+      --color-accent: #000000;
+      --color-highlight: #fff000;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-s: 8px;
+      --space-m: 16px;
+      --space-l: 24px;
+      --space-xl: 40px;
+
+      /* Typography */
+      --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    body {
+      font-family: var(--font-main);
+      font-size: 14px;
+      background: var(--color-bg-paper);
+      color: var(--color-text-main);
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .split-container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* LEFT: Content Side */
+    .paper-side {
+      width: 50vw;
+      height: 100vh;
+      overflow-y: auto;
+      padding: var(--space-xl);
+      border-right: 2px solid var(--color-border-strong);
+      background: var(--color-bg-paper);
+      scroll-behavior: smooth;
+    }
+
+    .section {
+      min-height: 90vh; /* Takes up most of the screen to enforce scroll steps */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: var(--space-xl);
+      padding: var(--space-m) 0;
+      border-bottom: 1px dashed var(--color-border);
+    }
+    .section:last-child { border-bottom: none; }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: var(--space-s);
+    }
+
+    .subheader {
+      font-size: 18px;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-l);
+      font-weight: 400;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: var(--space-m);
+      line-height: 1.3;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: var(--space-m);
+      font-size: 15px;
+      color: #333;
+      max-width: 600px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--color-bg-paper);
+      border: 2px solid var(--color-border-strong);
+      color: var(--color-text-main);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 4px 4px 0 var(--color-border-strong);
+      transition: all 0.1s;
+      text-decoration: none;
+      margin-right: 12px;
+      margin-bottom: 12px;
+    }
+
+    .btn:hover {
+      background: var(--color-accent);
+      color: #ffffff;
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--color-border-strong);
+    }
+
+    i {
+      display: block;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    /* RIGHT: Visual Side */
+    .tool-side {
+      width: 50vw;
+      height: 100vh;
+      background: var(--color-bg-tool);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .right-content-item {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      background: var(--color-bg-tool);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-out;
+      transform: translateY(20px);
+    }
+
+    .right-content-item.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      z-index: 10;
+    }
+
+    .placeholder-box {
+      width: 100%;
+      height: 100%;
+      background: #eee;
+      border: 2px dashed #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: var(--font-mono);
+      color: #999;
+      font-size: 12px;
+      text-align: center;
+      padding: 20px;
+      flex-direction: column;
+    }
+
+    .placeholder-img {
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      object-fit: cover;
+      border: 2px solid var(--color-border-strong);
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+    }
+
+    .caption {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--color-text-muted);
+      text-align: center;
+      font-family: var(--font-mono);
+      max-width: 400px;
+    }
+
+    .caption a {
+      color: var(--color-text-main);
+      text-decoration: underline;
+    }
+
+    .grid-2x2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 16px;
+        width: 100%;
+        height: 100%;
+        max-width: 600px;
+        max-height: 600px;
+    }
+
+    .grid-item {
+        background: #ddd;
+        border: 2px solid #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        transition: transform 0.2s;
+    }
+    .grid-item:hover {
+        transform: scale(1.02);
+    }
+
+    .blog-card {
+        border: 2px solid #000;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 8px 8px 0 #000;
+        max-width: 400px;
+        text-align: left;
+    }
+    .blog-image {
+        width: 100%;
+        height: 150px;
+        background: #eee;
+        margin-bottom: 16px;
+    }
+
+    .fixed-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .split-container { flex-direction: column; }
+      .paper-side { width: 100%; height: auto; border-right: none; }
+      .tool-side { display: none; } /* Simplified for mobile as requested interaction is split view */
+      .section { min-height: auto; padding: 60px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="split-container">
+
+    <!-- LEFT PANEL: Narrative -->
+    <div class="paper-side">
+
+      <!-- Hero Section -->
+      <div class="section" data-target="hero">
+        <h1>Carl Kho</h1>
+        <div class="subheader">Celebrated for "Fine, I'll do it..." doing</div>
+      </div>
+
+      <!-- MIT Replication -->
+      <div class="section" data-target="alterego">
+        <h2>Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
+        <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head (sort of) to speak</p>
+        <div>
+            <a href="#" class="btn">wait, how?</a>
+        </div>
+        <i>if ure from MIT media lab, i forgot to submit this application section</i>
+        <div style="margin-top:20px;">
+             <a href="#" class="btn">Community Engagement section</a>
+        </div>
+      </div>
+
+      <!-- Work History -->
+      <div class="section" data-target="work">
+        <h2>ive been working since i was 16</h2>
+        <div>
+            <a href="#" class="btn">View One-Pager Resume</a>
+        </div>
+        <p>have u rly been working?</p>
+        <a href="#" class="btn">view all my works</a>
+      </div>
+
+      <!-- Projects / Motto -->
+      <div class="section" data-target="motto">
+        <h2>I get rly giddy when i talk about the work i do</h2>
+        <p>If I get serious a bit, I live by this motto: "Kindness is Generative," that's why I build.</p>
+        <a href="#" class="btn">view projs im proud of</a>
+      </div>
+
+      <!-- Research -->
+      <div class="section" data-target="research">
+        <h2>the Philippines didn't have a lot of research support, yet here I am still publishing independently</h2>
+        <p>dad lore: i got into research in highschool becsause I get to play Command and Conquer: Zero Hour while my classmates were attending class (while still winning competitions)</p>
+        <a href="#" class="btn">ideas i want the world to be aware of</a>
+      </div>
+
+      <!-- About -->
+      <div class="section" data-target="about">
+        <h2>who are you?</h2>
+        <p>just a guy curious and hyper-independent of the world because of video games, who taught him everyrhing: from english to physics, and even street smarts. we all know there's a rare item hidden behind the waterfalls.</p>
+      </div>
+
+       <!-- Location -->
+      <div class="section" data-target="location">
+        <h2>where are you rn?</h2>
+        <p>funny question, i go to Minerva University, so, <a href="#" style="color:black; font-weight:bold;">everywhere</a></p>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: Visuals -->
+    <div class="tool-side">
+
+      <!-- Hero Visual -->
+      <div id="hero" class="right-content-item active">
+         <!-- NY Times Square GIF Placeholder -->
+         <div class="placeholder-box" style="background: #222; color: #fff;">
+             [ GIF: NYC Times Square ]
+         </div>
+         <div class="caption">
+             for funding own education (~$90k in scholarships)<br>
+             <a href="https://www.youtube.com/watch?v=F2QU7A7_AfI" target="_blank">link to padayon ko pitch</a>
+         </div>
+      </div>
+
+      <!-- AlterEgo Visual -->
+      <div id="alterego" class="right-content-item">
+         <div class="placeholder-box" style="background:#f0f0f0;">
+             [ AlterEgo Project Visual / Video ]
+         </div>
+      </div>
+
+      <!-- Work Visual (Resume) -->
+      <div id="work" class="right-content-item">
+         <div class="placeholder-box" style="background: white; border: 1px solid #ccc; color: #333;">
+             [ Resume PDF ]
+         </div>
+      </div>
+
+      <!-- Motto Visual (Grid) -->
+      <div id="motto" class="right-content-item">
+          <div class="grid-2x2">
+              <div class="grid-item">Proj 1</div>
+              <div class="grid-item">Proj 2</div>
+              <div class="grid-item">Proj 3</div>
+              <div class="grid-item">Proj 4</div>
+          </div>
+          <a href="#" class="btn fixed-btn">view all projects</a>
+      </div>
+
+      <!-- Research Visual (Blog Card) -->
+      <div id="research" class="right-content-item">
+          <div class="blog-card">
+              <div class="blog-image"></div>
+              <h3>Research Blog Title</h3>
+              <p style="font-size:12px; margin-top:8px;">Short description of the research idea or blog post.</p>
+          </div>
+      </div>
+
+      <!-- About Visual -->
+      <div id="about" class="right-content-item">
+           <div class="placeholder-box" style="background: #eef;">
+             [ Hidden Item Behind Waterfalls Visual ]
+         </div>
+      </div>
+
+       <!-- Location Visual -->
+      <div id="location" class="right-content-item">
+          <div class="placeholder-box" style="background: #efe;">
+             [ Map / Minerva Locations ]
+         </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observerOptions = {
+        root: document.querySelector('.paper-side'),
+        threshold: 0.5, // Trigger when 50% of the section is visible
+        rootMargin: "-10% 0px -10% 0px"
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const targetId = entry.target.getAttribute('data-target');
+            activateRightPanel(targetId);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+      });
+
+      function activateRightPanel(id) {
+        // Hide all
+        document.querySelectorAll('.right-content-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        // Show target
+        const target = document.getElementById(id);
+        if (target) {
+          target.classList.add('active');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
