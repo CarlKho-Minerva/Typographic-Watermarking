@@ -24,7 +24,6 @@
       --color-gemini: #4285f4;    /* Blue */
       --color-copilot: #06b6d4;   /* Cyan/Teal */
       --color-perplexity: #8b5cf6; /* Purple */
-      --color-poe: #e11d48;       /* Rose/Pink */
       --color-regular: #cccccc;
 
       /* Spacing */
@@ -384,7 +383,6 @@
     .bar-gemini { background: var(--color-gemini); }
     .bar-copilot { background: var(--color-copilot); }
     .bar-perplexity { background: var(--color-perplexity); }
-    .bar-poe { background: var(--color-poe); }
     .bar-regular { background: var(--color-regular); color: var(--color-text-muted); }
 
     /* Stats Grid */
@@ -461,8 +459,6 @@
     .visualizer-modal-body .space-marker.copilot { background: var(--color-copilot); }
     .text-visualizer .space-marker.perplexity,
     .visualizer-modal-body .space-marker.perplexity { background: var(--color-perplexity); }
-    .text-visualizer .space-marker.poe,
-    .visualizer-modal-body .space-marker.poe { background: var(--color-poe); }
     .text-visualizer .space-marker.regular,
     .visualizer-modal-body .space-marker.regular {
       background: var(--color-regular);
@@ -1023,11 +1019,8 @@
     const FINGERPRINTS = {
       '\u2009': { name: 'ChatGPT', code: 'U+2009', color: 'chatgpt' },
       '\u200A': { name: 'Claude', code: 'U+200A', color: 'claude' },
-      '\u2005': { name: 'Gemini', code: 'U+2005', color: 'gemini' },
-      '\u2004': { name: 'Poe', code: 'U+2004', color: 'poe' },
       '\u2006': { name: 'Copilot', code: 'U+2006', color: 'copilot' },
       '\u2007': { name: 'Perplexity', code: 'U+2007', color: 'perplexity' },
-      '\u2008': { name: 'Pi', code: 'U+2008', color: 'poe' },
       '\u205F': { name: 'HuggingChat', code: 'U+205F', color: 'copilot' },
     };
 
@@ -1097,7 +1090,6 @@
       if (text.includes('\u2009')) directHits.push('ChatGPT (Thin Space)');
       if (text.includes('\u200A')) directHits.push('Claude (Hair Space)');
       if (text.includes('\u2005')) directHits.push('Gemini (Four-Per-Em Space)');
-      if (text.includes('\u2004')) directHits.push('Poe (Three-Per-Em)');
       if (text.includes('\u2006')) directHits.push('Copilot (Six-Per-Em)');
       if (text.includes('\u2007')) directHits.push('Perplexity (Figure Space)');
       if (text.includes('\u205F')) directHits.push('HuggingChat (Medium Math)');
