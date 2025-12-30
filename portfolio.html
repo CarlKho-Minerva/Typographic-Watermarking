@@ -11,8 +11,8 @@
       /* Colors */
       --color-bg-paper: #ffffff;
       --color-bg-tool: #fcfcfc;
-      --color-text-main: #111111;
-      --color-text-muted: #666666;
+      --color-text-main: #1a1a1a;
+      --color-text-muted: #6e6e73;
       --color-border: #e0e0e0;
       --color-border-strong: #000000;
       --color-accent: #000000;
@@ -63,12 +63,29 @@
       border-bottom: 2px solid var(--color-border-strong);
     }
 
+    .title-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .header-icon {
+      height: 48px;
+      width: auto;
+      filter: brightness(0);
+      image-rendering: pixelated;
+      margin-bottom: 1vh;
+    }
+
     .paper-title {
         font-size: 22px;
         font-weight: bold;
         line-height: 1.3;
-        margin-bottom: 12px;
+        margin-bottom: 0;
     }
+
+
 
     .paper-subheader {
         font-size: 12px;
@@ -95,7 +112,7 @@
     }
 
     p {
-      line-height: 1.7;
+      line-height: 1.8;
       margin-bottom: 12px;
       text-align: justify;
       font-size: 13px; /* Matched to reference */
@@ -144,9 +161,10 @@
     .section.active-text .section-title {
         background: var(--color-highlight);
         display: inline-block;
-        padding-right: 4px;
-        padding-left: 4px;
+        padding: 0 4px;
         margin-left: -4px;
+        border-radius: 2px;
+        mix-blend-mode: multiply;
     }
 
     /* RIGHT: Visual Side */
@@ -283,8 +301,11 @@
 
       <!-- Header -->
       <div class="paper-header" data-target="hero">
-        <h1 class="paper-title">Carl Kho</h1>
-        <div class="paper-subheader">Celebrated for "Fine, I'll do it..." doing</div>
+        <div class="title-row">
+            <img src="mario.gif" class="header-icon" alt="">
+            <h1 class="paper-title">Carl Kho</h1>
+        </div>
+        <div class="paper-subheader">Celebrated for doing "Fine, I'll do it..." my whole life</div>
       </div>
 
       <!-- MIT Replication -->
@@ -475,6 +496,34 @@
               }
           });
       }
+
+      // Mario GIF Interaction
+      const marioImg = document.querySelector('.header-icon');
+      const staticSrc = 'mario_static.png';
+      const gifSrc = 'mario.gif';
+      const gifDuration = 1400; // ms
+      let isHovering = false;
+
+      // Preload static image
+      const preloadStatic = new Image();
+      preloadStatic.src = staticSrc;
+
+      // Logic: Run once on load, then stop. Play on hover.
+      setTimeout(() => {
+          if (!isHovering) {
+              marioImg.src = staticSrc;
+          }
+      }, gifDuration);
+
+      marioImg.addEventListener('mouseenter', () => {
+          isHovering = true;
+          marioImg.src = gifSrc;
+      });
+
+      marioImg.addEventListener('mouseleave', () => {
+          isHovering = false;
+          marioImg.src = staticSrc;
+      });
     });
   </script>
 </body>
