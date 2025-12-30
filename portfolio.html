@@ -169,7 +169,7 @@
 
     /* Highlight active section in the text as well for better feedback */
     /* Animated Highlighter */
-    .section-title {
+    .section-title, .intro-highlight {
         background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
         background-size: 0% 100%;
         background-repeat: no-repeat;
@@ -183,7 +183,8 @@
         /* mix-blend-mode: multiply;  Removed to keep colors consistent during anim */
     }
 
-    .section.active-text .section-title {
+    .section.active-text .section-title,
+    .intro-highlight.active {
         background-size: 100% 100%;
     }
 
@@ -325,7 +326,7 @@
             <img src="mario.gif" class="header-icon" alt="">
             <h1 class="paper-title">Carl Kho</h1>
         </div>
-        <div class="paper-subheader">Celebrated for doing "Fine, I'll do it..." my whole life</div>
+        <div class="paper-subheader">Celebrated for doing <span class="intro-highlight">"Fine, I'll do it..."</span> my whole life</div>
       </div>
 
       <!-- MIT Replication -->
@@ -460,8 +461,12 @@
 
       const sections = document.querySelectorAll('[data-target]');
       const paperSide = document.querySelector('.paper-side');
+      let isIntroComplete = false;
 
       const onScroll = () => {
+          // If intro is not done, force everything to remain inactive (blurred)
+          if (!isIntroComplete) return;
+
           // Calculate the "reading line" - let's say 40% down the screen
           const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.4);
 
@@ -493,8 +498,22 @@
       };
 
       paperSide.addEventListener('scroll', onScroll);
-      // Initial call
-      onScroll();
+
+      // Intro Sequence
+      // 1. Trigger highlight on "Fine, I'll do it..." immediately
+      setTimeout(() => {
+          const introSpan = document.querySelector('.intro-highlight');
+          if (introSpan) introSpan.classList.add('active');
+
+          // 2. Wait 3 seconds AFTER highlight starts
+          setTimeout(() => {
+              isIntroComplete = true;
+              // 3. Auto-scroll to start (ensure we are at top)
+              paperSide.scrollTo({ top: 0, behavior: 'smooth' });
+              // 4. Trigger main interface active state
+              onScroll();
+          }, 3000);
+      }, 500); // Short delay to ensure render
 
       function activateRightPanel(id) {
         // Toggle opacity for smooth transition
