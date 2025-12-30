@@ -71,7 +71,7 @@
     }
 
     .header-icon {
-      height: 48px;
+      height: 64px;
       width: auto;
       filter: brightness(0);
       image-rendering: pixelated;
@@ -79,7 +79,7 @@
     }
 
     .paper-title {
-        font-size: 22px;
+        font-size: 32px;
         font-weight: bold;
         line-height: 1.3;
         margin-bottom: 0;
@@ -88,7 +88,7 @@
 
 
     .paper-subheader {
-        font-size: 12px;
+        font-size: 16px;
         color: #444;
         margin-bottom: 8px;
     }
@@ -320,46 +320,22 @@
     /* Responsive */
     @media (max-width: 768px) {
       .split-container { flex-direction: column; }
-      .paper-side { width: 100%; height: auto; border-right: none; }
-      .tool-side { display: none; }
+      .paper-side { width: 100%; height: 100vh; border-right: none; }
+      .tool-side {
+        display: block;
+        position: fixed;
+        bottom: 4vh;
+        right: 4vw;
+        width: calc(50vw - 8vw); /* ~1/4 of screen width with margins */
+        height: calc(25vh);
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 100;
+        overflow: hidden;
+      }
       .section { margin-bottom: 40px; }
     }
 
-    /* Scroll Indicator */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      pointer-events: none;
-    }
-    .scroll-indicator.visible {
-      opacity: 1;
-    }
-    .scroll-indicator span {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--color-muted);
-    }
-    .scroll-indicator .chevron {
-      width: 20px;
-      height: 20px;
-      border-right: 2px solid var(--color-muted);
-      border-bottom: 2px solid var(--color-muted);
-      transform: rotate(45deg);
-      animation: bounce 1.5s infinite;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: rotate(45deg) translateY(0); }
-      50% { transform: rotate(45deg) translateY(6px); }
-    }
   </style>
 </head>
 <body>
@@ -376,10 +352,6 @@
             <h1 class="paper-title">Carl Kho</h1>
         </div>
         <div class="paper-subheader">Celebrated for doing <span class="intro-highlight">"Fine, I'll do it..."</span> my whole life</div>
-        <div class="scroll-indicator" id="scrollIndicator">
-          <span>scroll</span>
-          <div class="chevron"></div>
-        </div>
       </div>
 
       <!-- MIT Replication -->
@@ -614,16 +586,6 @@
               // Force activation of first section to ensure unblur
               activateRightPanel('alterego');
               highlightActiveText('alterego');
-
-              // Show scroll indicator
-              const scrollIndicator = document.getElementById('scrollIndicator');
-              if (scrollIndicator) scrollIndicator.classList.add('visible');
-
-              // Hide scroll indicator after first user scroll
-              paperSide.addEventListener('scroll', function hideIndicator() {
-                  if (scrollIndicator) scrollIndicator.classList.remove('visible');
-                  paperSide.removeEventListener('scroll', hideIndicator);
-              }, { once: true });
           }, 5000); // 2s duration + 3s wait = 5s from here
 
       }, 2400);
