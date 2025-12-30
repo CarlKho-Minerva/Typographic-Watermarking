@@ -99,6 +99,16 @@
       padding: 0;
       display: block; /* Default block layout */
       border-bottom: none;
+
+      /* Focus Mode Styles */
+      opacity: 0.3;
+      filter: blur(1.5px);
+      transition: opacity 0.4s ease, filter 0.4s ease;
+    }
+
+    .section.active-text {
+        opacity: 1;
+        filter: blur(0);
     }
 
     .section-title {
@@ -106,9 +116,9 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      border-bottom: 1px solid var(--color-border-strong);
       padding-bottom: var(--space-xs);
       margin-bottom: var(--space-m);
+      /* Border removed in favor of highlight */
     }
 
     p {
@@ -158,13 +168,23 @@
     }
 
     /* Highlight active section in the text as well for better feedback */
-    .section.active-text .section-title {
-        background: var(--color-highlight);
+    /* Animated Highlighter */
+    .section-title {
+        background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+        background-size: 0% 100%;
+        background-repeat: no-repeat;
+        background-position: 0 center;
+        transition: background-size 0.8s cubic-bezier(0.22, 1, 0.36, 1); /* Ease out drawing effect */
+
         display: inline-block;
         padding: 0 4px;
         margin-left: -4px;
         border-radius: 2px;
-        mix-blend-mode: multiply;
+        /* mix-blend-mode: multiply;  Removed to keep colors consistent during anim */
+    }
+
+    .section.active-text .section-title {
+        background-size: 100% 100%;
     }
 
     /* RIGHT: Visual Side */
