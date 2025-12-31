@@ -282,11 +282,11 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
-        gap: 16px;
+        gap: 12px;
         width: 100%;
         height: 100%;
-        max-width: 600px;
-        max-height: 500px;
+        padding: 12px; /* Frame inside the card */
+        background: #f9f9f9;
     }
 
     .grid-item {
@@ -306,12 +306,15 @@
     }
 
     .blog-card {
-        border: 2px solid #000;
-        background: #fff;
-        padding: 20px;
-        box-shadow: 6px 6px 0 #000;
-        max-width: 400px;
+        border: none;
+        background: transparent;
+        padding: 24px;
+        box-shadow: none;
+        width: 100%;
+        height: 100%;
         text-align: left;
+        display: flex;
+        flex-direction: column;
     }
     .blog-image {
         width: 100%;
@@ -474,8 +477,10 @@
 
        <!-- Location -->
       <div class="section" data-target="location">
-        <h2 class="section-title">where are you rn?</h2>
-        <p>funny question. i go to Minerva University, so... <a href="#" style="color:black; font-weight:bold;">everywhere</a></p>
+        <h2 class="section-title">WHERE ARE YOU RN?</h2>
+      <p>
+          funny question. i go to Minerva University, so... everywhere. no, really. <a href="https://www.freethink.com/series/catalysts/global-education" target="_blank" style="color: inherit; text-decoration: underline;">Freethink</a> did a piece on us.
+      </p>
       </div>
 
       <!-- Filler content to ensure scrolling past the last element is comfortable -->
@@ -570,9 +575,16 @@
        <!-- Location Visual -->
       <div id="location" class="right-content-item">
           <div class="card-3d">
-              <div class="placeholder-box" style="background: #efe;">
-                 [ Map / Minerva Locations ]
-             </div>
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/xfciyuavUCk?controls=0&rel=0&modestbranding=1"
+                title="Minerva University"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                style="border-radius: 0; display: block;">
+              </iframe>
           </div>
       </div>
 
