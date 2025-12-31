@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carl Kho - Portfolio</title>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -211,7 +212,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      perspective: 1000px; /* Enable 3D space */
     }
 
     .right-content-item {
@@ -236,20 +236,45 @@
       z-index: 10;
     }
 
-    /* The 3D Object */
+    /* The 3D Object -> Now "Physical Card" */
+    /* RE-ATTEMPTING CSS FOR EXACT "DITHERED SHADOW" REQUEST */
     .card-3d {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #fff;
-      border: 1px solid #000;
-      /* "Physical" feel */
-      box-shadow:
-        2px 2px 0px rgba(0,0,0,1),  /* Hard shadow for comic/pop feel */
-        10px 10px 30px rgba(0,0,0,0.1); /* Soft shadow for depth */
+        /* Reset */
+        box-shadow: none;
+        border: 1px solid #000;
+        transform: translate(0,0);
+        position: relative; /* Keep relative for ::after positioning */
+        transition: transform 0.15s ease-out; /* Add transition for lift */
+        z-index: 2; /* Ensure card is above its shadow */
+    }
 
-      transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
-      position: relative;
+    /* The Dithered Block Shadow */
+    .card-3d::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: #000; /* Default small hard shadow */
+        transition: transform 0.15s ease-out, opacity 0.15s ease-out, background 0.15s ease-out; /* Add transitions */
+        opacity: 1; /* Start visible with solid shadow */
+    }
+
+    /* Hover State */
+    .right-content-item:hover .card-3d {
+        transform: translate(-2px, -2px); /* Slight lift */
+    }
+
+    .right-content-item:hover .card-3d::after {
+        /* The Dither Reveal */
+        background: transparent;
+        background-image: radial-gradient(#000 1px, transparent 1px);
+        background-size: 3px 3px;
+        transform: translate(8px, 8px); /* Deep throw */
+        /* border: 1px solid #000; Optional border for shadow? No. */
+        opacity: 0.6;
     }
 
     .placeholder-box {
@@ -346,7 +371,6 @@
         box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         z-index: 100;
         overflow: hidden;
-        perspective: 1000px; /* Enable 3D space */
       }
       .section { margin-bottom: 40px; }
       .paper-footer { position: relative; padding-bottom: 30vh; }
@@ -514,30 +538,38 @@
       </div>
 
       <!-- AlterEgo Visual -->
-      <div id="alterego" class="right-content-item">
-         <div class="card-3d">
-             <div class="placeholder-box" style="background:#f0f0f0;">
-                 [ AlterEgo Project Visual ]
-             </div>
-             <div class="schematic-overlay">
-                 <div class="specs-grid">
-                     <span class="spec-label">COST</span><span class="spec-value">$30</span>
-                     <span class="spec-label">SENSORS</span><span class="spec-value">Custom EMG</span>
-                     <span class="spec-label">ACCURACY</span><span class="spec-value">92%</span>
-                     <span class="spec-label">STATUS</span><span class="spec-value">Replicated</span>
-                 </div>
-             </div>
-         </div>
-      </div>
+       <div id="alterego" class="right-content-item">
+          <div class="card-3d">
+              <div class="placeholder-box" style="background:#f0f0f0;">
+                  [ AlterEgo Project Visual ]
+              </div>
+              <div class="schematic-overlay">
+                  <div class="specs-grid">
+                      <span class="spec-label">COST</span><span class="spec-value">$30</span>
+                      <span class="spec-label">SENSORS</span><span class="spec-value">Custom EMG</span>
+                      <span class="spec-label">ACCURACY</span><span class="spec-value">92%</span>
+                      <span class="spec-label">STATUS</span><span class="spec-value">Replicated</span>
+                  </div>
+              </div>
+          </div>
+          <div class="caption">
+              full project documentation (pdf)<br>
+              <a href="#" target="_blank">read the technical paper</a>
+          </div>
+       </div>
 
       <!-- Work Visual (Resume) -->
-      <div id="work" class="right-content-item">
-         <div class="card-3d">
-             <div class="placeholder-box" style="background: white; border: 1px solid #ccc; color: #333;">
-                 [ Resume PDF ]
-             </div>
-         </div>
-      </div>
+       <div id="work" class="right-content-item">
+          <div class="card-3d">
+              <div class="placeholder-box" style="background: white; border: 1px solid #ccc; color: #333;">
+                  [ Resume PDF ]
+              </div>
+          </div>
+          <div class="caption">
+              standard one-pager<br>
+              <a href="#" target="_blank">download.pdf (120kb)</a>
+          </div>
+       </div>
 
       <!-- Motto Visual (Grid) -->
       <div id="motto" class="right-content-item">
@@ -553,7 +585,7 @@
       </div>
 
       <!-- Research Visual (Blog Card) -->
-      <div id="research" class="right-content-item">
+       <div id="research" class="right-content-item">
           <div class="card-3d">
               <div class="blog-card">
                   <div class="blog-image"></div>
@@ -561,7 +593,10 @@
                   <p style="font-size:11px; margin-top:8px; line-height:1.4;">Short description of the research idea or blog post.</p>
               </div>
           </div>
-      </div>
+          <div class="caption">
+               published on <a href="#" target="_blank">medium</a> & <a href="#" target="_blank">substack</a>
+          </div>
+       </div>
 
       <!-- About Visual -->
       <div id="about" class="right-content-item">
@@ -572,7 +607,7 @@
            </div>
       </div>
 
-       <!-- Location Visual -->
+       <!-- Location -->
       <div id="location" class="right-content-item">
           <div class="card-3d">
               <iframe
@@ -737,33 +772,7 @@
           marioImg.src = staticSrc;
       });
 
-      // 3D Tilt Interaction
-      const rightItems = document.querySelectorAll('.right-content-item');
-
-      rightItems.forEach(item => {
-          // We track mouse on the CONTAINER (.right-content-item)
-          // But we animate the CARD (.card-3d)
-          const card = item.querySelector('.card-3d');
-          if(!card) return;
-
-          item.addEventListener('mousemove', (e) => {
-              const rect = card.getBoundingClientRect(); // Use card rect for reference
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
-
-              const centerX = rect.width / 2;
-              const centerY = rect.height / 2;
-
-              const rotateX = ((y - centerY) / centerY) * -10;
-              const rotateY = ((x - centerX) / centerX) * 10;
-
-              card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-          });
-
-          item.addEventListener('mouseleave', () => {
-              card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-          });
-      });
+      /* Removed GSAP Interaction Logic */
     });
   </script>
 </body>
