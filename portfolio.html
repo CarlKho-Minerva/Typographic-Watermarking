@@ -66,12 +66,12 @@
     .title-row {
       display: flex;
       align-items: flex-end;
-      gap: 12px;
+      /* gap: 12p x; */
       margin-bottom: 12px;
     }
 
     .header-icon {
-      height: 64px;
+      height: 20vh;
       width: auto;
       filter: brightness(0);
       image-rendering: pixelated;
@@ -357,7 +357,7 @@
       <!-- MIT Replication -->
       <div class="section" data-target="alterego">
         <h2 class="section-title">Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
-        <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head (sort of) to speak</p>
+        <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head to speak. sort of.</p>
         <p>
             <a href="#" class="btn">wait, how?</a>
         </p>
@@ -489,8 +489,11 @@
       let isIntroComplete = false;
 
       const onScroll = () => {
-          // If intro is not done, force everything to remain inactive (blurred)
-          if (!isIntroComplete) return;
+          // If intro is not done but user scrolled, skip intro immediately
+          if (!isIntroComplete) {
+              skipIntro();
+              return;
+          }
 
           // Calculate the "reading line" - let's say 40% down the screen
           const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.4);
@@ -521,6 +524,28 @@
               highlightActiveText(activeId);
           }
       };
+
+      // Skip intro function - called when user scrolls during intro
+      function skipIntro() {
+          isIntroComplete = true;
+          const introSpan = document.querySelector('.intro-highlight');
+          if (introSpan) introSpan.classList.remove('active');
+
+          // Activate based on current scroll position
+          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.4);
+          let activeId = sections[0]?.getAttribute('data-target') || 'alterego';
+
+          sections.forEach(section => {
+              const start = section.offsetTop;
+              const end = start + section.offsetHeight + 28;
+              if (readingLine >= start && readingLine < end) {
+                  activeId = section.getAttribute('data-target');
+              }
+          });
+
+          activateRightPanel(activeId);
+          highlightActiveText(activeId);
+      }
 
       paperSide.addEventListener('scroll', onScroll);
 
