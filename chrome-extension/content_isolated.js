@@ -10,11 +10,8 @@ const FINGERPRINTS = {
   'claude': '\u200A',
   'gemini': '\u2005',
   'googleusercontent': '\u2005', // Gemini sandboxes
-  'poe': '\u2004',
   'copilot': '\u2006',
   'perplexity': '\u2007',
-  'pi.ai': '\u2008',
-  'huggingface': '\u205F',
   'localhost': '\u2009',
   '127.0.0.1': '\u2009'
 };
@@ -32,11 +29,8 @@ function getAIName() {
   if (h.includes('chatgpt') || h.includes('openai')) return 'ChatGPT';
   if (h.includes('claude')) return 'Claude';
   if (h.includes('gemini') || h.includes('googleusercontent')) return 'Gemini';
-  if (h.includes('poe')) return 'Poe';
   if (h.includes('copilot')) return 'Copilot';
   if (h.includes('perplexity')) return 'Perplexity';
-  if (h.includes('pi')) return 'Pi';
-  if (h.includes('huggingface')) return 'HuggingChat';
   return 'AI Model';
 }
 

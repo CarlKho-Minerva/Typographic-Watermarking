@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Typographic Watermark",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Injects invisible Unicode signatures when copying from AI chatbots.",
   "permissions": [
     "clipboardWrite"
@@ -10,8 +10,13 @@
     {
       "matches": [
         "*://chatgpt.com/*",
+        "*://chat.openai.com/*",
         "*://claude.ai/*",
-        "*://gemini.google.com/*"
+        "*://gemini.google.com/*",
+        "*://*.googleusercontent.com/*",
+        "*://copilot.microsoft.com/*",
+        "*://perplexity.ai/*",
+        "*://www.perplexity.ai/*"
       ],
       "js": ["content.js"],
       "run_at": "document_start"

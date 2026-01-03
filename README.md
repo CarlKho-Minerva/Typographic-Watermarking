@@ -22,9 +22,6 @@ A Chrome extension that embeds invisible provenance metadata into AI-generated t
 | Gemini | Four-Per-Em | U+2005 |
 | Copilot | Six-Per-Em | U+2006 |
 | Perplexity | Figure Space | U+2007 |
-| Poe | Three-Per-Em | U+2004 |
-| Pi | Punctuation | U+2008 |
-| HuggingChat | Medium Math | U+205F |
 
 ## Installation
 

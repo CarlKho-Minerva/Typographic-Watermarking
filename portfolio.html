@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carl Kho - Portfolio</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Colors */
+      --color-bg-paper: #ffffff;
+      --color-bg-tool: #fcfcfc;
+      --color-text-main: #1a1a1a;
+      --color-text-muted: #6e6e73;
+      --color-border: #e0e0e0;
+      --color-border-strong: #000000;
+      --color-accent: #000000;
+      --color-highlight: #fff000;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-s: 8px;
+      --space-m: 16px;
+      --space-l: 24px;
+      --space-xl: 40px;
+
+      /* Typography */
+      --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    body {
+      font-family: var(--font-main);
+      font-size: 13px; /* Matched to reference */
+      background: var(--color-bg-paper);
+      color: var(--color-text-main);
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .split-container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* LEFT: Content Side */
+    .paper-side {
+      width: 50vw;
+      height: 100vh;
+      overflow-y: auto;
+      padding: var(--space-xl);
+      border-right: 2px solid var(--color-border-strong);
+      background: var(--color-bg-paper);
+      scroll-behavior: smooth;
+    }
+
+    .paper-header {
+      margin-bottom: var(--space-l);
+      padding-bottom: var(--space-m);
+      border-bottom: 2px solid var(--color-border-strong);
+    }
+
+    .title-row {
+      display: flex;
+      align-items: flex-end;
+      /* gap: 12p x; */
+      margin-bottom: 12px;
+    }
+
+    .header-icon {
+      height: 20vh;
+      width: auto;
+      filter: brightness(0);
+      image-rendering: pixelated;
+      margin-bottom: 1vh;
+    }
+
+    .paper-title {
+        font-size: 10vh;
+        font-weight: bold;
+        line-height: 1.3;
+        margin-bottom: -2vh;
+    }
+
+
+
+    .paper-subheader {
+        font-size: 16px;
+        color: #444;
+        margin-bottom: 8px;
+    }
+
+    .section {
+      /* Removed min-height: 90vh */
+      margin-bottom: 28px; /* Matched to reference */
+      padding: 0;
+      display: block; /* Default block layout */
+      border-bottom: none;
+
+      /* Focus Mode Styles */
+      opacity: 0.3;
+      filter: blur(1.5px);
+      transition: opacity 0.4s ease, filter 0.4s ease;
+    }
+
+    .section.active-text {
+        opacity: 1;
+        filter: blur(0);
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-m);
+      /* Border removed in favor of highlight */
+    }
+
+    p {
+      line-height: 1.8;
+      margin-bottom: 12px;
+      text-align: justify;
+      font-size: 13px; /* Matched to reference */
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 16px; /* Smaller padding */
+      background: var(--color-bg-paper);
+      border: 1px solid var(--color-border-strong); /* Thinner border */
+      color: var(--color-text-main);
+      font-family: inherit;
+      font-size: 11px; /* Smaller font */
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 3px 3px 0 var(--color-border-strong); /* Smaller shadow */
+      transition: all 0.1s;
+      text-decoration: none;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .btn:hover {
+      background: var(--color-accent);
+      color: #ffffff;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--color-border-strong);
+    }
+
+    i {
+      display: block;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    /* Highlight active section in the text as well for better feedback */
+    /* Animated Highlighter */
+    .section-title {
+        background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+        background-size: 0% 100%;
+        background-repeat: no-repeat;
+        background-position: 0 center;
+        transition: background-size 0.8s cubic-bezier(0.22, 1, 0.36, 1); /* Ease out drawing effect */
+
+        display: inline-block;
+        padding: 0 4px;
+        margin-left: -4px;
+        border-radius: 2px;
+        /* mix-blend-mode: multiply;  Removed to keep colors consistent during anim */
+    }
+
+    .intro-highlight {
+        background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+        background-size: 0% 100%;
+        background-repeat: no-repeat;
+        background-position: 0 center;
+        transition: background-size 2s ease-out; /* 2s duration as requested */
+
+        display: inline-block;
+        padding: 0 4px;
+        margin-left: -4px;
+        border-radius: 2px;
+    }
+
+    .section.active-text .section-title,
+    .intro-highlight.active {
+        background-size: 100% 100%;
+    }
+
+    /* RIGHT: Visual Side */
+    .tool-side {
+      width: 50%;
+      height: 100vh;
+      background: var(--color-bg-tool);
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .right-content-item {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 500px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .right-content-item.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    /* The 3D Object -> Now "Physical Card" */
+    /* RE-ATTEMPTING CSS FOR EXACT "DITHERED SHADOW" REQUEST */
+    .card-3d {
+        /* Reset */
+        box-shadow: none;
+        border: 1px solid #000;
+        transform: translate(0,0);
+        position: relative; /* Keep relative for ::after positioning */
+        transition: transform 0.15s ease-out; /* Add transition for lift */
+        z-index: 2; /* Ensure card is above its shadow */
+    }
+
+    /* The Dithered Block Shadow */
+    .card-3d::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: #000; /* Default small hard shadow */
+        transition: transform 0.15s ease-out, opacity 0.15s ease-out, background 0.15s ease-out; /* Add transitions */
+        opacity: 1; /* Start visible with solid shadow */
+    }
+
+    /* Hover State */
+    .right-content-item:hover .card-3d {
+        transform: translate(-2px, -2px); /* Slight lift */
+    }
+
+    .right-content-item:hover .card-3d::after {
+        /* The Dither Reveal */
+        background: transparent;
+        background-image: radial-gradient(#000 1px, transparent 1px);
+        background-size: 3px 3px;
+        transform: translate(8px, 8px); /* Deep throw */
+        /* border: 1px solid #000; Optional border for shadow? No. */
+        opacity: 0.6;
+    }
+
+    .placeholder-box {
+      width: 100%;
+      height: 100%;
+      background: #fdfdfd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: var(--font-mono);
+      color: #333;
+      font-weight: bold;
+    }
+
+    .caption {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+      max-width: 100%;
+      line-height: 1.5;
+      /* Static, no tilt */
+    }
+
+    .caption a {
+      color: var(--color-text-main);
+      text-decoration: underline;
+    }
+
+    .grid-2x2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 12px;
+        width: 100%;
+        height: 100%;
+        padding: 12px; /* Frame inside the card */
+        background: #f9f9f9;
+    }
+
+    .grid-item {
+        background: #ddd;
+        border: 2px solid #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        transition: transform 0.2s;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .grid-item:hover {
+        transform: scale(1.02);
+    }
+
+    .blog-card {
+        border: none;
+        background: transparent;
+        padding: 24px;
+        box-shadow: none;
+        width: 100%;
+        height: 100%;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+    }
+    .blog-image {
+        width: 100%;
+        height: 120px;
+        background: #eee;
+        margin-bottom: 12px;
+        border: 1px solid #000;
+    }
+
+    .fixed-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .split-container { flex-direction: column; }
+      .paper-side { width: 100%; height: 100vh; border-right: none; }
+      .tool-side {
+        display: block;
+        position: fixed;
+        bottom: 4vh;
+        right: 4vw;
+        width: calc(50vw - 8vw); /* ~1/4 of screen width with margins */
+        height: calc(25vh);
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 100;
+        overflow: hidden;
+      }
+      .section { margin-bottom: 40px; }
+      .paper-footer { position: relative; padding-bottom: 30vh; }
+    }
+
+    /* Footer */
+    .paper-footer {
+        margin-top: 60px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        font-family: var(--font-main); /* Match body font */
+    }
+    .footer-tiny {
+        font-size: 10px;
+        color: #999;
+        margin-bottom: 4px;
+    }
+    .footer-tiny a { color: #888; text-decoration: none; }
+    .footer-legible {
+        font-size: 13px;
+        color: #333;
+    }
+    .footer-legible a { color: #333; text-decoration: underline; }
+
+    /* Schematic Overlay Interaction */
+    .right-content-item {
+        /* ... existing styles ... */
+        cursor: crosshair; /* Hint at precision */
+    }
+    .schematic-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85); /* Dark schematic bg */
+        color: #0f0; /* Retro terminal green or blueprint white? Let's go Clean Blueprint White */
+        color: rgba(255,255,255,0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 20px;
+        box-sizing: border-box;
+        backdrop-filter: blur(4px);
+    }
+    .right-content-item:hover .schematic-overlay {
+        opacity: 1;
+    }
+    .specs-grid {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 8px 16px;
+        text-align: left;
+    }
+    .spec-label { opacity: 0.6; }
+    .spec-value { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="split-container">
+
+    <!-- LEFT PANEL: Narrative -->
+    <div class="paper-side">
+
+      <!-- Header -->
+      <div class="paper-header" data-target="hero">
+        <div class="title-row">
+            <img src="mario.gif" class="header-icon" alt="">
+            <h1 class="paper-title">Carl Kho</h1>
+        </div>
+        <div class="paper-subheader">Celebrated for doing <span class="intro-highlight">"Fine, I'll do it..."</span> my whole life</div>
+        <div class="footer-tiny" style="margin-top: 8px; font-size: 11px; color: #888;">
+            Currently living in: <a href="#" onclick="document.querySelector('[data-target=\'location\']').scrollIntoView({behavior: 'smooth'}); return false;" style="text-decoration: underline; color: inherit;">everywhere</a>
+        </div>
+      </div>
+
+      <!-- MIT Replication -->
+      <div class="section" data-target="alterego">
+        <h2 class="section-title">Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
+        <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head to speak (sort of).</p>
+        <p>
+            <a href="#" class="btn">wait, how?</a>
+        </p>
+        <i>if u're from MIT media lab, i forgot to submit this section in the application</i>
+        <p>
+             <a href="#" class="btn">Community Engagement section</a>
+        </p>
+      </div>
+
+      <!-- Work History -->
+      <div class="section" data-target="work">
+        <h2 class="section-title">ive been working in tech & the sciences since i was 16</h2>
+        <p>
+            <a href="#" class="btn">view one-pager resume</a>
+        </p>
+        <p>u're kidding?</p>
+        <p>
+            <a href="#" class="btn">my life's work (cv)</a>
+        </p>
+      </div>
+
+      <!-- Projects / Motto -->
+      <div class="section" data-target="motto">
+        <h2 class="section-title">I get rly giddy when i talk about the work i do</h2>
+        <p>If I get serious a bit, I live by this motto: "Kindness is Generative," that's why I build.</p>
+        <p>
+            <a href="#" class="btn">view projects im proud of</a>
+        </p>
+      </div>
+
+      <!-- Research -->
+      <div class="section" data-target="research">
+        <h2 class="section-title">the Philippines didn't have much research support, yet here I am still publishing independently</h2>
+        <p>dad lore: i got into research in highschool because i got to play Command and Conquer: Zero Hour in my school's Science Lab while my classmates were in class (i won competitions and still graduated near-top of class anyway). unironically, i now <b>want to</b> do research full-time.</p>
+        <p>
+            <a href="#" class="btn">ideas i want the world to be aware of</a>
+        </p>
+      </div>
+
+      <!-- About -->
+      <div class="section" data-target="about">
+        <h2 class="section-title">who are you?</h2>
+        <p>just a guy curious and hyper-independent because of video games. they taught me everything: from english to physics, and even street smarts. (we all know there's a rare item hidden behind the waterfalls.)</p>
+      </div>
+
+       <!-- Location -->
+      <div class="section" data-target="location">
+        <h2 class="section-title">WHERE ARE YOU RN?</h2>
+      <p>
+          funny question. i go to Minerva University, so... everywhere. no, really. <a href="https://www.freethink.com/series/catalysts/global-education" target="_blank" style="color: inherit; text-decoration: underline;">Freethink</a> did a piece on us.
+      </p>
+      </div>
+
+      <!-- Filler content to ensure scrolling past the last element is comfortable -->
+      <div style="height: 20vh;"></div>
+
+      <!-- Footer -->
+      <div class="paper-footer">
+          <div class="footer-tiny">
+              inspired by the cleverness of <a href="https://ped.ro" target="_blank">ped.ro</a> & the typographic sexiness of <a href="https://www.makingsoftware.com/" target="_blank">makingsoftware.com</a>
+          </div>
+          <div class="footer-legible">
+              carl kho &copy; [a day before 2026] (proof → <a href="https://github.com/CarlKho-Minerva/Typographic-Watermarking/commits/main/" target="_blank">github</a>)
+          </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Visuals -->
+    <div class="tool-side">
+
+      <!-- Hero Visual -->
+      <div id="hero" class="right-content-item active">
+         <div class="card-3d">
+             <div class="placeholder-box" style="background: #222; color: #fff;">
+                 [ GIF: NYC Times Square ]
+             </div>
+         </div>
+         <div class="caption">
+             for funding own education (~$90k in scholarships)<br>
+             <a href="https://www.youtube.com/watch?v=F2QU7A7_AfI" target="_blank">see how i did it from an island in the philippines</a>
+         </div>
+      </div>
+
+      <!-- AlterEgo Visual -->
+       <div id="alterego" class="right-content-item">
+          <div class="card-3d">
+              <div class="placeholder-box" style="background:#f0f0f0;">
+                  [ AlterEgo Project Visual ]
+              </div>
+              <div class="schematic-overlay">
+                  <div class="specs-grid">
+                      <span class="spec-label">COST</span><span class="spec-value">$30</span>
+                      <span class="spec-label">SENSORS</span><span class="spec-value">Custom EMG</span>
+                      <span class="spec-label">ACCURACY</span><span class="spec-value">92%</span>
+                      <span class="spec-label">STATUS</span><span class="spec-value">Replicated</span>
+                  </div>
+              </div>
+          </div>
+          <div class="caption">
+              full project documentation (pdf)<br>
+              <a href="#" target="_blank">read the technical paper</a>
+          </div>
+       </div>
+
+      <!-- Work Visual (Resume) -->
+       <div id="work" class="right-content-item">
+          <div class="card-3d">
+              <div class="placeholder-box" style="background: white; border: 1px solid #ccc; color: #333;">
+                  [ Resume PDF ]
+              </div>
+          </div>
+          <div class="caption">
+              standard one-pager<br>
+              <a href="#" target="_blank">download.pdf (120kb)</a>
+          </div>
+       </div>
+
+      <!-- Motto Visual (Grid) -->
+      <div id="motto" class="right-content-item">
+          <div class="card-3d">
+              <div class="grid-2x2">
+                  <div class="grid-item">Proj 1</div>
+                  <div class="grid-item">Proj 2</div>
+                  <div class="grid-item">Proj 3</div>
+                  <div class="grid-item">Proj 4</div>
+              </div>
+          </div>
+          <a href="#" class="btn fixed-btn">view all projects</a>
+      </div>
+
+      <!-- Research Visual (Blog Card) -->
+       <div id="research" class="right-content-item">
+          <div class="card-3d">
+              <div class="blog-card">
+                  <div class="blog-image"></div>
+                  <h3>Research Blog Title</h3>
+                  <p style="font-size:11px; margin-top:8px; line-height:1.4;">Short description of the research idea or blog post.</p>
+              </div>
+          </div>
+          <div class="caption">
+               published on <a href="#" target="_blank">medium</a> & <a href="#" target="_blank">substack</a>
+          </div>
+       </div>
+
+      <!-- About Visual -->
+      <div id="about" class="right-content-item">
+           <div class="card-3d">
+               <div class="placeholder-box" style="background: #eef;">
+                 [ Hidden Item Behind Waterfalls Visual ]
+             </div>
+           </div>
+      </div>
+
+       <!-- Location -->
+      <div id="location" class="right-content-item">
+          <div class="card-3d">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/xfciyuavUCk?controls=0&rel=0&modestbranding=1"
+                title="Minerva University"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                style="border-radius: 0; display: block;">
+              </iframe>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Logic for determining the active section based on scroll position
+      // Using a center-line intersection strategy for "snappier" feel with smaller scrolls
+
+      const sections = document.querySelectorAll('[data-target]');
+      const paperSide = document.querySelector('.paper-side');
+      let isIntroComplete = false;
+
+      const onScroll = () => {
+          // If intro is not done but user scrolled, skip intro immediately
+          if (!isIntroComplete) {
+              skipIntro();
+              return;
+          }
+
+          // Calculate the "reading line" - let's say 40% down the screen
+          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.4);
+
+          let activeId = null;
+
+          // Find the section that contains the reading line
+          sections.forEach(section => {
+              const start = section.offsetTop;
+              const end = start + section.offsetHeight + 28; // +margin
+
+              if (readingLine >= start && readingLine < end) {
+                  activeId = section.getAttribute('data-target');
+              }
+          });
+
+          // Fallback: if we are at the very top, activate the first one
+          if (paperSide.scrollTop < 50 && sections.length > 0) {
+              activeId = sections[0].getAttribute('data-target');
+          }
+           // Fallback: if we are at the very bottom, active the last one
+           if ((paperSide.scrollHeight - paperSide.scrollTop) <= paperSide.clientHeight + 50) {
+               activeId = sections[sections.length - 1].getAttribute('data-target');
+           }
+
+          if (activeId) {
+              activateRightPanel(activeId);
+              highlightActiveText(activeId);
+          }
+      };
+
+      // Skip intro function - called when user scrolls during intro
+      function skipIntro() {
+          isIntroComplete = true;
+          const introSpan = document.querySelector('.intro-highlight');
+          if (introSpan) introSpan.classList.remove('active');
+
+          // Activate based on current scroll position
+          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.4);
+          let activeId = sections[0]?.getAttribute('data-target') || 'alterego';
+
+          sections.forEach(section => {
+              const start = section.offsetTop;
+              const end = start + section.offsetHeight + 28;
+              if (readingLine >= start && readingLine < end) {
+                  activeId = section.getAttribute('data-target');
+              }
+          });
+
+          activateRightPanel(activeId);
+          highlightActiveText(activeId);
+      }
+
+      paperSide.addEventListener('scroll', onScroll);
+
+      function activateRightPanel(id) {
+        // Toggle opacity for smooth transition
+        document.querySelectorAll('.right-content-item').forEach(item => {
+          if(item.id === id) {
+              item.classList.add('active');
+          } else {
+              item.classList.remove('active');
+          }
+        });
+      }
+
+      function highlightActiveText(id) {
+          sections.forEach(s => {
+              if(s.getAttribute('data-target') === id) {
+                  s.classList.add('active-text');
+              } else {
+                  s.classList.remove('active-text');
+              }
+          });
+      }
+
+      // Mario GIF Interaction
+      const marioImg = document.querySelector('.header-icon');
+      const staticSrc = 'mario_static.png';
+      const gifSrc = 'mario.gif';
+      const gifDuration = 1400; // ms
+      let isHovering = false;
+
+      // Preload static image
+      const preloadStatic = new Image();
+      preloadStatic.src = staticSrc;
+
+      // Logic: Run once on load, then stop. Play on hover.
+      // Initial Play
+      marioImg.src = gifSrc;
+
+      setTimeout(() => {
+          if (!isHovering) {
+              marioImg.src = staticSrc;
+          }
+      }, gifDuration);
+
+      // Intro Sequence Timeline
+      // T+0: Mario Jump Starts
+      // T+1400: Mario Jump Ends
+      // T+2400 (1.4s + 1s): Start Highlight
+      setTimeout(() => {
+          const introSpan = document.querySelector('.intro-highlight');
+          if (introSpan) introSpan.classList.add('active'); // Duration 2s
+
+          // T+7400 (2400 + 2000 duration + 3000 wait): Unlock
+          setTimeout(() => {
+              isIntroComplete = true;
+
+              // Remove intro highlight before transition
+              if (introSpan) introSpan.classList.remove('active');
+
+              paperSide.scrollTo({ top: 0, behavior: 'smooth' });
+
+              // Force activation of first section to ensure unblur
+              activateRightPanel('alterego');
+              highlightActiveText('alterego');
+          }, 5000); // 2s duration + 3s wait = 5s from here
+
+      }, 2400);
+
+      marioImg.addEventListener('mouseenter', () => {
+          isHovering = true;
+          marioImg.src = gifSrc;
+      });
+
+      marioImg.addEventListener('mouseleave', () => {
+          isHovering = false;
+          marioImg.src = staticSrc;
+      });
+
+      /* Removed GSAP Interaction Logic */
+    });
+  </script>
+</body>
+</html>

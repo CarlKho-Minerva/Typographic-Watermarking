@@ -1,7 +1,5 @@
-https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
-
 # Typographic Watermarking — Loom Demo Script
-## Duration: 2 minutes | Last Updated: 2025-12-16 22:00 UTC+8
+## Duration: 2 minutes | Last Updated: 2025-12-28 23:00 UTC+8
 
 ---
 
@@ -47,7 +45,7 @@ https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
 >
 > "Totally innocent."
 
-**[OPTIONAL: Quick multi-site montage - 10 seconds]**
+**[Quick multi-site montage - 10 seconds]**
 > "And it works everywhere—Claude, Gemini, Perplexity..."
 >
 > **[Quick cut: copy from Claude → toast shows "Claude", copy from Gemini → toast shows "Gemini"]**
@@ -62,23 +60,23 @@ https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
 >
 > **[Paste text, click Analyze]**
 >
-> "BOOM. 100% watermarked. Source: ChatGPT."
+> "BOOM. 88% watermarked. Source detected: ChatGPT and Gemini—I mixed text from both!"
 >
-> **[Hover over the visualized text, spaces highlight yellow]**
+> **[Hover over the visualized text, spaces highlight in their source colors - green for ChatGPT, blue for Gemini]**
 >
-> "See these highlighted spots? Every single space in this text is now a special Unicode character—U+2009, the 'Thin Space'—invisibly tagged to ChatGPT.
->
-> Claude gets a different space. Gemini gets another. It's like invisible ink, but for AI."
+> "See these highlighted spots? Each color is a different AI. Green spaces are ChatGPT. Blue spaces are Gemini. It's like invisible ink—carrying its source identity in every space character."
 
 ---
 
-## 🎯 THE EXPLANATION (1:40 - 1:55)
+## 🎯 THE FRAMING (1:40 - 1:55)
 
-> "Look—as a student myself, please don't hate me. I'm not trying to catch anyone.
+> "Now—I'm not building a surveillance tool. I'm not here to 'catch' anyone.
 >
-> I'm worried about a future where we can't tell what's real. Fabricated political statements. Fake evidence. Essays that were never written by humans.
+> The real threat is a future where we can't tell what's real—fabricated political statements, AI-generated evidence, synthetic media with no paper trail.
 >
-> **Typographic Watermarking** won't stop bad actors—you can strip it with regex—but for everyday use? It creates a paper trail. Think EXIF data for images, but for text."
+> **Typographic Watermarking** is a proposal: what if every AI company—OpenAI, Anthropic, Google—added this to their response layer? One line of code. Invisible to users. But traceable when needed.
+>
+> Think of it like EXIF data for AI text. It won't stop bad actors—they can strip it—but it gives us a baseline for authenticity."
 
 ---
 
@@ -86,17 +84,21 @@ https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
 
 > "The Chrome extension is free. The decoder is live. Link's in the description.
 >
-> If you think this matters, share it. I'm writing the arXiv paper right now."
+> If you think transparent AI matters, share this. The arXiv paper is live."
 
 ---
 
-## 🎥 B-ROLL SUGGESTIONS
+## 🎥 B-ROLL CHECKLIST (All Captured)
 
-1. **Side-by-side A vs А** — Use large font, maybe animate a swap
-2. **Extension popup** — Show the fingerprint assignments
-3. **Decoder results** — Confidence bar filling up
-4. **Highlighted spaces** — Yellow hover effect on each space
-5. **Code snippet** — The `replace(/ /g, '\u2009')` one-liner
+- [x] Side-by-side A vs А — Cyrillic comparison
+- [x] Extension popup — Fingerprint assignments
+- [x] ChatGPT copy → toast notification
+- [x] Claude copy → toast notification
+- [x] Gemini copy → toast notification
+- [x] Decoder results — Multi-source detection (ChatGPT + Gemini)
+- [x] Highlighted spaces — Color-coded by source
+- [x] Google Docs paste — Watermark survives
+- [x] Code snippet — The `replace(/ /g, '\u2009')` one-liner
 
 ---
 
@@ -106,4 +108,5 @@ https://aistudio.google.com/prompts/1_bubGvT6EUpPrm859Wu0OlXzDGXi-77Z
 - The Cyrillic hook is the "mic drop" opener
 - Show the TOAST notification when copying
 - Hover over spaces in decoder for visual impact
+- **Reframed**: Not "catching students" → "proposal for AI companies to adopt"
 - End with the arXiv angle to establish credibility
