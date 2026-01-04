@@ -703,8 +703,8 @@
               return;
           }
 
-          // Calculate the "reading line" - let's say 40% down the screen
-          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.4);
+          // Calculate the "reading line" - adjusted to 15% (top) per user request
+          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.15);
 
           let activeId = null;
 
@@ -740,7 +740,7 @@
           if (introSpan) introSpan.classList.remove('active');
 
           // Activate based on current scroll position
-          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.4);
+          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.15);
           let activeId = sections[0]?.getAttribute('data-target') || 'alterego';
 
           sections.forEach(section => {
@@ -847,7 +847,7 @@
                         firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
 
-                }, 3000); // 3s wait for reading/viewing GIF
+                }, 7000); // 7s wait per user request
 
           }, 2000); // Wait for 2s highlight to finish
 
