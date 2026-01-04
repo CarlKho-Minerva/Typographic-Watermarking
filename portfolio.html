@@ -565,11 +565,11 @@
       <!-- Hero Visual -->
       <div id="hero" class="right-content-item active">
           <div class="card-3d">
-              <img src="webflow.gif" alt="NYC Times Square" style="width: 100%; height: auto; display: block;">
+              <img src="webflow.gif" id="hero-gif" alt="NYC Times Square" style="width: 100%; height: auto; display: block; opacity: 0; transition: opacity 2s ease;">
           </div>
          <div class="caption">
              for funding own education (~$90k in scholarships)<br>
-             <a href="https://www.youtube.com/watch?v=F2QU7A7_AfI" target="_blank">see how i did it from an island in the philippines</a>
+             <a href="https://www.youtube.com/watch?v=F2QU7A7_AfI" target="_blank">learn how i did it (and won Google's AI for Impact '24)</a>
          </div>
       </div>
 
@@ -594,7 +594,7 @@
           </div>
           <div class="caption">
               standard one-pager<br>
-              <a href="resume.pdf" target="_blank">download.pdf</a>
+              <a href="resume.pdf" target="_blank">take a closer look</a>
           </div>
        </div>
 
@@ -779,6 +779,10 @@
 
               // Remove intro highlight before transition
               if (introSpan) introSpan.classList.remove('active');
+
+              // Reveal Hero GIF
+              const heroGif = document.getElementById('hero-gif');
+              if (heroGif) heroGif.style.opacity = '1';
 
               paperSide.scrollTo({ top: 0, behavior: 'smooth' });
 
