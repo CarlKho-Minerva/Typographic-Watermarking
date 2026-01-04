@@ -429,6 +429,44 @@
     }
     .spec-label { opacity: 0.6; }
     .spec-value { font-weight: bold; }
+
+    /* Zoomable Image Container & Loupe */
+    .zoom-container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      cursor: none; /* Hide default cursor */
+      position: relative;
+    }
+
+    .zoomable-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      /* removed transform transition/scale logic */
+    }
+
+    .loupe {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      pointer-events: none; /* Let events pass through to container */
+      background-image: url('resume_highres.png');
+      background-repeat: no-repeat;
+      background-color: #fff; /* fallback */
+      /* Initially hidden */
+      opacity: 0;
+      transform: translate(-50%, -50%); /* Centered on mouse */
+      z-index: 100;
+    }
+
+    .zoom-container:hover .loupe {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -455,11 +493,11 @@
         <h2 class="section-title">Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
         <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head to speak (sort of).</p>
         <p>
-            <a href="#" class="btn">wait, how?</a>
+            <a href="https://somach.vercel.app/" target="_blank" class="btn">wait, how?</a>
         </p>
         <i>if u're from MIT media lab, i forgot to submit this section in the application</i>
         <p>
-             <a href="#" class="btn">Community Engagement section</a>
+             <a href="https://docs.google.com/document/d/1_xlXTRBgNuWiATNA_2ToqgZ7AZ7-gKjbyV2lwSMkB8I/edit?usp=sharing" target="_blank" class="btn">Community Engagement section</a>
         </p>
       </div>
 
@@ -540,34 +578,25 @@
       <!-- AlterEgo Visual -->
        <div id="alterego" class="right-content-item">
           <div class="card-3d">
-              <div class="placeholder-box" style="background:#f0f0f0;">
-                  [ AlterEgo Project Visual ]
-              </div>
-              <div class="schematic-overlay">
-                  <div class="specs-grid">
-                      <span class="spec-label">COST</span><span class="spec-value">$30</span>
-                      <span class="spec-label">SENSORS</span><span class="spec-value">Custom EMG</span>
-                      <span class="spec-label">ACCURACY</span><span class="spec-value">92%</span>
-                      <span class="spec-label">STATUS</span><span class="spec-value">Replicated</span>
-                  </div>
-              </div>
+              <img src="alterego_merged.png" alt="AlterEgo Project Visual" style="width: 100%; height: auto; display: block; max-height: 80vh; object-fit: contain;">
           </div>
           <div class="caption">
               full project documentation (pdf)<br>
-              <a href="#" target="_blank">read the technical paper</a>
+              <a href="https://somach.vercel.app/" target="_blank">read the technical paper</a>
           </div>
        </div>
 
       <!-- Work Visual (Resume) -->
        <div id="work" class="right-content-item">
           <div class="card-3d">
-              <div class="placeholder-box" style="background: white; border: 1px solid #ccc; color: #333;">
-                  [ Resume PDF ]
+              <div class="zoom-container">
+                  <img src="resume_preview.png" alt="Resume Preview" class="zoomable-image">
+                  <div class="loupe"></div>
               </div>
           </div>
           <div class="caption">
               standard one-pager<br>
-              <a href="#" target="_blank">download.pdf (120kb)</a>
+              <a href="resume.pdf" target="_blank">download.pdf</a>
           </div>
        </div>
 
@@ -773,6 +802,51 @@
       });
 
       /* Removed GSAP Interaction Logic */
+
+      // Zoom + Pan Logic for Resume (Loupe Effect)
+      const zoomContainers = document.querySelectorAll('.zoom-container');
+
+      zoomContainers.forEach(container => {
+          const img = container.querySelector('.zoomable-image');
+          const loupe = container.querySelector('.loupe');
+
+          container.addEventListener('mousemove', (e) => {
+              const rect = container.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+
+              // Move Loupe
+              loupe.style.left = `${x}px`;
+              loupe.style.top = `${y}px`;
+
+              // Calculate background position
+              // We want the background image inside the loupe to match the position of the cursor relative to the main image
+              // But magnified.
+
+              // 1. Get ratios
+              const xRatio = x / rect.width;
+              const yRatio = y / rect.height;
+
+              // 2. Define Zoom Level
+              const zoomLevel = 2.5;
+
+              // 3. Assume resume_highres.png has same aspect ratio as the container/image displayed.
+              // To center the magnified view on the cursor:
+              // bgX = -x * zoomLevel + (loupeWidth / 2)
+              // bgY = -y * zoomLevel + (loupeHeight / 2)
+              // AND we need to make sure the background-size is set correctly relative to the container size * zoomLevel.
+
+              const bgWidth = rect.width * zoomLevel;
+              const bgHeight = rect.height * zoomLevel;
+
+              loupe.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
+
+              const bgX = -x * zoomLevel + 100; // 100 is half of 200px width
+              const bgY = -y * zoomLevel + 100; // 100 is half of 200px height
+
+              loupe.style.backgroundPosition = `${bgX}px ${bgY}px`;
+          });
+      });
     });
   </script>
 </body>
