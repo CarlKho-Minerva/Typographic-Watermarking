@@ -427,10 +427,41 @@
         gap: 8px 16px;
         text-align: left;
     }
-    .spec-label { opacity: 0.6; }
-    .spec-value { font-weight: bold; }
+    .intro-highlight.active {
+        background-size: 100% 100%;
+    }
 
-    /* Zoomable Image Container & Loupe */
+    /* Hero Loading State */
+    .hero-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+    .hero-static {
+        width: 100%;
+        height: auto;
+        display: block;
+        opacity: 0.5; /* Low opacity B&W */
+        transition: opacity 1s ease;
+    }
+    .hero-gif {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+    /* Loading Text Removed */
+
+    /* Attention Blur Class */
+    .attention-blur {
+        filter: blur(1.5px); /* Soften to match body blur */
+        opacity: 0.3;
+        transition: all 1s ease;
+    }
+
     .zoom-container {
       width: 100%;
       height: 100%;
@@ -484,7 +515,7 @@
         </div>
         <div class="paper-subheader">Celebrated for doing <span class="intro-highlight">"Fine, I'll do it..."</span> my whole life</div>
         <div class="footer-tiny" style="margin-top: 8px; font-size: 11px; color: #888;">
-            Currently living in: <a href="#" onclick="document.querySelector('[data-target=\'location\']').scrollIntoView({behavior: 'smooth'}); return false;" style="text-decoration: underline; color: inherit;">everywhere</a>
+            i live <a href="#" onclick="document.querySelector('[data-target=\'location\']').scrollIntoView({behavior: 'smooth'}); return false;" style="text-decoration: underline; color: inherit;">everywhere</a> for my undergrad degree.
         </div>
       </div>
 
@@ -509,7 +540,7 @@
         </p>
         <p>u're kidding?</p>
         <p>
-            <a href="https://gist.github.com/CarlKho-Minerva/1b81b59bee4365c75b0ede595300e330#file-cv-md" target="_blank" class="btn">my life's work (cv)</a>
+            <a href="https://gist.github.com/CarlKho-Minerva/1b81b59bee4365c75b0ede595300e330#file-cv-md" target="_blank" class="btn">cv (or: everything i did)</a>
         </p>
       </div>
 
@@ -565,7 +596,10 @@
       <!-- Hero Visual -->
       <div id="hero" class="right-content-item active">
           <div class="card-3d">
-              <img src="webflow.gif" id="hero-gif" alt="NYC Times Square" style="width: 100%; height: auto; display: block; opacity: 0; transition: opacity 2s ease;">
+              <div class="hero-container">
+                  <img src="webflow_static_bw.png" class="hero-static" alt="Static Preview">
+                  <img src="webflow.gif" id="hero-gif" class="hero-gif" alt="NYC Times Square">
+              </div>
           </div>
          <div class="caption">
              for funding own education (~$90k in scholarships)<br>
@@ -768,28 +802,54 @@
       // Intro Sequence Timeline
       // T+0: Mario Jump Starts
       // T+1400: Mario Jump Ends
-      // T+2400 (1.4s + 1s): Start Highlight
+      // T+2400 (1.4s + 1s): Start Highlight ONLY
       setTimeout(() => {
           const introSpan = document.querySelector('.intro-highlight');
           if (introSpan) introSpan.classList.add('active'); // Duration 2s
 
-          // T+7400 (2400 + 2000 duration + 3000 wait): Unlock
+          // T+4400 (2400 + 2000 duration): Highlight Finished -> Now Blur & Reveal GIF
           setTimeout(() => {
-              isIntroComplete = true;
+                // REVEAL GIF & BLUR HEADER
+                const heroGif = document.getElementById('hero-gif');
+                const heroStatic = document.querySelector('.hero-static');
+                const header = document.querySelector('.paper-header');
 
-              // Remove intro highlight before transition
-              if (introSpan) introSpan.classList.remove('active');
+                if (heroGif) heroGif.style.opacity = '1';
+                if (heroStatic) heroStatic.style.opacity = '0';
 
-              // Reveal Hero GIF
-              const heroGif = document.getElementById('hero-gif');
-              if (heroGif) heroGif.style.opacity = '1';
+                // Restart GIF from beginning so it seamlesssly transitions from static frame
+                if (heroGif) {
+                    const currentSrc = heroGif.src;
+                    heroGif.src = '';
+                    heroGif.src = currentSrc;
+                    heroGif.style.opacity = '1';
+                }
 
-              paperSide.scrollTo({ top: 0, behavior: 'smooth' });
+                // Blur the header AFTER highlight is done
+                if (header) header.classList.add('attention-blur');
 
-              // Force activation of first section to ensure unblur
-              activateRightPanel('alterego');
-              highlightActiveText('alterego');
-          }, 5000); // 2s duration + 3s wait = 5s from here
+                // Ensure right panel shows HERO
+                activateRightPanel('hero');
+
+                // T+9400 (4400 + 5000 wait): Auto Unblur & Scroll
+                setTimeout(() => {
+                    isIntroComplete = true;
+
+                    // Remove intro highlight
+                    if (introSpan) introSpan.classList.remove('active');
+
+                    // Unblur Header
+                    if (header) header.classList.remove('attention-blur');
+
+                    // Auto Scroll to first section ("AlterEgo")
+                    const firstSection = document.querySelector('.section[data-target="alterego"]');
+                    if (firstSection) {
+                        firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+
+                }, 3000); // 3s wait for reading/viewing GIF
+
+          }, 2000); // Wait for 2s highlight to finish
 
       }, 2400);
 
