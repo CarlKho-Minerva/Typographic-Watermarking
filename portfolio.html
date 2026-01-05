@@ -279,6 +279,18 @@
         opacity: 0.6;
     }
 
+    /* Dither Active State (for loading) */
+    .card-3d.dither-active {
+        transform: translate(-2px, -2px);
+    }
+    .card-3d.dither-active::after {
+        background: transparent;
+        background-image: radial-gradient(#000 1px, transparent 1px);
+        background-size: 3px 3px;
+        transform: translate(8px, 8px);
+        opacity: 0.6;
+    }
+
     .placeholder-box {
         width: 100%;
         height: 100%;
@@ -556,6 +568,35 @@
         width: 100%;
         height: auto;
     }
+
+    /* Logo Marquee */
+    .logo-marquee {
+        width: 100%;
+        overflow: hidden;
+        background: #f9f9f9;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 12px 0;
+        margin-bottom: 20px;
+    }
+    .marquee-content {
+        display: flex;
+        gap: 40px;
+        animation: marquee 30s linear infinite;
+        width: max-content;
+    }
+    .marquee-content span {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #999;
+        white-space: nowrap;
+    }
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
   </style>
 </head>
 <body>
@@ -637,6 +678,47 @@
       <!-- Filler content to ensure scrolling past the last element is comfortable -->
       <div style="height: 20vh;"></div>
 
+      <!-- Logo Marquee -->
+      <div class="logo-marquee">
+          <div class="marquee-content">
+              <span>GDC</span>
+              <span>Anthropic</span>
+              <span>OpenAI</span>
+              <span>Google</span>
+              <span>Red Bull</span>
+              <span>Microsoft</span>
+              <span>Dell</span>
+              <span>Gensler</span>
+              <span>AI Pilipinas</span>
+              <span>Hanwha</span>
+              <span>Minerva University</span>
+              <span>Symph</span>
+              <span>BnB Germany</span>
+              <span>LEGO WRO</span>
+              <span>YC AI Startup</span>
+              <span>Cerebras</span>
+              <span>Raycast (Top 5 ProductHunt)</span>
+              <!-- Duplicate for seamless loop -->
+              <span>GDC</span>
+              <span>Anthropic</span>
+              <span>OpenAI</span>
+              <span>Google</span>
+              <span>Red Bull</span>
+              <span>Microsoft</span>
+              <span>Dell</span>
+              <span>Gensler</span>
+              <span>AI Pilipinas</span>
+              <span>Hanwha</span>
+              <span>Minerva University</span>
+              <span>Symph</span>
+              <span>BnB Germany</span>
+              <span>LEGO WRO</span>
+              <span>YC AI Startup</span>
+              <span>Cerebras</span>
+              <span>Raycast (Top 5 ProductHunt)</span>
+          </div>
+      </div>
+
       <!-- Footer -->
       <div class="paper-footer">
           <div class="footer-tiny">
@@ -653,7 +735,7 @@
 
       <!-- Hero Visual -->
       <div id="hero" class="right-content-item active">
-          <div class="card-3d">
+          <div class="card-3d dither-active" id="hero-card">
               <div class="hero-container">
                   <img src="webflow_static_bw.png" class="hero-static" alt="Static Preview">
                   <img src="webflow.gif" id="hero-gif" class="hero-gif" alt="NYC Times Square">
@@ -909,6 +991,10 @@
                 // Blur the header AFTER highlight is done
                 if (header) header.classList.add('attention-blur');
 
+                // Remove dither effect from hero card now that GIF is playing
+                const heroCard = document.getElementById('hero-card');
+                if (heroCard) heroCard.classList.remove('dither-active');
+
                 // Ensure right panel shows HERO
                 activateRightPanel('hero');
 
@@ -953,6 +1039,10 @@
           const img = container.querySelector('.zoomable-image');
           const loupe = container.querySelector('.loupe');
 
+          // High-res image actual dimensions (from resume_highres.png at 6000px height)
+          const highResWidth = 4636;
+          const highResHeight = 6000;
+
           container.addEventListener('mousemove', (e) => {
               const rect = container.getBoundingClientRect();
               const x = e.clientX - rect.left;
@@ -962,30 +1052,26 @@
               loupe.style.left = `${x}px`;
               loupe.style.top = `${y}px`;
 
-              // Calculate background position
-              // We want the background image inside the loupe to match the position of the cursor relative to the main image
-              // But magnified.
-
-              // 1. Get ratios
+              // Calculate ratios of cursor position within container
               const xRatio = x / rect.width;
               const yRatio = y / rect.height;
 
-              // 2. Define Zoom Level
-              const zoomLevel = 2.5;
-
-              // 3. Assume resume_highres.png has same aspect ratio as the container/image displayed.
-              // To center the magnified view on the cursor:
-              // bgX = -x * zoomLevel + (loupeWidth / 2)
-              // bgY = -y * zoomLevel + (loupeHeight / 2)
-              // AND we need to make sure the background-size is set correctly relative to the container size * zoomLevel.
-
+              // Calculate the background size to achieve ~2x zoom relative to displayed preview.
+              // The high-res image is much larger than the displayed preview, so we need to scale it down.
+              // If the container is ~400px wide, and the high-res is ~4636px, that's ~11.5x native zoom.
+              // We want ~2x zoom, so we use (container width * 2) / (preview width / highres width) = ...
+              // Simpler: just use a scaled-down version of the high-res dimensions.
+              const zoomLevel = 2.0; // Desired magnification over displayed size
               const bgWidth = rect.width * zoomLevel;
               const bgHeight = rect.height * zoomLevel;
 
               loupe.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
 
-              const bgX = -x * zoomLevel + 100; // 100 is half of 200px width
-              const bgY = -y * zoomLevel + 100; // 100 is half of 200px height
+              // Position the background so the point under the cursor is centered in the loupe.
+              const loupeWidth = 200;
+              const loupeHeight = 200;
+              const bgX = -(xRatio * bgWidth) + (loupeWidth / 2);
+              const bgY = -(yRatio * bgHeight) + (loupeHeight / 2);
 
               loupe.style.backgroundPosition = `${bgX}px ${bgY}px`;
           });
