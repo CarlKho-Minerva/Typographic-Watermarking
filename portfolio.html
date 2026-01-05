@@ -500,13 +500,22 @@
       border: 2px solid rgba(255, 255, 255, 0.5);
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       pointer-events: none; /* Let events pass through to container */
-      background-image: url('resume_highres.png');
       background-repeat: no-repeat;
       background-color: #fff; /* fallback */
       /* Initially hidden */
       opacity: 0;
       transform: translate(-50%, -50%); /* Centered on mouse */
       z-index: 100;
+    }
+
+    /* Resume loupe uses resume_highres.png */
+    #work .loupe {
+      background-image: url('resume_highres.png');
+    }
+
+    /* AlterEgo loupe uses alterego_merged.png (already high-res) */
+    #alterego .loupe {
+      background-image: url('alterego_merged.png');
     }
 
     .zoom-container:hover .loupe {
@@ -750,7 +759,10 @@
       <!-- AlterEgo Visual -->
        <div id="alterego" class="right-content-item">
           <div class="card-3d">
-              <img src="alterego_merged.png" alt="AlterEgo Project Visual" style="width: 100%; height: auto; display: block; max-height: 80vh; object-fit: contain;">
+              <div class="zoom-container">
+                  <img src="alterego_merged.png" alt="AlterEgo Project Visual" class="zoomable-image" style="max-height: 80vh; object-fit: contain;">
+                  <div class="loupe"></div>
+              </div>
           </div>
           <div class="caption">
               full project documentation (pdf)<br>
