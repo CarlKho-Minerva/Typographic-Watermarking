@@ -52,7 +52,7 @@
       width: 50vw;
       height: 100vh;
       overflow-y: auto;
-      padding: var(--space-xl);
+      padding: var(--space-l); /* Tightened from xl */
       border-right: 2px solid var(--color-border-strong);
       background: var(--color-bg-paper);
       scroll-behavior: smooth;
@@ -97,8 +97,8 @@
     .section {
       /* Removed min-height: 90vh */
       /* Added min-height to prevent scroll skipping on short sections */
-      min-height: 30vh;
-      margin-bottom: 28px; /* Matched to reference */
+      min-height: 25vh; /* Relaxed from 20vh (was 30vh) for better breathing room */
+      margin-bottom: 32px; /* Relaxed from 24px */
       padding: 0;
       display: block; /* Default block layout */
       border-bottom: none;
@@ -247,7 +247,26 @@
         transform: translate(0,0);
         position: relative; /* Keep relative for ::after positioning */
         transition: transform 0.15s ease-out; /* Add transition for lift */
-        z-index: 2; /* Ensure card is above its shadow */
+        /* Ensure card is above its shadow */
+        /* background-color: #ffffff !important;  -- Solved via child plate */
+        background: transparent;
+        isolation: isolate;
+    }
+
+    .card-3d.ghost {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    .card-plate {
+        background: #fff;
+        border: 1px solid #000;
+        padding: 16px;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        z-index: 1; /* Explicitly above shadow */
     }
 
     /* The Dithered Block Shadow */
@@ -632,6 +651,9 @@
         <h2 class="section-title">Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
         <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head to speak (sort of).</p>
         <i>if u're from MIT media lab, i forgot to submit this section in the application</i>
+        <p>
+             <a href="https://docs.google.com/document/d/1_xlXTRBgNuWiATNA_2ToqgZ7AZ7-gKjbyV2lwSMkB8I/edit?usp=sharing" target="_blank" class="btn">Community Engagement section</a>
+        </p>
       </div>
 
       <!-- Work History -->
@@ -839,49 +861,79 @@
 
       <!-- Blog Visual -->
       <div id="blog" class="right-content-item">
-          <div class="card-3d" style="max-height: 70vh; overflow-y: auto; padding: 16px; background: #fff;">
-              <div class="research-list" style="border: none;">
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+          <!-- removed container card-3d wrapper to allow individual cards to fly -->
+          <div class="research-list" style="border: none; max-height: 70vh; overflow-y: auto; padding: 4px;">
+
+              <a href="https://somach.vercel.app/blogs/openemg-kaggle-deepmind.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">OpenEMG: The Data Bottleneck Nobody Talks About</div>
                       <div class="research-meta">Dec 12, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/publishing-first-arxiv-paper.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">Publishing My First arXiv Paper</div>
                       <div class="research-meta">Dec 14, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/eureka-subvocalization-pivot.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">The Eureka Moment: Why I Felt 'Lied To' About Brain Interfaces</div>
                       <div class="research-meta">Dec 9, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/hip-muscles-dont-lie.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">Hip(s) (muscles) don't lie.</div>
                       <div class="research-meta">Nov 16, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/teaching-eeg-mind-control.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">Teaching EEG: How to Control Machines with Your Mind</div>
                       <div class="research-meta">Nov 10, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/rebuilding-phase2-watch.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">(Re)Building the Phase 2 Smartwatch Game Controller</div>
                       <div class="research-meta">Nov 9, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/voice-controlled-uber-playwright.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">Voice-Controlled Uber: The API That Doesn't Exist</div>
                       <div class="research-meta">Oct 24, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/button-grid-redemption.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">[3/3] 6 Buttons vs Voice Labelling</div>
                       <div class="research-meta">Oct 21, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
-                      <div class="research-title">The Three-Electrode Problem</div>
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/emg-electrode-placement.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
+                      <div class="research-title">The Three-Electrode Problem (or: When Your Sensor Shows a Flat Line)</div>
                       <div class="research-meta">Oct 13, 2025</div>
-                  </a>
-                  <a href="https://somach.vercel.app/" target="_blank" class="research-item">
+                  </div>
+              </a>
+
+              <a href="https://somach.vercel.app/blogs/shin-controller.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                  <div class="card-plate">
                       <div class="research-title">Gaming's Next Controller Isn't a Brain Implant. It's Your Shin.</div>
                       <div class="research-meta">Sep 18, 2025</div>
-                  </a>
-              </div>
+                  </div>
+              </a>
+
           </div>
           <div class="caption">
                10 of 23 posts • <a href="https://somach.vercel.app/" target="_blank">view all</a>
@@ -923,8 +975,8 @@
               return;
           }
 
-          // Calculate the "reading line" - adjusted to 15% (top) per user request
-          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.15);
+          // Calculate the "reading line" - adjusted to 45% (center-ish) per user request to activate in middle
+          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.45);
 
           let activeId = null;
 
@@ -960,7 +1012,7 @@
           if (introSpan) introSpan.classList.remove('active');
 
           // Activate based on current scroll position
-          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.15);
+          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.45);
           let activeId = sections[0]?.getAttribute('data-target') || 'alterego';
 
           sections.forEach(section => {
