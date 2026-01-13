@@ -1,1222 +1,1609 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carl Kho - Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carl Kho - Portfolio</title>
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    :root {
-      /* Colors */
-      --color-bg-paper: #ffffff;
-      --color-bg-tool: #fcfcfc;
-      --color-text-main: #1a1a1a;
-      --color-text-muted: #6e6e73;
-      --color-border: #e0e0e0;
-      --color-border-strong: #000000;
-      --color-accent: #000000;
-      --color-highlight: #fff000;
+        :root {
+            /* Colors */
+            --color-bg-paper: #ffffff;
+            --color-bg-tool: #fcfcfc;
+            --color-text-main: #1a1a1a;
+            --color-text-muted: #6e6e73;
+            --color-border: #e0e0e0;
+            --color-border-strong: #000000;
+            --color-accent: #000000;
+            --color-highlight: #fff000;
 
-      /* Spacing */
-      --space-xs: 4px;
-      --space-s: 8px;
-      --space-m: 16px;
-      --space-l: 24px;
-      --space-xl: 40px;
+            /* Spacing */
+            --space-xs: 4px;
+            --space-s: 8px;
+            --space-m: 16px;
+            --space-l: 24px;
+            --space-xl: 40px;
 
-      /* Typography */
-      --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+            /* Typography */
+            --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+        }
+
+        body {
+            font-family: var(--font-main);
+            font-size: 13px;
+            /* Matched to reference */
+            background: var(--color-bg-paper);
+            color: var(--color-text-main);
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .split-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* LEFT: Content Side */
+        .paper-side {
+            width: 50vw;
+            height: 100vh;
+            overflow-y: auto;
+            padding: var(--space-l);
+            /* Tightened from xl */
+            border-right: 2px solid var(--color-border-strong);
+            background: var(--color-bg-paper);
+            scroll-behavior: smooth;
+        }
+
+        .paper-header {
+            margin-bottom: var(--space-l);
+            padding-bottom: var(--space-m);
+            border-bottom: 2px solid var(--color-border-strong);
+        }
+
+        .title-row {
+            display: flex;
+            align-items: flex-end;
+            /* gap: 12p x; */
+            margin-bottom: 12px;
+        }
+
+        .header-icon {
+            height: 20vh;
+            width: auto;
+            filter: brightness(0);
+            image-rendering: pixelated;
+            margin-bottom: 1vh;
+        }
+
+        .paper-title {
+            font-size: 10vh;
+            font-weight: bold;
+            line-height: 1.3;
+            margin-bottom: -2vh;
+        }
+
+
+
+        .paper-subheader {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .section {
+            /* Removed min-height: 90vh */
+            /* Added min-height to prevent scroll skipping on short sections */
+            min-height: 25vh;
+            /* Relaxed from 20vh (was 30vh) for better breathing room */
+            margin-bottom: 32px;
+            /* Relaxed from 24px */
+            padding: 0;
+            display: block;
+            /* Default block layout */
+            border-bottom: none;
+
+            /* Focus Mode Styles */
+            opacity: 0.3;
+            filter: blur(1.5px);
+            transition: opacity 0.4s ease, filter 0.4s ease;
+        }
+
+        .section.active-text {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: var(--space-xs);
+            margin-bottom: var(--space-m);
+            /* Border removed in favor of highlight */
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 12px;
+            text-align: justify;
+            font-size: 13px;
+            /* Matched to reference */
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            /* Smaller padding */
+            background: var(--color-bg-paper);
+            border: 1px solid var(--color-border-strong);
+            /* Thinner border */
+            color: var(--color-text-main);
+            font-family: inherit;
+            font-size: 11px;
+            /* Smaller font */
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 3px 3px 0 var(--color-border-strong);
+            /* Smaller shadow */
+            transition: all 0.1s;
+            text-decoration: none;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .btn:hover {
+            background: var(--color-accent);
+            color: #ffffff;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 var(--color-border-strong);
+        }
+
+        i {
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        /* Highlight active section in the text as well for better feedback */
+        /* Animated Highlighter */
+        .section-title {
+            background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+            background-size: 0% 100%;
+            background-repeat: no-repeat;
+            background-position: 0 center;
+            transition: background-size 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            /* Ease out drawing effect */
+
+            display: inline-block;
+            padding: 0 4px;
+            margin-left: -4px;
+            border-radius: 2px;
+            /* mix-blend-mode: multiply;  Removed to keep colors consistent during anim */
+        }
+
+        .intro-highlight {
+            background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+            background-size: 0% 100%;
+            background-repeat: no-repeat;
+            background-position: 0 center;
+            transition: background-size 2s ease-out;
+            /* 2s duration as requested */
+
+            display: inline-block;
+            padding: 0 4px;
+            margin-left: -4px;
+            border-radius: 2px;
+        }
+
+        .section.active-text .section-title,
+        .intro-highlight.active {
+            background-size: 100% 100%;
+        }
+
+        /* RIGHT: Visual Side */
+        .tool-side {
+            width: 50%;
+            height: 100vh;
+            background: var(--color-bg-tool);
+            position: sticky;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right-content-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%; /* Slightly wider to accommodate scrollbar/padding */
+            max-width: 520px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            /* Scrollability Fixes */
+            max-height: 95vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+        }
+
+        .right-content-item.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* The 3D Object -> Now "Physical Card" */
+        /* RE-ATTEMPTING CSS FOR EXACT "DITHERED SHADOW" REQUEST */
+        .card-3d {
+            /* Reset */
+            box-shadow: none;
+            border: 1px solid #000;
+            transform: translate(0, 0);
+            position: relative;
+            /* Keep relative for ::after positioning */
+            transition: transform 0.15s ease-out;
+            /* Add transition for lift */
+            /* Ensure card is above its shadow */
+            /* background-color: #ffffff !important;  -- Solved via child plate */
+            background: transparent;
+            isolation: isolate;
+        }
+
+        .card-3d.ghost {
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+        }
+
+        .card-plate {
+            background: #fff;
+            border: 1px solid #000;
+            padding: 16px;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            /* Explicitly above shadow */
+        }
+
+        /* The Dithered Block Shadow */
+        .card-3d::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #000;
+            /* Default small hard shadow */
+            transition: transform 0.15s ease-out, opacity 0.15s ease-out, background 0.15s ease-out;
+            /* Add transitions */
+            opacity: 1;
+            /* Start visible with solid shadow */
+        }
+
+        /* Hover State */
+        /* Hover State - INDEPENDENT per Card */
+        .card-3d:hover {
+            transform: translate(-2px, -2px);
+            /* Slight lift */
+        }
+
+        .card-3d:hover::after {
+            /* The Dither Reveal */
+            background: transparent;
+            background-image: radial-gradient(#000 1px, transparent 1px);
+            background-size: 3px 3px;
+            transform: translate(8px, 8px);
+            /* Deep throw */
+            opacity: 0.6;
+        }
+
+        /* Dither Active State (for loading) */
+        .card-3d.dither-active {
+            transform: translate(-2px, -2px);
+        }
+
+        .card-3d.dither-active::after {
+            background: transparent;
+            background-image: radial-gradient(#000 1px, transparent 1px);
+            background-size: 3px 3px;
+            transform: translate(8px, 8px);
+            opacity: 0.6;
+        }
+
+        .placeholder-box {
+            width: 100%;
+            height: 100%;
+            background: #fdfdfd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: var(--font-mono);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .caption {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            max-width: 100%;
+            line-height: 1.5;
+            /* Static, no tilt */
+        }
+
+        .caption a {
+            color: var(--color-text-main);
+            text-decoration: underline;
+        }
+
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+            padding: 12px;
+            /* Frame inside the card */
+            background: #f9f9f9;
+        }
+
+        .grid-item {
+            background: #ddd;
+            border: 2px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            transition: transform 0.2s;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.02);
+        }
+
+        .blog-card {
+            border: none;
+            background: transparent;
+            padding: 24px;
+            box-shadow: none;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 120px;
+            background: #eee;
+            margin-bottom: 12px;
+            border: 1px solid #000;
+        }
+
+        .fixed-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .split-container {
+                flex-direction: column;
+            }
+
+            .paper-side {
+                width: 100%;
+                height: 100vh;
+                border-right: none;
+            }
+
+            .tool-side {
+                display: block;
+                position: fixed;
+                bottom: 4vh;
+                right: 4vw;
+                width: calc(50vw - 8vw);
+                /* ~1/4 of screen width with margins */
+                height: calc(25vh);
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                z-index: 100;
+                overflow: hidden;
+            }
+
+            .section {
+                margin-bottom: 40px;
+            }
+
+            .paper-footer {
+                position: relative;
+                padding-bottom: 30vh;
+            }
+        }
+
+        /* Footer */
+        .paper-footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-family: var(--font-main);
+            /* Match body font */
+        }
+
+        .footer-tiny {
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .footer-tiny a {
+            color: #888;
+            text-decoration: none;
+        }
+
+        .footer-legible {
+            font-size: 13px;
+            color: #333;
+        }
+
+        .footer-legible a {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        /* Schematic Overlay Interaction */
+        .right-content-item {
+            /* ... existing styles ... */
+            cursor: crosshair;
+            /* Hint at precision */
+        }
+
+        .schematic-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            /* Dark schematic bg */
+            color: #0f0;
+            /* Retro terminal green or blueprint white? Let's go Clean Blueprint White */
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            padding: 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(4px);
+        }
+
+        .right-content-item:hover .schematic-overlay {
+            opacity: 1;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 8px 16px;
+            text-align: left;
+        }
+
+        .intro-highlight.active {
+            background-size: 100% 100%;
+        }
+
+        /* Hero Loading State */
+        .hero-container {
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+
+        .hero-static {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.5;
+            /* Low opacity B&W */
+            transition: opacity 1s ease;
+        }
+
+        .hero-gif {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Loading Text Removed */
+
+        /* Attention Blur Class */
+        .attention-blur {
+            filter: blur(1.5px);
+            /* Soften to match body blur */
+            opacity: 0.3;
+            transition: all 1s ease;
+        }
+
+        .zoom-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            cursor: none;
+            /* Hide default cursor */
+            position: relative;
+        }
+
+        .zoomable-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            /* removed transform transition/scale logic */
+        }
+
+        .loupe {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            /* Let events pass through to container */
+            background-repeat: no-repeat;
+            background-color: #fff;
+            /* fallback */
+            /* Initially hidden */
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            /* Centered on mouse */
+            z-index: 100;
+        }
+
+        /* Resume loupe uses resume_highres.png */
+        #work .loupe {
+            background-image: url('resume_highres.png');
+        }
+
+        /* AlterEgo loupe uses alterego_merged.png (already high-res) */
+        #alterego .loupe {
+            background-image: url('alterego_merged.png');
+        }
+
+        .zoom-container:hover .loupe {
+            opacity: 1;
+        }
+
+        /* Research List & Hover Reveal */
+        .research-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid #000;
+            padding: 0;
+        }
+
+        .research-item {
+            display: block;
+            padding: 0; /* Full bleed for images */
+            text-decoration: none;
+            color: var(--color-text-main);
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+            cursor: pointer;
+            /* Signal interactivity */
+            overflow: hidden; /* Contain child elements */
+        }
+
+        .research-item:last-child {
+            border-bottom: none;
+        }
+
+        .research-item:hover {
+            background: #f9f9f9;
+            color: var(--color-text-main);
+            /* Ensure text stays dark on hover */
+        }
+
+        .project-card-image {
+            width: 100%;
+            height: 140px; /* Intriguing but not overwhelming height */
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+            display: block;
+        }
+
+        .project-info {
+            padding: 16px;
+        }
+
+        .research-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .research-meta {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Floating Image Preview */
+        .hover-reveal {
+            position: fixed;
+            width: 200px;
+            height: auto;
+            pointer-events: none;
+            /* Ignore mouse events */
+            z-index: 1000;
+            opacity: 0;
+            transform: translate(15px, 15px);
+            transition: opacity 0.2s ease;
+            border: 1px solid #000;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .hover-reveal img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Logo Marquee */
+        .logo-marquee {
+            width: 100%;
+            overflow: hidden;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+            margin-bottom: 20px;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 40px;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-content span {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #000;
+            /* User requested black */
+            white-space: nowrap;
+        }
+
+        @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
     }
 
-    body {
-      font-family: var(--font-main);
-      font-size: 13px; /* Matched to reference */
-      background: var(--color-bg-paper);
-      color: var(--color-text-main);
-      height: 100vh;
-      overflow: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .split-container {
-      display: flex;
-      height: 100vh;
-    }
-
-    /* LEFT: Content Side */
-    .paper-side {
-      width: 50vw;
-      height: 100vh;
-      overflow-y: auto;
-      padding: var(--space-l); /* Tightened from xl */
-      border-right: 2px solid var(--color-border-strong);
-      background: var(--color-bg-paper);
-      scroll-behavior: smooth;
-    }
-
-    .paper-header {
-      margin-bottom: var(--space-l);
-      padding-bottom: var(--space-m);
-      border-bottom: 2px solid var(--color-border-strong);
-    }
-
-    .title-row {
-      display: flex;
-      align-items: flex-end;
-      /* gap: 12p x; */
-      margin-bottom: 12px;
-    }
-
-    .header-icon {
-      height: 20vh;
-      width: auto;
-      filter: brightness(0);
-      image-rendering: pixelated;
-      margin-bottom: 1vh;
-    }
-
-    .paper-title {
-        font-size: 10vh;
-        font-weight: bold;
-        line-height: 1.3;
-        margin-bottom: -2vh;
-    }
-
-
-
-    .paper-subheader {
-        font-size: 16px;
-        color: #444;
-        margin-bottom: 8px;
-    }
-
-    .section {
-      /* Removed min-height: 90vh */
-      /* Added min-height to prevent scroll skipping on short sections */
-      min-height: 25vh; /* Relaxed from 20vh (was 30vh) for better breathing room */
-      margin-bottom: 32px; /* Relaxed from 24px */
-      padding: 0;
-      display: block; /* Default block layout */
-      border-bottom: none;
-
-      /* Focus Mode Styles */
-      opacity: 0.3;
-      filter: blur(1.5px);
-      transition: opacity 0.4s ease, filter 0.4s ease;
-    }
-
-    .section.active-text {
-        opacity: 1;
-        filter: blur(0);
-    }
-
-    .section-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding-bottom: var(--space-xs);
-      margin-bottom: var(--space-m);
-      /* Border removed in favor of highlight */
-    }
-
-    p {
-      line-height: 1.8;
-      margin-bottom: 12px;
-      text-align: justify;
-      font-size: 13px; /* Matched to reference */
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 8px 16px; /* Smaller padding */
-      background: var(--color-bg-paper);
-      border: 1px solid var(--color-border-strong); /* Thinner border */
-      color: var(--color-text-main);
-      font-family: inherit;
-      font-size: 11px; /* Smaller font */
-      font-weight: 700;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 3px 3px 0 var(--color-border-strong); /* Smaller shadow */
-      transition: all 0.1s;
-      text-decoration: none;
-      margin-right: 8px;
-      margin-bottom: 8px;
-    }
-
-    .btn:hover {
-      background: var(--color-accent);
-      color: #ffffff;
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
-    }
-
-    .btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--color-border-strong);
-    }
-
-    i {
-      display: block;
-      margin-top: 8px;
-      margin-bottom: 8px;
-      font-size: 11px;
-      color: var(--color-text-muted);
-    }
-
-    /* Highlight active section in the text as well for better feedback */
-    /* Animated Highlighter */
-    .section-title {
-        background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
-        background-size: 0% 100%;
-        background-repeat: no-repeat;
-        background-position: 0 center;
-        transition: background-size 0.8s cubic-bezier(0.22, 1, 0.36, 1); /* Ease out drawing effect */
-
-        display: inline-block;
-        padding: 0 4px;
-        margin-left: -4px;
-        border-radius: 2px;
-        /* mix-blend-mode: multiply;  Removed to keep colors consistent during anim */
-    }
-
-    .intro-highlight {
-        background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
-        background-size: 0% 100%;
-        background-repeat: no-repeat;
-        background-position: 0 center;
-        transition: background-size 2s ease-out; /* 2s duration as requested */
-
-        display: inline-block;
-        padding: 0 4px;
-        margin-left: -4px;
-        border-radius: 2px;
-    }
-
-    .section.active-text .section-title,
-    .intro-highlight.active {
-        background-size: 100% 100%;
-    }
-
-    /* RIGHT: Visual Side */
-    .tool-side {
-      width: 50%;
-      height: 100vh;
-      background: var(--color-bg-tool);
-      position: sticky;
-      top: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .right-content-item {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80%;
-      max-width: 500px;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .right-content-item.active {
-      opacity: 1;
-      pointer-events: auto;
-      z-index: 10;
-    }
-
-    /* The 3D Object -> Now "Physical Card" */
-    /* RE-ATTEMPTING CSS FOR EXACT "DITHERED SHADOW" REQUEST */
-    .card-3d {
-        /* Reset */
-        box-shadow: none;
-        border: 1px solid #000;
-        transform: translate(0,0);
-        position: relative; /* Keep relative for ::after positioning */
-        transition: transform 0.15s ease-out; /* Add transition for lift */
-        /* Ensure card is above its shadow */
-        /* background-color: #ffffff !important;  -- Solved via child plate */
-        background: transparent;
-        isolation: isolate;
-    }
-
-    .card-3d.ghost {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-
-    .card-plate {
-        background: #fff;
-        border: 1px solid #000;
-        padding: 16px;
-        height: 100%;
-        width: 100%;
-        position: relative;
-        z-index: 1; /* Explicitly above shadow */
-    }
-
-    /* The Dithered Block Shadow */
-    .card-3d::after {
-        content: "";
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background: #000; /* Default small hard shadow */
-        transition: transform 0.15s ease-out, opacity 0.15s ease-out, background 0.15s ease-out; /* Add transitions */
-        opacity: 1; /* Start visible with solid shadow */
-    }
-
-    /* Hover State */
-    /* Hover State - INDEPENDENT per Card */
-    .card-3d:hover {
-        transform: translate(-2px, -2px); /* Slight lift */
-    }
-
-    .card-3d:hover::after {
-        /* The Dither Reveal */
-        background: transparent;
-        background-image: radial-gradient(#000 1px, transparent 1px);
-        background-size: 3px 3px;
-        transform: translate(8px, 8px); /* Deep throw */
-        opacity: 0.6;
-    }
-
-    /* Dither Active State (for loading) */
-    .card-3d.dither-active {
-        transform: translate(-2px, -2px);
-    }
-    .card-3d.dither-active::after {
-        background: transparent;
-        background-image: radial-gradient(#000 1px, transparent 1px);
-        background-size: 3px 3px;
-        transform: translate(8px, 8px);
-        opacity: 0.6;
-    }
-
-    .placeholder-box {
-        width: 100%;
-        height: 100%;
-        background: #fdfdfd;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: var(--font-mono);
-        color: #333;
-        font-weight: bold;
-    }
-
-    .caption {
-      font-size: 13px;
-      color: #666;
-      text-align: center;
-      max-width: 100%;
-      line-height: 1.5;
-      /* Static, no tilt */
-    }
-
-    .caption a {
-      color: var(--color-text-main);
-      text-decoration: underline;
-    }
-
-    .grid-2x2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        gap: 12px;
-        width: 100%;
-        height: 100%;
-        padding: 12px; /* Frame inside the card */
-        background: #f9f9f9;
-    }
-
-    .grid-item {
-        background: #ddd;
-        border: 2px solid #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
-        transition: transform 0.2s;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    .grid-item:hover {
-        transform: scale(1.02);
-    }
-
-    .blog-card {
-        border: none;
-        background: transparent;
-        padding: 24px;
-        box-shadow: none;
-        width: 100%;
-        height: 100%;
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-    }
-    .blog-image {
-        width: 100%;
-        height: 120px;
-        background: #eee;
-        margin-bottom: 12px;
-        border: 1px solid #000;
-    }
-
-    .fixed-btn {
+    /* --- Project Modal Styles --- */
+    .project-modal {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 100;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .split-container { flex-direction: column; }
-      .paper-side { width: 100%; height: 100vh; border-right: none; }
-      .tool-side {
-        display: block;
-        position: fixed;
-        bottom: 4vh;
-        right: 4vw;
-        width: calc(50vw - 8vw); /* ~1/4 of screen width with margins */
-        height: calc(25vh);
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        z-index: 100;
-        overflow: hidden;
-      }
-      .section { margin-bottom: 40px; }
-      .paper-footer { position: relative; padding-bottom: 30vh; }
-    }
-
-    /* Footer */
-    .paper-footer {
-        margin-top: 60px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-        font-family: var(--font-main); /* Match body font */
-    }
-    .footer-tiny {
-        font-size: 10px;
-        color: #999;
-        margin-bottom: 4px;
-    }
-    .footer-tiny a { color: #888; text-decoration: none; }
-    .footer-legible {
-        font-size: 13px;
-        color: #333;
-    }
-    .footer-legible a { color: #333; text-decoration: underline; }
-
-    /* Schematic Overlay Interaction */
-    .right-content-item {
-        /* ... existing styles ... */
-        cursor: crosshair; /* Hint at precision */
-    }
-    .schematic-overlay {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.85); /* Dark schematic bg */
-        color: #0f0; /* Retro terminal green or blueprint white? Let's go Clean Blueprint White */
-        color: rgba(255,255,255,0.9);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2000; /* Above everything */
+        pointer-events: none;
         opacity: 0;
         transition: opacity 0.3s ease;
-        font-family: var(--font-mono);
-        font-size: 12px;
-        padding: 20px;
-        box-sizing: border-box;
-        backdrop-filter: blur(4px);
-    }
-    .right-content-item:hover .schematic-overlay {
-        opacity: 1;
-    }
-    .specs-grid {
-        display: grid;
-        grid-template-columns: auto auto;
-        gap: 8px 16px;
-        text-align: left;
-    }
-    .intro-highlight.active {
-        background-size: 100% 100%;
+        display: flex; /* Center content */
+        justify-content: center;
+        align-items: center;
     }
 
-    /* Hero Loading State */
-    .hero-container {
-        position: relative;
-        width: 100%;
-        height: auto;
+    .project-modal.active {
+        pointer-events: auto;
+        opacity: 1;
     }
-    .hero-static {
-        width: 100%;
-        height: auto;
-        display: block;
-        opacity: 0.5; /* Low opacity B&W */
-        transition: opacity 1s ease;
-    }
-    .hero-gif {
+
+    .modal-backdrop {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    }
-    /* Loading Text Removed */
-
-    /* Attention Blur Class */
-    .attention-blur {
-        filter: blur(1.5px); /* Soften to match body blur */
-        opacity: 0.3;
-        transition: all 1s ease;
+        background: rgba(0, 0, 0, 0.4); /* Darkened for focus */
+        backdrop-filter: blur(8px); /* The requested blur */
+        -webkit-backdrop-filter: blur(8px);
     }
 
-    .zoom-container {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      cursor: none; /* Hide default cursor */
-      position: relative;
+    .modal-content {
+        position: relative;
+        width: 80vw;
+        height: 80vh;
+        background: #fff;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        border: 1px solid #000; /* Consistent with design */
+        border-radius: 12px; /* Smooth corners */
+        z-index: 2001;
+        overflow: hidden;
+        transform: scale(0.95);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Quick POP effect */
     }
 
-    .zoomable-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      /* removed transform transition/scale logic */
+    .project-modal.active .modal-content {
+        transform: scale(1);
     }
 
-    .loupe {
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      pointer-events: none; /* Let events pass through to container */
-      background-repeat: no-repeat;
-      background-color: #fff; /* fallback */
-      /* Initially hidden */
-      opacity: 0;
-      transform: translate(-50%, -50%); /* Centered on mouse */
-      z-index: 100;
-    }
-
-    /* Resume loupe uses resume_highres.png */
-    #work .loupe {
-      background-image: url('resume_highres.png');
-    }
-
-    /* AlterEgo loupe uses alterego_merged.png (already high-res) */
-    #alterego .loupe {
-      background-image: url('alterego_merged.png');
-    }
-
-    .zoom-container:hover .loupe {
-      opacity: 1;
-    }
-
-    /* Research List & Hover Reveal */
-    .research-list {
+    .project-modal iframe {
         width: 100%;
+        height: 100%;
+        display: block;
+        background: #fff;
+    }
+
+    .close-modal-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+
+        background: #000;
+        color: #fff;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%; /* Circular close button for cleaner look */
+        font-family: var(--font-mono);
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        z-index: 2002; /* Above iframe */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.1s, background 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .close-modal-btn:hover {
+        transform: scale(1.1);
+        background: #333;
+    }
+    .close-modal-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* Project Grid Layout */
+    .project-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 Columns */
+        gap: 16px;
+        width: 100%;
+    }
+
+    .project-grid .card-3d {
+        width: 100% !important; /* Override inline style */
+        aspect-ratio: 1 / 1;    /* Square Aspect Ratio */
         display: flex;
         flex-direction: column;
-        background: #fff;
-        border: 1px solid #000;
-        padding: 0;
-    }
-    .research-item {
-        display: block;
-        padding: 16px;
-        text-decoration: none;
-        color: var(--color-text-main);
-        border-bottom: 1px solid #eee;
-        transition: background 0.2s;
-        cursor: pointer; /* Signal interactivity */
-    }
-    .research-item:last-child {
-        border-bottom: none;
-    }
-    .research-item:hover {
-        background: #f9f9f9;
-        color: var(--color-text-main); /* Ensure text stays dark on hover */
-    }
-    .research-title {
-        font-weight: 700;
-        font-size: 13px;
-        margin-bottom: 4px;
-        line-height: 1.3;
-    }
-    .research-meta {
-        font-size: 11px;
-        color: #666;
     }
 
-    /* Floating Image Preview */
-    .hover-reveal {
-        position: fixed;
-        width: 200px;
-        height: auto;
-        pointer-events: none; /* Ignore mouse events */
-        z-index: 1000;
-        opacity: 0;
-        transform: translate(15px, 15px);
-        transition: opacity 0.2s ease;
-        border: 1px solid #000;
-        background: #fff;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .hover-reveal img {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
-
-    /* Logo Marquee */
-    .logo-marquee {
-        width: 100%;
-        overflow: hidden;
-        background: #f9f9f9;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        padding: 12px 0;
-        margin-bottom: 20px;
-    }
-    .marquee-content {
+    .project-grid .research-item {
+        height: 100%;
         display: flex;
-        gap: 40px;
-        animation: marquee 30s linear infinite;
-        width: max-content;
+        flex-direction: column;
+        border: none; /* Remove bottom border for grid items if preferred, or keep */
+        border: 1px solid #eee; /* Full border for grid cards */
     }
-    .marquee-content span {
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: #000; /* User requested black */
-        white-space: nowrap;
+
+    .project-grid .project-card-image {
+        flex: 1; /* Grow to fill space */
+        height: 0; /* Min height constraint for flex */
+        min-height: 0;
+        width: 100%;
+        object-fit: cover;
     }
-    @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+
+    .project-grid .project-info {
+        flex-shrink: 0; /* Keep text size natural */
+        border-top: 1px solid #eee; /* Separator */
     }
-  </style>
+    </style>
 </head>
+
 <body>
 
-  <div class="split-container">
+    <div class="split-container">
 
-    <!-- LEFT PANEL: Narrative -->
-    <div class="paper-side">
+        <!-- LEFT PANEL: Narrative -->
+        <div class="paper-side">
 
-      <!-- Header -->
-      <div class="paper-header" data-target="hero">
-        <div class="title-row">
-            <img src="mario.gif" class="header-icon" alt="">
-            <h1 class="paper-title">Carl Kho</h1>
+            <!-- Header -->
+            <div class="paper-header" data-target="hero">
+                <div class="title-row">
+                    <img src="mario.gif" class="header-icon" alt="">
+                    <h1 class="paper-title">Carl Kho</h1>
+                </div>
+                <div class="paper-subheader">Celebrated for doing <span class="intro-highlight">"Fine, I'll do
+                        it..."</span> my whole life</div>
+                <div class="footer-tiny" style="margin-top: 8px; font-size: 11px; color: #888;">
+                    i live <a href="#"
+                        onclick="document.querySelector('[data-target=\'location\']').scrollIntoView({behavior: 'smooth'}); return false;"
+                        style="text-decoration: underline; color: inherit;">everywhere</a> for my undergrad degree.
+                </div>
+            </div>
+
+            <!-- MIT Replication -->
+            <div class="section" data-target="alterego">
+                <h2 class="section-title">Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
+                <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head
+                    to speak (sort of).</p>
+                <i>if u're from MIT media lab, i forgot to submit this section in the application</i>
+                <p>
+                    <a href="https://docs.google.com/document/d/1_xlXTRBgNuWiATNA_2ToqgZ7AZ7-gKjbyV2lwSMkB8I/edit?usp=sharing"
+                        target="_blank" class="btn">Community Engagement section</a>
+                </p>
+            </div>
+
+            <!-- Work History -->
+            <div class="section" data-target="work">
+                <h2 class="section-title">ive been working in tech & the sciences since i was 16</h2>
+                <p>u're kidding?</p>
+                <p>
+                    <a href="https://gist.github.com/CarlKho-Minerva/1b81b59bee4365c75b0ede595300e330#file-cv-md"
+                        target="_blank" class="btn"> everything i did (or: a CV you can drop into an AI)</a>
+                </p>
+            </div>
+
+            <!-- Projects / Motto -->
+            <div class="section" data-target="motto">
+                <h2 class="section-title">I get rly giddy when i talk about the work i do</h2>
+                <p>If I get serious a bit, I live by this motto: "Kindness is Generative," that's why I build.</p>
+            </div>
+
+            <!-- Research -->
+            <div class="section" data-target="research">
+                <h2 class="section-title">the Philippines didn't have much research support, yet here I am still
+                    publishing independently</h2>
+                <p>dad lore: i got into research in highschool because i got to play Command and Conquer: Zero Hour in
+                    my school's Science Lab while my classmates were in class* unironically, i now <b>want to</b> do
+                    research full-time. <i>i won competitions and still graduated near-top of class anyway.</i></p>
+            </div>
+
+            <!-- About -->
+            <div class="section" data-target="about">
+                <h2 class="section-title">who are you?</h2>
+                <p>just a guy curious and hyper-independent because of video games. they taught me everything: from
+                    english to physics, and even street smarts. <i>we all know there's a rare item hidden behind the
+                        waterfalls.</i></p>
+            </div>
+
+            <!-- Blog -->
+            <div class="section" data-target="blog">
+                <h2 class="section-title">i document my capstone journey</h2>
+                <p>23 blog posts about building cognitive prosthetics, EMG sensors, and teaching machines to understand
+                    human intent.</p>
+                <p>
+                    <a href="https://somach.vercel.app/" target="_blank" class="btn">read the full blog</a>
+                </p>
+            </div>
+
+            <!-- Location -->
+            <div class="section" data-target="location">
+                <h2 class="section-title">WHERE ARE YOU RN?</h2>
+                <p>
+                    funny question. i go to Minerva University, so... everywhere. no, really. <a
+                        href="https://www.freethink.com/series/catalysts/global-education" target="_blank"
+                        style="color: inherit; text-decoration: underline;">Freethink</a> did a piece on us.
+                </p>
+            </div>
+
+            <!-- Filler content to ensure scrolling past the last element is comfortable -->
+            <div style="height: 20vh;"></div>
+
+            <!-- Logo Marquee -->
+            <div class="logo-marquee">
+                <div class="marquee-content">
+                    <span>GDC</span>
+                    <span>Anthropic</span>
+                    <span>OpenAI</span>
+                    <span>Google</span>
+                    <span>Red Bull</span>
+                    <span>Microsoft</span>
+                    <span>Dell</span>
+                    <span>Gensler</span>
+                    <span>AI Pilipinas</span>
+                    <span>Hanwha</span>
+                    <span>Minerva University</span>
+                    <span>Symph</span>
+                    <span>BnB Germany</span>
+                    <span>LEGO WRO</span>
+                    <span>YC AI Startup</span>
+                    <span>Cerebras</span>
+                    <span>Raycast (Top 5 ProductHunt)</span>
+                    <!-- Duplicate for seamless loop -->
+                    <span>GDC</span>
+                    <span>Anthropic</span>
+                    <span>OpenAI</span>
+                    <span>Google</span>
+                    <span>Red Bull</span>
+                    <span>Microsoft</span>
+                    <span>Dell</span>
+                    <span>Gensler</span>
+                    <span>AI Pilipinas</span>
+                    <span>Hanwha</span>
+                    <span>Minerva University</span>
+                    <span>Symph</span>
+                    <span>BnB Germany</span>
+                    <span>LEGO WRO</span>
+                    <span>YC AI Startup</span>
+                    <span>Cerebras</span>
+                    <span>Raycast (Top 5 ProductHunt)</span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="paper-footer">
+                <div class="footer-tiny">
+                    inspired by the cleverness of <a href="https://ped.ro" target="_blank">ped.ro</a> & the typographic
+                    sexiness of <a href="https://www.makingsoftware.com/" target="_blank">makingsoftware.com</a>
+                </div>
+                <div class="footer-legible">
+                    carl kho &copy; [a day before 2026] (proof → <a
+                        href="https://github.com/CarlKho-Minerva/Typographic-Watermarking/commits/main/"
+                        target="_blank">github</a>)
+                </div>
+            </div>
         </div>
-        <div class="paper-subheader">Celebrated for doing <span class="intro-highlight">"Fine, I'll do it..."</span> my whole life</div>
-        <div class="footer-tiny" style="margin-top: 8px; font-size: 11px; color: #888;">
-            i live <a href="#" onclick="document.querySelector('[data-target=\'location\']').scrollIntoView({behavior: 'smooth'}); return false;" style="text-decoration: underline; color: inherit;">everywhere</a> for my undergrad degree.
+
+        <!-- RIGHT PANEL: Visuals -->
+        <div class="tool-side">
+
+            <!-- Hero Visual -->
+            <div id="hero" class="right-content-item active">
+                <div class="card-3d dither-active" id="hero-card">
+                    <div class="hero-container">
+                        <img src="webflow_static_bw.png" class="hero-static" alt="Static Preview">
+                        <img src="webflow.gif" id="hero-gif" class="hero-gif" alt="NYC Times Square">
+                    </div>
+                </div>
+                <div class="caption">
+                    for funding own education (~$95k in scholarships)<br>
+                    <a href="https://www.youtube.com/watch?v=F2QU7A7_AfI" target="_blank">learn how i did it (and won
+                        Google's AI for Impact '24)</a>
+                </div>
+            </div>
+
+            <!-- AlterEgo Visual -->
+            <div id="alterego" class="right-content-item">
+                <div class="card-3d">
+                    <div class="zoom-container">
+                        <img src="alterego_merged.png" alt="AlterEgo Project Visual" class="zoomable-image"
+                            style="max-height: 80vh; object-fit: contain;">
+                        <div class="loupe"></div>
+                    </div>
+                </div>
+                <div class="caption">
+                    full project documentation (pdf)<br>
+                    <a href="https://somach.vercel.app/" target="_blank">read the technical paper</a>
+                </div>
+            </div>
+
+            <!-- Work Visual (Resume) -->
+            <div id="work" class="right-content-item">
+                <div class="card-3d">
+                    <div class="zoom-container">
+                        <img src="resume_preview.png" alt="Resume Preview" class="zoomable-image">
+                        <div class="loupe"></div>
+                    </div>
+                </div>
+                <div class="caption">
+                    i apparently have to condense my resume into a one-pager<br>
+                    <a href="resume.pdf" target="_blank">take a closer look</a>
+                </div>
+            </div>
+
+             <!-- Motto Visual (Projects) -->
+            <div id="motto" class="right-content-item">
+                <div class="project-grid">
+                    <!-- Item 1: Padayon Ko -->
+                    <div class="card-3d" style="width: 100%;">
+                        <a href="projects/padayon-ko.html" class="research-item" data-image="padayon_preview.webp"
+                            style="background: #fff; border-bottom: none;">
+                            <img src="padayon_preview.webp" alt="Preview" class="project-card-image">
+                            <div class="project-info">
+                                <div class="research-title">Padayon Ko (Google AI Hackathon Winner)</div>
+                                <div class="research-meta">Built AI scholarship platform helping 500+ students (won $8K)</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Item 2: RoboSoccer WRO -->
+                    <div class="card-3d" style="width: 100%;">
+                        <a href="projects/robosoccer.html" class="research-item" data-image="robosoccer_preview.png"
+                            style="background: #fff; border-bottom: none;">
+                            <img src="robosoccer_preview.png" alt="Preview" class="project-card-image">
+                            <div class="project-info">
+                                <div class="research-title">RoboSoccer World Finals (Hungary)</div>
+                                <div class="research-meta">Self-taught PID control to 6th Place Global Ranking</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Item 3: Segue MediRecords -->
+                    <div class="card-3d" style="width: 100%;">
+                        <a href="projects/segue.html" class="research-item" data-image="segue_preview.png"
+                            style="background: #fff; border-bottom: none;">
+                            <img src="segue_preview.png" alt="Preview" class="project-card-image">
+                            <div class="project-info">
+                                <div class="research-title">Segue MediRecords (Research)</div>
+                                <div class="research-meta">DOI-published EMR system endorsed by 23 physicians</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Item 4: Simala Overwatch -->
+                    <div class="card-3d" style="width: 100%;">
+                        <a href="projects/simala.html" class="research-item" data-image="simala_preview.webp"
+                            style="background: #fff; border-bottom: none;">
+                            <img src="simala_preview.webp" alt="Preview" class="project-card-image">
+                            <div class="project-info">
+                                <div class="research-title">Simala Sanctuary Overwatch Map</div>
+                                <div class="research-meta">Winner of SEA Map Concept Contest—Cultural preservation via gaming
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Item 5: Connect4GPT -->
+                    <div class="card-3d" style="width: 100%;">
+                        <a href="projects/connect4.html" class="research-item" data-image="connect4_preview.png"
+                            style="background: #fff; border-bottom: none;">
+                            <img src="connect4_preview.png" alt="Preview" class="project-card-image">
+                            <div class="project-info">
+                                <div class="research-title">Connect4GPT (Adversarial AI)</div>
+                                <div class="research-meta">Adversarial agent testing LLM reasoning capabilities</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Item 6: YC AI Startup School -->
+                    <div class="card-3d" style="width: 100%;">
+                        <a href="projects/yc-startup.html" class="research-item" data-image="yc_preview.png"
+                            style="background: #fff; border-bottom: none;">
+                            <img src="yc_preview.png" alt="Preview" class="project-card-image">
+                            <div class="project-info">
+                                <div class="research-title">YC AI Startup School (Selectee)</div>
+                                <div class="research-meta">Selected for competitive AI founder program (Summer 2025)</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="caption">
+                    i ramble on <a href="https://carlkho-cvk.medium.com/" target="_blank">medium</a> too
+                </div>
+                <div id="research-reveal" class="hover-reveal">
+                    <img src="" alt="Preview">
+                </div>
+            </div>
+
+            <!-- Research Visual (List) -->
+            <div id="research" class="right-content-item">
+                <!-- Item 1: arXiv - Wrapped in its own Card -->
+                <div class="card-3d" style="width: 100%;">
+                    <a href="https://arxiv.org/abs/2601.06516" target="_blank" class="research-item" data-image="emg_preview.png" style="background: #fff; border-bottom: none;">
+                        <div class="research-title">Pareto-Optimal Model Selection for Low-Cost, Single-Lead EMG Control in Embedded Systems</div>
+                        <div class="research-meta">Preprint accepted to arXiv (cs.HC, cs.LG)</div>
+                    </a>
+                </div>
+
+                <!-- Item 2: Chrome Extension - Wrapped in its own Card -->
+                <div class="card-3d" style="width: 100%;">
+                    <a href="#" class="research-item" data-image="chrome-extension/icon128.png" style="background: #fff; border-bottom: none;">
+                        <div class="research-title">Typographic Watermarking Chrome Extension (WIP)</div>
+                        <div class="research-meta">Browser Security Tool</div>
+                    </a>
+                </div>
+
+                <div class="caption">
+                     i ramble on <a href="https://carlkho-cvk.medium.com/" target="_blank">medium</a> too
+                </div>
+                <div id="research-reveal-2" class="hover-reveal">
+                    <img src="" alt="Preview">
+                </div>
+            </div>
+
+            <!-- About Visual -->
+            <div id="about" class="right-content-item">
+                <div class="card-3d">
+                    <iframe width="100%" height="100%"
+                        src="https://www.youtube.com/embed/q32UQJJX8S0?controls=0&rel=0&modestbranding=1"
+                        title="Old Sponsorship Video" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen style="border-radius: 0; display: block;">
+                    </iframe>
+                </div>
+                <div class="caption">
+                    this is the old video for the sponsorship that got me initial edu support from my mayor in the
+                    philippines (~$4000)<br>
+                    <a href="https://www.carlkho.com/old-forsponsorship" target="_blank">visit the old site here</a>
+                </div>
+            </div>
+
+            <!-- Blog Visual -->
+            <div id="blog" class="right-content-item">
+                <!-- removed container card-3d wrapper to allow individual cards to fly -->
+                <div class="research-list" style="border: none; max-height: 70vh; overflow-y: auto; padding: 4px;">
+
+                    <a href="https://somach.vercel.app/blogs/openemg-kaggle-deepmind.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">OpenEMG: The Data Bottleneck Nobody Talks About</div>
+                            <div class="research-meta">Dec 12, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/publishing-first-arxiv-paper.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">Publishing My First arXiv Paper</div>
+                            <div class="research-meta">Dec 14, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/eureka-subvocalization-pivot.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">The Eureka Moment: Why I Felt 'Lied To' About Brain Interfaces
+                            </div>
+                            <div class="research-meta">Dec 9, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/hip-muscles-dont-lie.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">Hip(s) (muscles) don't lie.</div>
+                            <div class="research-meta">Nov 16, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/teaching-eeg-mind-control.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">Teaching EEG: How to Control Machines with Your Mind</div>
+                            <div class="research-meta">Nov 10, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/rebuilding-phase2-watch.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">(Re)Building the Phase 2 Smartwatch Game Controller</div>
+                            <div class="research-meta">Nov 9, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/voice-controlled-uber-playwright.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">Voice-Controlled Uber: The API That Doesn't Exist</div>
+                            <div class="research-meta">Oct 24, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/button-grid-redemption.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">[3/3] 6 Buttons vs Voice Labelling</div>
+                            <div class="research-meta">Oct 21, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/emg-electrode-placement.html" target="_blank"
+                        class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">The Three-Electrode Problem (or: When Your Sensor Shows a Flat
+                                Line)</div>
+                            <div class="research-meta">Oct 13, 2025</div>
+                        </div>
+                    </a>
+
+                    <a href="https://somach.vercel.app/blogs/shin-controller.html" target="_blank" class="card-3d ghost"
+                        style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
+                        <div class="card-plate">
+                            <div class="research-title">Gaming's Next Controller Isn't a Brain Implant. It's Your Shin.
+                            </div>
+                            <div class="research-meta">Sep 18, 2025</div>
+                        </div>
+                    </a>
+
+                </div>
+                <div class="caption">
+                    10 of 23 posts • <a href="https://somach.vercel.app/" target="_blank">view all</a>
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div id="location" class="right-content-item">
+                <div class="card-3d">
+                    <iframe width="100%" height="100%"
+                        src="https://www.youtube.com/embed/xfciyuavUCk?controls=0&rel=0&modestbranding=1"
+                        title="Minerva University" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen style="border-radius: 0; display: block;">
+                    </iframe>
+                </div>
+            </div>
+
         </div>
-      </div>
-
-      <!-- MIT Replication -->
-      <div class="section" data-target="alterego">
-        <h2 class="section-title">Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
-        <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head to speak (sort of).</p>
-        <i>if u're from MIT media lab, i forgot to submit this section in the application</i>
-        <p>
-             <a href="https://docs.google.com/document/d/1_xlXTRBgNuWiATNA_2ToqgZ7AZ7-gKjbyV2lwSMkB8I/edit?usp=sharing" target="_blank" class="btn">Community Engagement section</a>
-        </p>
-      </div>
-
-      <!-- Work History -->
-      <div class="section" data-target="work">
-        <h2 class="section-title">ive been working in tech & the sciences since i was 16</h2>
-        <p>u're kidding?</p>
-        <p>
-            <a href="https://gist.github.com/CarlKho-Minerva/1b81b59bee4365c75b0ede595300e330#file-cv-md" target="_blank" class="btn"> everything i did (or: a CV you can drop into an AI)</a>
-        </p>
-      </div>
-
-      <!-- Projects / Motto -->
-      <div class="section" data-target="motto">
-        <h2 class="section-title">I get rly giddy when i talk about the work i do</h2>
-        <p>If I get serious a bit, I live by this motto: "Kindness is Generative," that's why I build.</p>
-      </div>
-
-      <!-- Research -->
-      <div class="section" data-target="research">
-        <h2 class="section-title">the Philippines didn't have much research support, yet here I am still publishing independently</h2>
-        <p>dad lore: i got into research in highschool because i got to play Command and Conquer: Zero Hour in my school's Science Lab while my classmates were in class (i won competitions and still graduated near-top of class anyway). unironically, i now <b>want to</b> do research full-time.</p>
-      </div>
-
-      <!-- About -->
-      <div class="section" data-target="about">
-        <h2 class="section-title">who are you?</h2>
-        <p>just a guy curious and hyper-independent because of video games. they taught me everything: from english to physics, and even street smarts. (we all know there's a rare item hidden behind the waterfalls.)</p>
-      </div>
-
-      <!-- Blog -->
-      <div class="section" data-target="blog">
-        <h2 class="section-title">i document my capstone journey</h2>
-        <p>23 blog posts about building cognitive prosthetics, EMG sensors, and teaching machines to understand human intent.</p>
-        <p>
-            <a href="https://somach.vercel.app/" target="_blank" class="btn">read the full blog</a>
-        </p>
-      </div>
-
-       <!-- Location -->
-      <div class="section" data-target="location">
-        <h2 class="section-title">WHERE ARE YOU RN?</h2>
-      <p>
-          funny question. i go to Minerva University, so... everywhere. no, really. <a href="https://www.freethink.com/series/catalysts/global-education" target="_blank" style="color: inherit; text-decoration: underline;">Freethink</a> did a piece on us.
-      </p>
-      </div>
-
-      <!-- Filler content to ensure scrolling past the last element is comfortable -->
-      <div style="height: 20vh;"></div>
-
-      <!-- Logo Marquee -->
-      <div class="logo-marquee">
-          <div class="marquee-content">
-              <span>GDC</span>
-              <span>Anthropic</span>
-              <span>OpenAI</span>
-              <span>Google</span>
-              <span>Red Bull</span>
-              <span>Microsoft</span>
-              <span>Dell</span>
-              <span>Gensler</span>
-              <span>AI Pilipinas</span>
-              <span>Hanwha</span>
-              <span>Minerva University</span>
-              <span>Symph</span>
-              <span>BnB Germany</span>
-              <span>LEGO WRO</span>
-              <span>YC AI Startup</span>
-              <span>Cerebras</span>
-              <span>Raycast (Top 5 ProductHunt)</span>
-              <!-- Duplicate for seamless loop -->
-              <span>GDC</span>
-              <span>Anthropic</span>
-              <span>OpenAI</span>
-              <span>Google</span>
-              <span>Red Bull</span>
-              <span>Microsoft</span>
-              <span>Dell</span>
-              <span>Gensler</span>
-              <span>AI Pilipinas</span>
-              <span>Hanwha</span>
-              <span>Minerva University</span>
-              <span>Symph</span>
-              <span>BnB Germany</span>
-              <span>LEGO WRO</span>
-              <span>YC AI Startup</span>
-              <span>Cerebras</span>
-              <span>Raycast (Top 5 ProductHunt)</span>
-          </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="paper-footer">
-          <div class="footer-tiny">
-              inspired by the cleverness of <a href="https://ped.ro" target="_blank">ped.ro</a> & the typographic sexiness of <a href="https://www.makingsoftware.com/" target="_blank">makingsoftware.com</a>
-          </div>
-          <div class="footer-legible">
-              carl kho &copy; [a day before 2026] (proof → <a href="https://github.com/CarlKho-Minerva/Typographic-Watermarking/commits/main/" target="_blank">github</a>)
-          </div>
-      </div>
     </div>
 
-    <!-- RIGHT PANEL: Visuals -->
-    <div class="tool-side">
-
-      <!-- Hero Visual -->
-      <div id="hero" class="right-content-item active">
-          <div class="card-3d dither-active" id="hero-card">
-              <div class="hero-container">
-                  <img src="webflow_static_bw.png" class="hero-static" alt="Static Preview">
-                  <img src="webflow.gif" id="hero-gif" class="hero-gif" alt="NYC Times Square">
-              </div>
-          </div>
-         <div class="caption">
-             for funding own education (~$90k in scholarships)<br>
-             <a href="https://www.youtube.com/watch?v=F2QU7A7_AfI" target="_blank">learn how i did it (and won Google's AI for Impact '24)</a>
-         </div>
-      </div>
-
-      <!-- AlterEgo Visual -->
-       <div id="alterego" class="right-content-item">
-          <div class="card-3d">
-              <div class="zoom-container">
-                  <img src="alterego_merged.png" alt="AlterEgo Project Visual" class="zoomable-image" style="max-height: 80vh; object-fit: contain;">
-                  <div class="loupe"></div>
-              </div>
-          </div>
-          <div class="caption">
-              full project documentation (pdf)<br>
-              <a href="https://somach.vercel.app/" target="_blank">read the technical paper</a>
-          </div>
-       </div>
-
-      <!-- Work Visual (Resume) -->
-       <div id="work" class="right-content-item">
-          <div class="card-3d">
-              <div class="zoom-container">
-                  <img src="resume_preview.png" alt="Resume Preview" class="zoomable-image">
-                  <div class="loupe"></div>
-              </div>
-          </div>
-          <div class="caption">
-              standard one-pager<br>
-              <a href="resume.pdf" target="_blank">take a closer look</a>
-          </div>
-       </div>
-
-      <!-- Motto Visual (Grid) -->
-      <div id="motto" class="right-content-item">
-          <div class="card-3d">
-              <div class="grid-2x2">
-                  <div class="grid-item">Proj 1</div>
-                  <div class="grid-item">Proj 2</div>
-                  <div class="grid-item">Proj 3</div>
-                  <div class="grid-item">Proj 4</div>
-              </div>
-          </div>
-          <a href="#" class="btn fixed-btn">view all projects</a>
-      </div>
-
-      <!-- Research Visual (List) -->
-       <div id="research" class="right-content-item">
-           <!-- Item 1: TechRxiv - Wrapped in its own Card -->
-           <div class="card-3d" style="width: 100%;">
-               <a href="https://www.techrxiv.org/users/1010300/articles/1370421-pareto-optimal-model-selection-for-low-cost-single-lead-emg-control-in-embedded-systems" target="_blank" class="research-item" data-image="alterego_merged.png" style="background: #fff; border-bottom: none;">
-                   <div class="research-title">Pareto Optimal Model Selection for Low-Cost Single-Lead EMG Control</div>
-                   <div class="research-meta">TechRxiv 2024</div>
-               </a>
-           </div>
-
-           <!-- Item 2: Chrome Extension - Wrapped in its own Card -->
-           <div class="card-3d" style="width: 100%;">
-               <a href="#" class="research-item" data-image="chrome-extension/icon128.png" style="background: #fff; border-bottom: none;">
-                   <div class="research-title">Typographic Watermarking Chrome Extension (WIP)</div>
-                   <div class="research-meta">Browser Security Tool</div>
-               </a>
-           </div>
-
-           <div class="caption">
-                i ramble on <a href="https://carlkho-cvk.medium.com/" target="_blank">medium</a> too
-           </div>
-         <div id="research-reveal" class="hover-reveal">
-             <img src="" alt="Preview">
-         </div>
-       </div>
-
-      <!-- About Visual -->
-      <div id="about" class="right-content-item">
-           <div class="card-3d">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/q32UQJJX8S0?controls=0&rel=0&modestbranding=1"
-                  title="Old Sponsorship Video"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                  style="border-radius: 0; display: block;">
-                </iframe>
-           </div>
-           <div class="caption">
-                this is the old video for the sponsorship that got me initial edu support from my mayor in the philippines (~$4000)<br>
-                <a href="https://www.carlkho.com/old-forsponsorship" target="_blank">visit the old site here</a>
-           </div>
-      </div>
-
-      <!-- Blog Visual -->
-      <div id="blog" class="right-content-item">
-          <!-- removed container card-3d wrapper to allow individual cards to fly -->
-          <div class="research-list" style="border: none; max-height: 70vh; overflow-y: auto; padding: 4px;">
-
-              <a href="https://somach.vercel.app/blogs/openemg-kaggle-deepmind.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">OpenEMG: The Data Bottleneck Nobody Talks About</div>
-                      <div class="research-meta">Dec 12, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/publishing-first-arxiv-paper.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">Publishing My First arXiv Paper</div>
-                      <div class="research-meta">Dec 14, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/eureka-subvocalization-pivot.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">The Eureka Moment: Why I Felt 'Lied To' About Brain Interfaces</div>
-                      <div class="research-meta">Dec 9, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/hip-muscles-dont-lie.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">Hip(s) (muscles) don't lie.</div>
-                      <div class="research-meta">Nov 16, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/teaching-eeg-mind-control.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">Teaching EEG: How to Control Machines with Your Mind</div>
-                      <div class="research-meta">Nov 10, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/rebuilding-phase2-watch.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">(Re)Building the Phase 2 Smartwatch Game Controller</div>
-                      <div class="research-meta">Nov 9, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/voice-controlled-uber-playwright.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">Voice-Controlled Uber: The API That Doesn't Exist</div>
-                      <div class="research-meta">Oct 24, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/button-grid-redemption.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">[3/3] 6 Buttons vs Voice Labelling</div>
-                      <div class="research-meta">Oct 21, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/emg-electrode-placement.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">The Three-Electrode Problem (or: When Your Sensor Shows a Flat Line)</div>
-                      <div class="research-meta">Oct 13, 2025</div>
-                  </div>
-              </a>
-
-              <a href="https://somach.vercel.app/blogs/shin-controller.html" target="_blank" class="card-3d ghost" style="display: block; margin-bottom: 24px; text-decoration: none; color: inherit;">
-                  <div class="card-plate">
-                      <div class="research-title">Gaming's Next Controller Isn't a Brain Implant. It's Your Shin.</div>
-                      <div class="research-meta">Sep 18, 2025</div>
-                  </div>
-              </a>
-
-          </div>
-          <div class="caption">
-               10 of 23 posts • <a href="https://somach.vercel.app/" target="_blank">view all</a>
-          </div>
-      </div>
-
-       <!-- Location -->
-      <div id="location" class="right-content-item">
-          <div class="card-3d">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/xfciyuavUCk?controls=0&rel=0&modestbranding=1"
-                title="Minerva University"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-                style="border-radius: 0; display: block;">
-              </iframe>
-          </div>
-      </div>
-
+    <!-- Project Modal -->
+    <div id="project-modal" class="project-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="close-modal-btn">&times;</button>
+            <iframe id="project-frame" src="" frameborder="0"></iframe>
+        </div>
     </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Logic for determining the active section based on scroll position
-      // Using a center-line intersection strategy for "snappier" feel with smaller scrolls
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logic for determining the active section based on scroll position
+            // Using a center-line intersection strategy for "snappier" feel with smaller scrolls
 
-      const sections = document.querySelectorAll('[data-target]');
-      const paperSide = document.querySelector('.paper-side');
-      let isIntroComplete = false;
+            const sections = document.querySelectorAll('[data-target]');
+            const paperSide = document.querySelector('.paper-side');
+            let isIntroComplete = false;
 
-      const onScroll = () => {
-          // If intro is not done but user scrolled, skip intro immediately
-          if (!isIntroComplete) {
-              skipIntro();
-              return;
-          }
-
-          // Calculate the "reading line" - adjusted to 45% (center-ish) per user request to activate in middle
-          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.45);
-
-          let activeId = null;
-
-          // Find the section that contains the reading line
-          sections.forEach(section => {
-              const start = section.offsetTop;
-              const end = start + section.offsetHeight + 28; // +margin
-
-              if (readingLine >= start && readingLine < end) {
-                  activeId = section.getAttribute('data-target');
-              }
-          });
-
-          // Fallback: if we are at the very top, activate the first one
-          if (paperSide.scrollTop < 50 && sections.length > 0) {
-              activeId = sections[0].getAttribute('data-target');
-          }
-           // Fallback: if we are at the very bottom, active the last one
-           if ((paperSide.scrollHeight - paperSide.scrollTop) <= paperSide.clientHeight + 50) {
-               activeId = sections[sections.length - 1].getAttribute('data-target');
-           }
-
-          if (activeId) {
-              activateRightPanel(activeId);
-              highlightActiveText(activeId);
-          }
-      };
-
-      // Skip intro function - called when user scrolls during intro
-      function skipIntro() {
-          isIntroComplete = true;
-          const introSpan = document.querySelector('.intro-highlight');
-          if (introSpan) introSpan.classList.remove('active');
-
-          // Activate based on current scroll position
-          const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.45);
-          let activeId = sections[0]?.getAttribute('data-target') || 'alterego';
-
-          sections.forEach(section => {
-              const start = section.offsetTop;
-              const end = start + section.offsetHeight + 28;
-              if (readingLine >= start && readingLine < end) {
-                  activeId = section.getAttribute('data-target');
-              }
-          });
-
-          activateRightPanel(activeId);
-          highlightActiveText(activeId);
-      }
-
-      paperSide.addEventListener('scroll', onScroll);
-
-      function activateRightPanel(id) {
-        // Toggle opacity for smooth transition
-        document.querySelectorAll('.right-content-item').forEach(item => {
-          if(item.id === id) {
-              item.classList.add('active');
-          } else {
-              item.classList.remove('active');
-          }
-        });
-      }
-
-      function highlightActiveText(id) {
-          sections.forEach(s => {
-              if(s.getAttribute('data-target') === id) {
-                  s.classList.add('active-text');
-              } else {
-                  s.classList.remove('active-text');
-              }
-          });
-      }
-
-      // Mario GIF Interaction
-      const marioImg = document.querySelector('.header-icon');
-      const staticSrc = 'mario_static.png';
-      const gifSrc = 'mario.gif';
-      const gifDuration = 1400; // ms
-      let isHovering = false;
-
-      // Preload static image
-      const preloadStatic = new Image();
-      preloadStatic.src = staticSrc;
-
-      // Logic: Run once on load, then stop. Play on hover.
-      // Initial Play
-      marioImg.src = gifSrc;
-
-      setTimeout(() => {
-          if (!isHovering) {
-              marioImg.src = staticSrc;
-          }
-      }, gifDuration);
-
-      // Intro Sequence Timeline
-      // T+0: Mario Jump Starts
-      // T+1400: Mario Jump Ends
-      // T+2400 (1.4s + 1s): Start Highlight ONLY
-      setTimeout(() => {
-          const introSpan = document.querySelector('.intro-highlight');
-          if (introSpan) introSpan.classList.add('active'); // Duration 2s
-
-          // T+4400 (2400 + 2000 duration): Highlight Finished -> Now Blur & Reveal GIF
-          setTimeout(() => {
-                // REVEAL GIF & BLUR HEADER
-                const heroGif = document.getElementById('hero-gif');
-                const heroStatic = document.querySelector('.hero-static');
-                const header = document.querySelector('.paper-header');
-
-                if (heroGif) heroGif.style.opacity = '1';
-                if (heroStatic) heroStatic.style.opacity = '0';
-
-                // Restart GIF from beginning so it seamlesssly transitions from static frame
-                if (heroGif) {
-                    const currentSrc = heroGif.src;
-                    heroGif.src = '';
-                    heroGif.src = currentSrc;
-                    heroGif.style.opacity = '1';
+            const onScroll = () => {
+                // If intro is not done but user scrolled, skip intro immediately
+                if (!isIntroComplete) {
+                    skipIntro();
+                    return;
                 }
 
-                // Blur the header AFTER highlight is done
-                if (header) header.classList.add('attention-blur');
+                // Calculate the "reading line" - adjusted to 45% (center-ish) per user request to activate in middle
+                const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.45);
 
-                // Remove dither effect from hero card now that GIF is playing
-                const heroCard = document.getElementById('hero-card');
-                if (heroCard) heroCard.classList.remove('dither-active');
+                let activeId = null;
 
-                // Ensure right panel shows HERO
-                activateRightPanel('hero');
+                // Find the section that contains the reading line
+                sections.forEach(section => {
+                    const start = section.offsetTop;
+                    const end = start + section.offsetHeight + 28; // +margin
 
-                // T+9400 (4400 + 5000 wait): Auto Unblur & Scroll
+                    if (readingLine >= start && readingLine < end) {
+                        activeId = section.getAttribute('data-target');
+                    }
+                });
+
+                // Fallback: if we are at the very top, activate the first one
+                if (paperSide.scrollTop < 50 && sections.length > 0) {
+                    activeId = sections[0].getAttribute('data-target');
+                }
+                // Fallback: if we are at the very bottom, active the last one
+                if ((paperSide.scrollHeight - paperSide.scrollTop) <= paperSide.clientHeight + 50) {
+                    activeId = sections[sections.length - 1].getAttribute('data-target');
+                }
+
+                if (activeId) {
+                    activateRightPanel(activeId);
+                    highlightActiveText(activeId);
+                }
+            };
+
+            // Skip intro function - called when user scrolls during intro
+            function skipIntro() {
+                isIntroComplete = true;
+                const introSpan = document.querySelector('.intro-highlight');
+                if (introSpan) introSpan.classList.remove('active');
+
+                // Activate based on current scroll position
+                const readingLine = paperSide.scrollTop + (paperSide.clientHeight * 0.45);
+                let activeId = sections[0]?.getAttribute('data-target') || 'alterego';
+
+                sections.forEach(section => {
+                    const start = section.offsetTop;
+                    const end = start + section.offsetHeight + 28;
+                    if (readingLine >= start && readingLine < end) {
+                        activeId = section.getAttribute('data-target');
+                    }
+                });
+
+                activateRightPanel(activeId);
+                highlightActiveText(activeId);
+            }
+
+            paperSide.addEventListener('scroll', onScroll);
+
+            function activateRightPanel(id) {
+                // Toggle opacity for smooth transition
+                document.querySelectorAll('.right-content-item').forEach(item => {
+                    if (item.id === id) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+
+            function highlightActiveText(id) {
+                sections.forEach(s => {
+                    if (s.getAttribute('data-target') === id) {
+                        s.classList.add('active-text');
+                    } else {
+                        s.classList.remove('active-text');
+                    }
+                });
+            }
+
+            // Mario GIF Interaction
+            const marioImg = document.querySelector('.header-icon');
+            const staticSrc = 'mario_static.png';
+            const gifSrc = 'mario.gif';
+            const gifDuration = 1400; // ms
+            let isHovering = false;
+
+            // Preload static image
+            const preloadStatic = new Image();
+            preloadStatic.src = staticSrc;
+
+            // Logic: Run once on load, then stop. Play on hover.
+            // Initial Play
+            marioImg.src = gifSrc;
+
+            setTimeout(() => {
+                if (!isHovering) {
+                    marioImg.src = staticSrc;
+                }
+            }, gifDuration);
+
+            // Intro Sequence Timeline
+            // T+0: Mario Jump Starts
+            // T+1400: Mario Jump Ends
+            // T+2400 (1.4s + 1s): Start Highlight ONLY
+            setTimeout(() => {
+                const introSpan = document.querySelector('.intro-highlight');
+                if (introSpan) introSpan.classList.add('active'); // Duration 2s
+
+                // T+4400 (2400 + 2000 duration): Highlight Finished -> Now Blur & Reveal GIF
                 setTimeout(() => {
-                    isIntroComplete = true;
+                    // REVEAL GIF & BLUR HEADER
+                    const heroGif = document.getElementById('hero-gif');
+                    const heroStatic = document.querySelector('.hero-static');
+                    const header = document.querySelector('.paper-header');
 
-                    // Remove intro highlight
-                    if (introSpan) introSpan.classList.remove('active');
+                    if (heroGif) heroGif.style.opacity = '1';
+                    if (heroStatic) heroStatic.style.opacity = '0';
 
-                    // Unblur Header
-                    if (header) header.classList.remove('attention-blur');
-
-                    // Auto Scroll to first section ("AlterEgo")
-                    const firstSection = document.querySelector('.section[data-target="alterego"]');
-                    if (firstSection) {
-                        firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Restart GIF from beginning so it seamlesssly transitions from static frame
+                    if (heroGif) {
+                        const currentSrc = heroGif.src;
+                        heroGif.src = '';
+                        heroGif.src = currentSrc;
+                        heroGif.style.opacity = '1';
                     }
 
-                }, 7000); // 7s wait per user request
+                    // Blur the header AFTER highlight is done
+                    if (header) header.classList.add('attention-blur');
 
-          }, 2000); // Wait for 2s highlight to finish
+                    // Remove dither effect from hero card now that GIF is playing
+                    const heroCard = document.getElementById('hero-card');
+                    if (heroCard) heroCard.classList.remove('dither-active');
 
-      }, 2400);
+                    // Ensure right panel shows HERO
+                    activateRightPanel('hero');
 
-      marioImg.addEventListener('mouseenter', () => {
-          isHovering = true;
-          marioImg.src = gifSrc;
-      });
+                    // T+9400 (4400 + 5000 wait): Auto Unblur & Scroll
+                    setTimeout(() => {
+                        isIntroComplete = true;
 
-      marioImg.addEventListener('mouseleave', () => {
-          isHovering = false;
-          marioImg.src = staticSrc;
-      });
+                        // Remove intro highlight
+                        if (introSpan) introSpan.classList.remove('active');
 
-      /* Removed GSAP Interaction Logic */
+                        // Unblur Header
+                        if (header) header.classList.remove('attention-blur');
 
-      // Zoom + Pan Logic for Resume (Loupe Effect)
-      const zoomContainers = document.querySelectorAll('.zoom-container');
+                        // Auto Scroll to first section ("AlterEgo")
+                        const firstSection = document.querySelector('.section[data-target="alterego"]');
+                        if (firstSection) {
+                            firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
 
-      zoomContainers.forEach(container => {
-          const img = container.querySelector('.zoomable-image');
-          const loupe = container.querySelector('.loupe');
+                    }, 7000); // 7s wait per user request
 
-          // High-res image actual dimensions (from resume_highres.png at 6000px height)
-          const highResWidth = 4636;
-          const highResHeight = 6000;
+                }, 2000); // Wait for 2s highlight to finish
 
-          container.addEventListener('mousemove', (e) => {
-              const rect = container.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
+            }, 2400);
 
-              // Move Loupe
-              loupe.style.left = `${x}px`;
-              loupe.style.top = `${y}px`;
+            marioImg.addEventListener('mouseenter', () => {
+                isHovering = true;
+                marioImg.src = gifSrc;
+            });
 
-              // Calculate ratios of cursor position within container
-              const xRatio = x / rect.width;
-              const yRatio = y / rect.height;
+            marioImg.addEventListener('mouseleave', () => {
+                isHovering = false;
+                marioImg.src = staticSrc;
+            });
 
-              // Calculate the background size to achieve ~2x zoom relative to displayed preview.
-              // The high-res image is much larger than the displayed preview, so we need to scale it down.
-              // If the container is ~400px wide, and the high-res is ~4636px, that's ~11.5x native zoom.
-              // We want ~2x zoom, so we use (container width * 2) / (preview width / highres width) = ...
-              // Simpler: just use a scaled-down version of the high-res dimensions.
-              const zoomLevel = 2.0; // Desired magnification over displayed size
-              const bgWidth = rect.width * zoomLevel;
-              const bgHeight = rect.height * zoomLevel;
+            /* Removed GSAP Interaction Logic */
 
-              loupe.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
+            // Zoom + Pan Logic for Resume (Loupe Effect)
+            const zoomContainers = document.querySelectorAll('.zoom-container');
 
-              // Position the background so the point under the cursor is centered in the loupe.
-              const loupeWidth = 200;
-              const loupeHeight = 200;
-              const bgX = -(xRatio * bgWidth) + (loupeWidth / 2);
-              const bgY = -(yRatio * bgHeight) + (loupeHeight / 2);
+            zoomContainers.forEach(container => {
+                const img = container.querySelector('.zoomable-image');
+                const loupe = container.querySelector('.loupe');
 
-              loupe.style.backgroundPosition = `${bgX}px ${bgY}px`;
-          });
-      });
+                // High-res image actual dimensions (from resume_highres.png at 6000px height)
+                const highResWidth = 4636;
+                const highResHeight = 6000;
 
-      // Research Hover Reveal Logic
-      const researchItems = document.querySelectorAll('.research-item');
-      const revealBox = document.getElementById('research-reveal');
-      const revealImg = revealBox ? revealBox.querySelector('img') : null;
+                container.addEventListener('mousemove', (e) => {
+                    const rect = container.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
 
-      if (revealBox && revealImg) {
-          researchItems.forEach(item => {
-              item.addEventListener('mouseenter', () => {
-                  const imgSrc = item.getAttribute('data-image');
-                  if (imgSrc) {
-                      revealImg.src = imgSrc;
-                      revealBox.style.opacity = '1';
-                  }
-              });
+                    // Move Loupe
+                    loupe.style.left = `${x}px`;
+                    loupe.style.top = `${y}px`;
 
-              item.addEventListener('mousemove', (e) => {
-                  // Position fixed, follows clientX/Y
-                  const x = e.clientX;
-                  const y = e.clientY;
-                  // Offset handled in CSS transform, or add here if needed
-                  revealBox.style.left = `${x}px`;
-                  revealBox.style.top = `${y}px`;
-              });
+                    // Calculate ratios of cursor position within container
+                    const xRatio = x / rect.width;
+                    const yRatio = y / rect.height;
 
-              item.addEventListener('mouseleave', () => {
-                  revealBox.style.opacity = '0';
-              });
-          });
-      }
+                    // Calculate the background size to achieve ~2x zoom relative to displayed preview.
+                    // The high-res image is much larger than the displayed preview, so we need to scale it down.
+                    // If the container is ~400px wide, and the high-res is ~4636px, that's ~11.5x native zoom.
+                    // We want ~2x zoom, so we use (container width * 2) / (preview width / highres width) = ...
+                    // Simpler: just use a scaled-down version of the high-res dimensions.
+                    const zoomLevel = 2.0; // Desired magnification over displayed size
+                    const bgWidth = rect.width * zoomLevel;
+                    const bgHeight = rect.height * zoomLevel;
 
-    });
-  </script>
+                    loupe.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
+
+                    // Position the background so the point under the cursor is centered in the loupe.
+                    const loupeWidth = 200;
+                    const loupeHeight = 200;
+                    const bgX = -(xRatio * bgWidth) + (loupeWidth / 2);
+                    const bgY = -(yRatio * bgHeight) + (loupeHeight / 2);
+
+                    loupe.style.backgroundPosition = `${bgX}px ${bgY}px`;
+                });
+            });
+
+            // Research Hover Reveal Logic
+            const researchItems = document.querySelectorAll('.research-item');
+            const revealBox = document.getElementById('research-reveal');
+            const revealImg = revealBox ? revealBox.querySelector('img') : null;
+
+            if (revealBox && revealImg) {
+                researchItems.forEach(item => {
+                    item.addEventListener('mouseenter', () => {
+                        const imgSrc = item.getAttribute('data-image');
+                        if (imgSrc) {
+                            revealImg.src = imgSrc;
+                            revealBox.style.opacity = '1';
+                        }
+                    });
+
+                    item.addEventListener('mousemove', (e) => {
+                        // Position fixed, follows clientX/Y
+                        const x = e.clientX;
+                        const y = e.clientY;
+                        // Offset handled in CSS transform, or add here if needed
+                        revealBox.style.left = `${x}px`;
+                        revealBox.style.top = `${y}px`;
+                    });
+
+                    item.addEventListener('mouseleave', () => {
+                        revealBox.style.opacity = '0';
+                    });
+                });
+            }
+
+            // --- PROJECT MODAL LOGIC ---
+            const projectLinks = document.querySelectorAll('a[href^="projects/"]');
+            const modal = document.getElementById('project-modal');
+            const modalFrame = document.getElementById('project-frame');
+            const closeModalBtn = document.querySelector('.close-modal-btn');
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+
+            projectLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = link.getAttribute('href');
+                    modalFrame.src = url;
+                    modal.classList.add('active');
+                });
+            });
+
+            function closeModal() {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modalFrame.src = ''; // Clear src to stop video/audio if any
+                }, 300);
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', closeModal);
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+        });
+    </script>
 </body>
+
 </html>

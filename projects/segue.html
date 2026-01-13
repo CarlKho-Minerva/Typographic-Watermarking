@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segue MediRecords: Decentralized EMR System</title>
+  <style>
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Colors */
+      --color-bg-paper: #ffffff;
+      --color-bg-tool: #fcfcfc;
+      --color-text-main: #111111;
+      --color-text-muted: #666666;
+      --color-border: #e0e0e0;
+      --color-border-strong: #000000;
+      --color-accent: #000000;
+      --color-highlight: #fff000;
+
+      /* Source Colors (Repurposed for Project Themes) */
+      --color-padayon: #4285f4;    /* Blue */
+      --color-robosoccer: #d97706; /* Orange */
+      --color-segue: #10a37f;      /* Green */
+      --color-simala: #8b5cf6;     /* Purple */
+      --color-connect4: #06b6d4;   /* Cyan */
+      --color-yc: #f26522;         /* YC Orange */
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-s: 8px;
+      --space-m: 16px;
+      --space-l: 24px;
+      --space-xl: 40px;
+
+      /* Typography */
+      --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    body {
+      font-family: var(--font-main);
+      font-size: 13px;
+      background: var(--color-bg-paper);
+      color: var(--color-text-main);
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .split-container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* LEFT: Narrative Side (Paper) */
+    .paper-side {
+      width: 60vw;
+      height: 100vh;
+      overflow-y: auto;
+      padding: var(--space-xl);
+      border-right: 2px solid var(--color-border-strong);
+      background: var(--color-bg-paper);
+    }
+
+    .paper-header {
+      margin-bottom: var(--space-l);
+      padding-bottom: var(--space-m);
+      border-bottom: 2px solid var(--color-border-strong);
+    }
+
+    .paper-title {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .paper-meta {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: var(--font-mono);
+      margin-top: 8px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border-bottom: 2px solid var(--color-border-strong);
+      padding-bottom: var(--space-s);
+      margin-bottom: var(--space-m);
+    }
+
+    .section p {
+      line-height: 1.8;
+      margin-bottom: 16px;
+      font-size: 14px;
+      text-align: left;
+      color: #333;
+    }
+
+    .section ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    .section li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    strong {
+        font-weight: 700;
+        color: #000;
+    }
+
+    /* RIGHT: Meta Side (Tool) */
+    .tool-side {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 40vw;
+      height: 100vh;
+      background: var(--color-bg-tool);
+      display: flex;
+      flex-direction: column;
+      border-left: 2px solid var(--color-border-strong); /* Ensure border if overlapping */
+    }
+
+    .tool-header {
+      background: var(--color-bg-paper);
+      border-bottom: 2px solid var(--color-border-strong);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tool-title {
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 12px;
+    }
+
+    .tool-content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .project-thumbnail {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border: 2px solid var(--color-border-strong);
+      margin-bottom: 24px;
+      background: #eee;
+      display: block;
+    }
+
+    .meta-block {
+      margin-bottom: 32px;
+    }
+
+    .meta-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      display: block;
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tech-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 6px 10px;
+      border: 1px solid var(--color-border-strong);
+      background: #fff;
+      text-transform: uppercase;
+    }
+
+    .action-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      text-align: center;
+      background: var(--color-view-project, #000);
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 1px;
+      border: none; /* 2px solid #000; */
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      opacity: 0.8;
+      transform: translateY(-2px);
+    }
+
+    .action-btn.secondary {
+        background: transparent;
+        color: #000;
+        border: 2px solid var(--color-border-strong);
+    }
+
+    .action-btn.secondary:hover {
+        background: #000;
+        color: #fff;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-border);
+      padding: 8px 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .stat-value {
+      font-weight: 700;
+    }
+
+    /* Panel Toggle Controls */
+    .panel-toggle-bar {
+      position: fixed;
+      top: 50%;
+      left: 60%; /* Matches paper-side width */
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      background: var(--color-accent);
+      border-radius: 20px;
+      width: 16px;
+      height: 16px;
+      overflow: hidden;
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .panel-toggle-bar:hover {
+      width: 120px;
+      height: 36px;
+      gap: 4px;
+      padding: 0 8px;
+    }
+
+    .panel-toggle-btn {
+      width: 0;
+      height: 24px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      opacity: 0;
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      padding: 0;
+      font-size: 14px;
+    }
+
+    .panel-toggle-bar:hover .panel-toggle-btn {
+      width: 32px;
+      opacity: 1;
+    }
+
+    .panel-toggle-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* Panel States */
+    .split-container.left-expanded .paper-side { width: 90vw; }
+    .split-container.left-expanded .tool-side { width: 10vw; }
+    .split-container.right-expanded .tool-side { width: 90vw; }
+    .split-container.right-expanded .paper-side { width: 10vw; }
+
+    .paper-side, .tool-side { transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); }
+
+    .split-container.left-expanded .panel-toggle-bar { left: 90vw; }
+    .split-container.right-expanded .panel-toggle-bar { left: 10vw; }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+      .split-container { flex-direction: column; }
+      .paper-side { width: 100% !important; height: auto; padding: 20px; overflow: visible; }
+      .tool-side { width: 100% !important; height: auto; position: relative; }
+      .panel-toggle-bar { display: none; }
+    }
+
+    :root { --color-view-project: var(--color-segue); }
+  </style>
+</head>
+<body>
+  <div class="split-container" id="splitContainer">
+    <!-- Panel Toggle Bar -->
+    <div class="panel-toggle-bar" id="panelToggleBar">
+      <button class="panel-toggle-btn" id="expandLeftBtn" title="Expand Narrative">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+      <button class="panel-toggle-btn" id="resetBtn" title="Reset View">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+      </button>
+      <button class="panel-toggle-btn" id="expandRightBtn" title="Expand Details">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+    </div>
+
+    <!-- LEFT: Narrative -->
+    <div class="paper-side">
+      <div class="paper-header">
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-muted); margin-bottom: 8px;">PROJECT / HEALTHCARE / PRODUCT</div>
+        <h1 class="paper-title">Segue MediRecords: Decentralized EMR System</h1>
+        <div class="paper-meta">2021-2023 • Product Creator</div>
+      </div>
+
+      
+        <div class="section">
+            <h2 class="section-title">The Problem</h2>
+            <p>In the Philippines, 67% of solo practice physicians still use paper records because EMR (Electronic Medical Record) systems are prohibitively expensive and complex. This disjointed data leads to medical errors and inefficient care.</p>
+        </div>
+        <div class="section">
+            <h2 class="section-title">The Solution</h2>
+            <p><strong>Segue MediRecords</strong> is a "freemium" decentralized EMR built entirely on Notion. It provides enterprise-grade structure—patient databases, consultation logs, lab results—without the enterprise price tag.</p>
+            <p>By leveraging Notion's SOC 2 Type 2 compliant infrastructure, Segue offers a secure, HIPAA-aligned environment for doctors to digitize their practice in minutes, not months.</p>
+        </div>
+        <div class="section">
+            <h2 class="section-title">Clinical Validation</h2>
+            <p>The system was rigorously tested with practicing OB-GYNs and Pediatricians, achieving high usability scores. The project was published as a research paper ("Segue MediRecords") reaching <strong>1,300+ reads on ResearchGate</strong>, validating the model of low-code tools as viable healthcare infrastructure.</p>
+        </div>
+        
+
+    </div>
+
+    <!-- RIGHT: Meta -->
+    <div class="tool-side">
+      <div class="tool-header">
+        <span class="tool-title">Project Details</span>
+        <a href="../portfolio.html" style="text-decoration: none; color: #000; font-weight: 700; font-size: 10px; text-transform: uppercase;">✕ Close</a>
+      </div>
+
+      <div class="tool-content">
+        <img src="../segue_preview.png" class="project-thumbnail" alt="Project Thumbnail" onerror="this.style.display='none'">
+
+        <div class="meta-block">
+            <a href="https://notion.so/segue" target="_blank" class="action-btn">Visit Project ↗</a>
+            
+        </div>
+
+        <div class="meta-block">
+          <span class="meta-label">At a Glance</span>
+          <div class="stat-row">
+            <span>Role</span>
+            <span class="stat-value">Product Creator</span>
+          </div>
+          <div class="stat-row">
+            <span>Timeline</span>
+            <span class="stat-value">2 Years</span>
+          </div>
+          <div class="stat-row">
+            <span>Team</span>
+            <span class="stat-value">Lead + 3 Researchers</span>
+          </div>
+           <div class="stat-row">
+            <span>Key Metric</span>
+            <span class="stat-value">1,300+ Research Reads</span>
+          </div>
+        </div>
+
+        <div class="meta-block">
+          <span class="meta-label">Technology Stack</span>
+          <div class="tech-tags">
+            <span class='tech-tag'>Notion System</span><span class='tech-tag'>Automation</span><span class='tech-tag'>Healthcare UX</span><span class='tech-tag'>Data Privacy (SOC 2)</span><span class='tech-tag'>Product Management</span>
+          </div>
+        </div>
+
+        <div class="meta-block">
+          <span class="meta-label">Awards & Recognition</span>
+          <ul style="list-style: none; padding: 0; font-size: 11px; line-height: 1.6;">
+            <li>📄 Published Research (DOI: 10.13140/RG.2.2.15577.80481)</li><li>🩺 Endorsed by Practicing Physicians</li><li>🚀 ProductHunt Launch (Nov 2021)</li><li>🎤 Presented at UP Cebu Congress</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Panel Toggle Functionality
+    (function() {
+      const container = document.getElementById('splitContainer');
+      const expandLeftBtn = document.getElementById('expandLeftBtn');
+      const expandRightBtn = document.getElementById('expandRightBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      expandLeftBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        container.classList.remove('right-expanded');
+        container.classList.toggle('left-expanded');
+      });
+
+      expandRightBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        container.classList.remove('left-expanded');
+        container.classList.toggle('right-expanded');
+      });
+
+      resetBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        container.classList.remove('left-expanded', 'right-expanded');
+      });
+    })();
+  </script>
+</body>
+</html>
