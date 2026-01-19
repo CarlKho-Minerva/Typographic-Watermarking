@@ -36,6 +36,8 @@
             --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
         }
 
+
+
         body {
             font-family: var(--font-main);
             font-size: 13px;
@@ -165,6 +167,9 @@
             margin-bottom: 8px;
         }
 
+
+
+
         .btn:hover {
             background: var(--color-accent);
             color: #ffffff;
@@ -239,22 +244,24 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 85%; /* Slightly wider to accommodate scrollbar/padding */
-            max-width: 520px;
+            max-width: 600px; /* Increased to make resume bigger */
             opacity: 0;
             transition: opacity 0.4s ease;
             pointer-events: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+
+            gap: 12px; /* Reduced from 20px */
 
             /* Scrollability Fixes */
-            max-height: 95vh;
+            max-height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 10px;
             box-sizing: border-box;
             scrollbar-width: thin;
+            padding-bottom: 60px; /* Increased padding for safety */
         }
 
         .right-content-item.active {
@@ -357,7 +364,7 @@
         }
 
         .caption {
-            font-size: 13px;
+            font-size: 11px;
             color: #666;
             text-align: center;
             max-width: 100%;
@@ -370,16 +377,11 @@
             text-decoration: underline;
         }
 
-        .grid-2x2 {
+        .project-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr; /* 3 columns for "more horz" */
             gap: 12px;
             width: 100%;
-            height: 100%;
-            padding: 12px;
-            /* Frame inside the card */
-            background: #f9f9f9;
         }
 
         .grid-item {
@@ -419,12 +421,12 @@
             border: 1px solid #000;
         }
 
-        .fixed-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-        }
+
+
+
+
+
+
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -830,8 +832,8 @@
     /* Project Grid Layout */
     .project-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr; /* 2 Columns */
-        gap: 16px;
+        grid-template-columns: 1fr 1fr 1fr; /* 3 Columns */
+        gap: 12px;
         width: 100%;
     }
 
@@ -892,21 +894,13 @@
                 <h2 class="section-title">Fine, i'll replicate MIT's $1250 AlterEgo for $30</h2>
                 <p>A 0 → 1 project for learning how to work with sensors, biosignals, and using the voices in your head
                     to speak (sort of).</p>
-                <i>if u're from MIT media lab, i forgot to submit this section in the application</i>
-                <p>
-                    <a href="https://docs.google.com/document/d/1_xlXTRBgNuWiATNA_2ToqgZ7AZ7-gKjbyV2lwSMkB8I/edit?usp=sharing"
-                        target="_blank" class="btn">Community Engagement section</a>
-                </p>
+                <i><a href="https://docs.google.com/document/d/1_xlXTRBgNuWiATNA_2ToqgZ7AZ7-gKjbyV2lwSMkB8I/edit?tab=t.0" target="_blank" style="color: inherit; text-decoration: underline;">if u're from MIT media lab, i forgot to submit this section in the application</a></i>
             </div>
 
             <!-- Work History -->
             <div class="section" data-target="work">
                 <h2 class="section-title">ive been working in tech & the sciences since i was 16</h2>
                 <p>u're kidding?</p>
-                <p>
-                    <a href="https://gist.github.com/CarlKho-Minerva/1b81b59bee4365c75b0ede595300e330#file-cv-md"
-                        target="_blank" class="btn"> everything i did (or: a CV you can drop into an AI)</a>
-                </p>
             </div>
 
             <!-- Projects / Motto -->
@@ -937,9 +931,6 @@
                 <h2 class="section-title">i document my capstone journey</h2>
                 <p>23 blog posts about building cognitive prosthetics, EMG sensors, and teaching machines to understand
                     human intent.</p>
-                <p>
-                    <a href="https://somach.vercel.app/" target="_blank" class="btn">read the full blog</a>
-                </p>
             </div>
 
             <!-- Location -->
@@ -1033,27 +1024,27 @@
                 <div class="card-3d">
                     <div class="zoom-container">
                         <img src="alterego_merged.png" alt="AlterEgo Project Visual" class="zoomable-image"
-                            style="max-height: 80vh; object-fit: contain;">
+                            style="max-height: 65vh; object-fit: contain;">
                         <div class="loupe"></div>
                     </div>
                 </div>
                 <div class="caption">
                     full project documentation (pdf)<br>
-                    <a href="https://somach.vercel.app/" target="_blank">read the technical paper</a>
+                    <a href="https://somach.vercel.app/" target="_blank">read the technical paper</a> or <a href="https://docs.google.com/document/d/1_xlXTRBgNuWiATNA_2ToqgZ7AZ7-gKjbyV2lwSMkB8I/edit?tab=t.0" target="_blank">see Community Engagement section</a>
                 </div>
             </div>
 
             <!-- Work Visual (Resume) -->
-            <div id="work" class="right-content-item">
+            <div id="work" class="right-content-item" style="max-width: 800px;">
                 <div class="card-3d">
                     <div class="zoom-container">
-                        <img src="resume_preview.png" alt="Resume Preview" class="zoomable-image">
+                        <img src="resume_preview.png" alt="Resume Preview" class="zoomable-image" style="max-height: 85vh; object-fit: contain;">
                         <div class="loupe"></div>
                     </div>
                 </div>
                 <div class="caption">
                     i apparently have to condense my resume into a one-pager<br>
-                    <a href="resume.pdf" target="_blank">take a closer look</a>
+                    <a href="resume.pdf" target="_blank">take a closer look</a> or <a href="https://gist.github.com/CarlKho-Minerva/1b81b59bee4365c75b0ede595300e330#file-cv-md" target="_blank">see extended CV (AI-Readable)</a>
                 </div>
             </div>
 
@@ -1146,7 +1137,7 @@
             <div id="research" class="right-content-item">
                 <!-- Item 1: arXiv - Wrapped in its own Card -->
                 <div class="card-3d" style="width: 100%;">
-                    <a href="https://arxiv.org/abs/2601.06516" target="_blank" class="research-item" data-image="emg_preview.png" style="background: #fff; border-bottom: none;">
+                    <a href="https://arxiv.org/abs/2601.06516" target="_blank" class="research-item" data-image="emg_preview.png" style="background: #fff; border-bottom: none; padding: 16px;">
                         <div class="research-title">Pareto-Optimal Model Selection for Low-Cost, Single-Lead EMG Control in Embedded Systems</div>
                         <div class="research-meta">Preprint accepted to arXiv (cs.HC, cs.LG)</div>
                     </a>
@@ -1154,7 +1145,7 @@
 
                 <!-- Item 2: Chrome Extension - Wrapped in its own Card -->
                 <div class="card-3d" style="width: 100%;">
-                    <a href="#" class="research-item" data-image="chrome-extension/icon128.png" style="background: #fff; border-bottom: none;">
+                    <a href="#" class="research-item" data-image="chrome-extension/icon128.png" style="background: #fff; border-bottom: none; padding: 16px;">
                         <div class="research-title">Typographic Watermarking Chrome Extension (WIP)</div>
                         <div class="research-meta">Browser Security Tool</div>
                     </a>
@@ -1284,7 +1275,9 @@
 
                 </div>
                 <div class="caption">
-                    10 of 23 posts • <a href="https://somach.vercel.app/" target="_blank">view all</a>
+                    <div style="margin-top: 8px;">
+                        <a href="https://somach.vercel.app/" target="_blank" class="btn">read the full blog</a>
+                    </div>
                 </div>
             </div>
 
@@ -1311,6 +1304,9 @@
             <iframe id="project-frame" src="" frameborder="0"></iframe>
         </div>
     </div>
+
+    <!-- Theme Toggle -->
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1603,6 +1599,8 @@
             });
 
         });
+
+
     </script>
 </body>
 
